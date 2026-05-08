@@ -1,0 +1,193 @@
+BUILD SESSION - SMB-OS
+Data: 2026-05-08 11:12:11.479968
+Modelo: llama-3.3-70b-versatile
+
+TAREFA:
+TAREFA: Estoque por Composição
+DESCRICAO: Implementar o estoque por composição com baixa automática, permitindo que os itens sejam compostos por outros itens e que a baixa seja feita automaticamente quando um item for vendido ou utilizado. Isso envolverá a criação de novas tabelas no banco de dados e a implementação de lógica para gerenciar as composições e baixas.
+ARQUIVOS: 
+apps/api/app/db/models/estoque.py
+apps/api/app/db/base.py
+apps/api/app/core/config.py
+apps/api/app/db/__init__.py
+apps/api/app/db/models/__init__.py
+
+ARQUIVOS GERADOS:
+
+
+CODIGO:
+### apps/api/app/db/models/estoque.py
+```python
+import uuid
+from datetime import datetime
+
+from sqlalchemy import DateTime, ForeignKey, Integer, String, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.base import Base
+
+
+class Estoque(Base):
+    __tablename__ = "estoque"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    nome: Mapped[str] = mapped_column(String(100), nullable=False)
+    descricao: Mapped[str] = mapped_column(String(255), nullable=True)
+    quantidade: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    composicoes: Mapped[list["Composicao"]] = relationship(back_populates="estoque")
+
+
+class Composicao(Base):
+    __tablename__ = "composicoes"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    estoque_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("estoque.id"), nullable=False, index=True
+    )
+    item_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("estoque.id"), nullable=False, index=True
+    )
+    quantidade: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    estoque: Mapped["Estoque"] = relationship(back_populates="composicoes")
+    item: Mapped["Estoque"] = relationship(back_populates="composicoes")
+
+
+class BaixaEstoque(Base):
+    __tablename__ = "baixa_estoque"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    estoque_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("estoque.id"), nullable=False, index=True
+    )
+    quantidade: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    estoque: Mapped["Estoque"] = relationship(back_populates="baixas")
+```
+
+### apps/api/app/db/base.py
+```python
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
+from app.core.config import settings
+
+
+engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+def set_tenant_context(db: Session, tenant_id: str) -> None:
+    # SET LOCAL is transaction-scoped — must be called inside an open transaction
+    db.execute(text("SET LOCAL app.tenant_id = :tid"), {"tid": tenant_id})
+```
+
+### apps/api/app/core/config.py
+```python
+from pydantic import field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    DATABASE_URL: str
+    JWT_PRIVATE_KEY: str
+    JWT_PUBLIC_KEY: str
+    SECRET_KEY: str
+
+    ENVIRONMENT: str = "development"
+    ALLOWED_ORIGINS: str = "http://localhost:3000"
+
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    GITHUB_CLIENT_ID: str = ""
+    GITHUB_CLIENT_SECRET: str = ""
+
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    BCRYPT_ROUNDS: int = 12
+
+    @field_validator("BCRYPT_ROUNDS")
+    @classmethod
+    def bcrypt_rounds_minimum(cls, v: int) -> int:
+        if v < 10:
+            raise ValueError("BCRYPT_ROUNDS must be at least 10")
+        return v
+
+    @property
+    def allowed_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.ALLOWED_ORIGINS.split(",") if o.strip()]
+
+    @property
+    def is_production(self) -> bool:
+        return self.ENVIRONMENT == "production"
+
+    @property
+    def jwt_private_key_pem(self) -> str:
+        return self.JWT_PRIVATE_KEY.replace("\\n", "\n")
+
+    @property
+    def jwt_public_key_pem(self) -> str:
+        return self.JWT_PUBLIC_KEY.replace("\\n", "\n")
+
+
+settings = Settings()
+```
+
+### apps/api/app/db/__init__.py
+```python
+from .base import Base, engine, SessionLocal, get_db, set_tenant_context
+```
+
+### apps/api/app/db/models/__init__.py
+```python
+from .estoque import Estoque, Composicao, BaixaEstoque
+from .tenant import Tenant
+from .user import User
+from .auth import OAuthAccount, RefreshToken
+from .rbac import Permission, Role, RolePermission, UserRole
+from .audit import AuditLog
+
+__all__ = [
+    "Estoque", "Composicao", "BaixaEstoque",
+    "Tenant", "User",
+    "OAuthAccount", "RefreshToken",
+    "Permission", "Role", "RolePermission", "UserRole",
+    "AuditLog",
+]
+```
+=== FIM ===
