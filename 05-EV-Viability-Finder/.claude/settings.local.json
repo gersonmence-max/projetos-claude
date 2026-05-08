@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(python -m pip install --upgrade pip)",
+      "Bash(pip --version)",
+      "Bash(python:*)",
+      "Bash(pip list:*)",
+      "Bash(pip show:*)",
+      "Bash(ls:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(where python:*)",
+      "Bash(curl -s http://localhost:8000/health)",
+      "Bash(curl -s http://localhost:8000/ -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:8000/api/properties/ -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:8000/api/pipeline/history -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:8000/)",
+      "Bash(curl:*)",
+      "Bash(taskkill /F /IM python.exe)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :8000)",
+      "Bash(taskkill /PID 12972 /F)",
+      "Bash(findstr \":8000 \")",
+      "Bash(findstr LISTENING)",
+      "Bash(taskkill //PID 12972 //F)",
+      "WebFetch(domain:cosl.org)",
+      "WebFetch(domain:www.govease.com)",
+      "WebFetch(domain:arlands.cosl.org)",
+      "WebFetch(domain:liveauctions.govease.com)",
+      "WebFetch(domain:www.cosl.org)",
+      "WebFetch(domain:auction.cosl.org)",
+      "WebSearch",
+      "Bash(taskkill //PID 12820 //F)",
+      "Bash(del \"C:\\\\Users\\\\g-fil\\\\Desktop\\\\buscador de terrenos\\\\backend\\\\terrenos.db\")",
+      "Bash(npx tsc:*)",
+      "Bash(taskkill:*)",
+      "Bash(findstr \":8000\")",
+      "Bash(findstr \"LISTENING\")"
+    ]
+  }
+}

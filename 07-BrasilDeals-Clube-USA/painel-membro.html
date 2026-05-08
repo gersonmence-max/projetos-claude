@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clube USA — Painel</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0a120d;
+  --bg2:#0f1a12;
+  --surface:#162019;
+  --surface2:#1e2e22;
+  --surface3:#263529;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.1);
+  --green:#009C3B;
+  --green-l:#00C44A;
+  --green-d:#007A2E;
+  --yellow:#FFDF00;
+  --blue:#002776;
+  --text:#edf0ec;
+  --muted:rgba(237,240,236,0.45);
+  --muted2:rgba(237,240,236,0.25);
+  --radius:14px;
+  --radius-sm:8px;
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* GRID BG */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(0,156,59,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,156,59,0.03) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+}
+
+/* TOP GLOW */
+.glow{
+  position:fixed;top:-180px;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;
+  background:radial-gradient(ellipse,rgba(0,156,59,0.15) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+/* ===================== LAYOUT ===================== */
+.app{position:relative;z-index:1;display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+
+/* ===================== SIDEBAR ===================== */
+.sidebar{
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  padding:28px 20px;
+  display:flex;flex-direction:column;gap:8px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+
+.logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:1.5px;
+  color:var(--green);
+  padding:0 8px 24px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:8px;
+}
+.logo span{color:var(--muted2)}
+
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:var(--radius-sm);
+  font-size:14px;color:var(--muted);
+  cursor:pointer;transition:all 0.15s;
+  border:1px solid transparent;
+  background:transparent;width:100%;text-align:left;
+}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{
+  background:rgba(0,156,59,0.1);
+  color:var(--green-l);
+  border-color:rgba(0,156,59,0.2);
+}
+.nav-icon{
+  width:18px;height:18px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+.sidebar-footer{margin-top:auto;padding-top:16px;border-top:1px solid var(--border)}
+.plan-badge{
+  background:rgba(255,223,0,0.08);
+  border:1px solid rgba(255,223,0,0.2);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.plan-dot{width:8px;height:8px;border-radius:50%;background:var(--yellow);flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.plan-info{}
+.plan-name{font-size:13px;font-weight:600;color:var(--yellow)}
+.plan-sub{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* ===================== MAIN ===================== */
+.main{padding:32px 36px;overflow-y:auto}
+
+/* PAGE HEADER */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;color:var(--text)}
+.page-sub{font-size:14px;color:var(--muted);margin-top:6px;font-weight:300}
+.header-right{display:flex;align-items:center;gap:10px}
+
+/* SCREEN */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ===================== STATS ROW ===================== */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 20px;
+  position:relative;overflow:hidden;
+  animation:fadeUp 0.4s ease forwards;opacity:0;
+}
+.stat-card:nth-child(1){animation-delay:0.05s}
+.stat-card:nth-child(2){animation-delay:0.1s}
+.stat-card:nth-child(3){animation-delay:0.15s}
+.stat-card:nth-child(4){animation-delay:0.2s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.stat-label{font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:var(--green-l)}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.stat-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),transparent);
+}
+
+/* PROGRESS BAR */
+.progress-wrap{margin-bottom:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.progress-level{font-size:13px;font-weight:600;color:var(--text)}
+.progress-next{font-size:12px;color:var(--muted)}
+.progress-track{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-l));border-radius:3px;transition:width 1s cubic-bezier(.25,.8,.25,1)}
+.progress-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted2)}
+
+/* ===================== DEALS ===================== */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:15px;font-weight:600;color:var(--text)}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap}
+.filter-btn{
+  padding:5px 12px;border-radius:100px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--muted);
+  font-size:12px;cursor:pointer;transition:all 0.15s;
+  font-family:'DM Sans',sans-serif;
+}
+.filter-btn.active,.filter-btn:hover{
+  background:rgba(0,156,59,0.1);
+  color:var(--green-l);border-color:rgba(0,156,59,0.25);
+}
+
+.deals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+
+.deal-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:border-color 0.2s,transform 0.2s;
+  cursor:pointer;
+}
+.deal-card:hover{border-color:rgba(0,156,59,0.3);transform:translateY(-2px)}
+
+.deal-top{display:flex;align-items:center;justify-content:space-between}
+.deal-pct{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  color:var(--green-l);letter-spacing:0.5px;
+}
+.deal-score{
+  font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;
+}
+.score-ex{background:rgba(0,196,74,0.12);color:#4ade80;border:1px solid rgba(0,196,74,0.2)}
+.score-ok{background:rgba(250,204,21,0.1);color:#fde047;border:1px solid rgba(250,204,21,0.2)}
+
+.deal-ctx{
+  background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.15);
+  border-radius:6px;padding:5px 9px;
+  font-size:11px;font-weight:600;color:#fbbf24;letter-spacing:0.3px;
+  display:none;
+}
+.deal-ctx.show{display:block}
+
+.deal-title{font-size:13px;font-weight:500;line-height:1.45;color:var(--text)}
+
+.deal-prices{display:flex;align-items:baseline;gap:8px}
+.deal-now{font-size:22px;font-weight:600;color:#4ade80;font-family:'DM Mono',monospace}
+.deal-was{font-size:13px;color:var(--muted);text-decoration:line-through}
+
+.deal-meta{display:flex;flex-wrap:wrap;gap:5px}
+.deal-tag{font-size:10px;color:var(--muted);background:var(--surface2);padding:2px 7px;border-radius:4px}
+
+.deal-btn{
+  width:100%;padding:10px;
+  background:rgba(0,156,59,0.12);
+  border:1px solid rgba(0,156,59,0.2);
+  border-radius:var(--radius-sm);
+  color:var(--green-l);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all 0.15s;
+  font-family:'DM Sans',sans-serif;
+}
+.deal-btn:hover{background:rgba(0,156,59,0.22);border-color:rgba(0,156,59,0.4)}
+
+/* VIP LOCK */
+.vip-lock{
+  background:rgba(255,223,0,0.05);border:1px solid rgba(255,223,0,0.15);
+  border-radius:var(--radius);padding:20px 24px;
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:20px;
+}
+.vip-lock-icon{
+  width:40px;height:40px;background:rgba(255,223,0,0.1);
+  border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.vip-lock-icon svg{width:20px;height:20px;stroke:var(--yellow);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.vip-lock-text{flex:1}
+.vip-lock-title{font-size:14px;font-weight:600;color:var(--yellow);margin-bottom:2px}
+.vip-lock-sub{font-size:13px;color:var(--muted);font-weight:300}
+.vip-lock-btn{
+  padding:9px 18px;background:var(--yellow);color:var(--blue);
+  border:none;border-radius:var(--radius-sm);
+  font-size:13px;font-weight:700;cursor:pointer;
+  font-family:'DM Sans',sans-serif;white-space:nowrap;
+  transition:opacity 0.15s;
+}
+.vip-lock-btn:hover{opacity:0.85}
+
+/* ===================== REFERRAL ===================== */
+.referral-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;margin-bottom:20px;
+}
+.ref-link-wrap{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:14px 16px;
+  display:flex;align-items:center;gap:12px;margin:16px 0;
+}
+.ref-link{
+  font-family:'DM Mono',monospace;font-size:13px;
+  color:var(--green-l);flex:1;word-break:break-all;
+}
+.ref-copy{
+  padding:7px 14px;background:var(--green);color:white;
+  border:none;border-radius:6px;font-size:12px;font-weight:600;
+  cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;
+  transition:all 0.15s;
+}
+.ref-copy:hover{background:var(--green-d)}
+.ref-copy.copied{background:var(--surface3);color:var(--green-l)}
+
+.ref-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.ref-stat{
+  background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center;
+}
+.ref-stat-n{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green-l);line-height:1}
+.ref-stat-l{font-size:11px;color:var(--muted);margin-top:3px}
+
+.how-it-works{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.how-step{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border-radius:var(--radius-sm)}
+.how-num{
+  width:24px;height:24px;background:rgba(0,156,59,0.15);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;color:var(--green-l);flex-shrink:0;
+}
+.how-text{font-size:13px;color:var(--text);line-height:1.5;font-weight:300}
+.how-text strong{color:var(--green-l);font-weight:600}
+
+/* ===================== RANKING ===================== */
+.ranking-list{display:flex;flex-direction:column;gap:8px}
+.rank-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:12px 16px;
+  transition:border-color 0.15s;
+}
+.rank-item.me{border-color:rgba(0,156,59,0.3);background:rgba(0,156,59,0.05)}
+.rank-pos{
+  font-family:'Bebas Neue',sans-serif;font-size:20px;
+  color:var(--muted2);min-width:28px;text-align:center;
+}
+.rank-pos.gold{color:#fbbf24}
+.rank-pos.silver{color:#9ca3af}
+.rank-pos.bronze{color:#cd7f32}
+.rank-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--surface3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;color:var(--muted);flex-shrink:0;
+}
+.rank-avatar.me-av{background:rgba(0,156,59,0.2);color:var(--green-l)}
+.rank-info{flex:1}
+.rank-name{font-size:13px;font-weight:500;color:var(--text)}
+.rank-level{font-size:11px;color:var(--muted)}
+.rank-pts{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  color:var(--green-l);letter-spacing:0.5px;
+}
+
+/* ===================== VIP PAGE ===================== */
+.vip-hero{
+  background:linear-gradient(135deg,var(--blue) 0%,#001a52 100%);
+  border:1px solid rgba(0,39,118,0.5);
+  border-radius:var(--radius);padding:36px;
+  text-align:center;margin-bottom:24px;position:relative;overflow:hidden;
+}
+.vip-hero::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(255,223,0,0.1) 0%,transparent 70%);
+}
+.vip-hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,223,0,0.1);border:1px solid rgba(255,223,0,0.3);
+  border-radius:100px;padding:5px 14px;
+  font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  color:var(--yellow);margin-bottom:16px;
+}
+.vip-hero-price{
+  font-family:'Bebas Neue',sans-serif;font-size:72px;
+  color:white;line-height:1;margin-bottom:4px;
+}
+.vip-hero-price span{font-size:28px;color:rgba(255,255,255,0.6)}
+.vip-hero-per{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:20px}
+.vip-hero-trial{
+  display:inline-block;
+  background:rgba(255,223,0,0.15);border:1px solid rgba(255,223,0,0.3);
+  border-radius:6px;padding:6px 16px;
+  font-size:13px;font-weight:600;color:var(--yellow);margin-bottom:24px;
+}
+.vip-cta{
+  width:100%;max-width:300px;padding:16px;
+  background:var(--yellow);color:var(--blue);
+  border:none;border-radius:var(--radius-sm);
+  font-size:16px;font-weight:700;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:opacity 0.2s;
+}
+.vip-cta:hover{opacity:0.9}
+
+.vip-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.vip-feat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 20px;
+  display:flex;gap:12px;align-items:flex-start;
+}
+.vip-feat-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--green-l);
+  flex-shrink:0;margin-top:5px;
+}
+.vip-feat-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.vip-feat-desc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.5}
+
+/* ===================== BUTTONS / UTILS ===================== */
+.btn-primary{
+  padding:10px 20px;background:var(--green);color:white;
+  border:none;border-radius:var(--radius-sm);
+  font-size:14px;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all 0.15s;
+}
+.btn-primary:hover{background:var(--green-d);transform:translateY(-1px)}
+
+.empty-state{
+  text-align:center;padding:60px 20px;color:var(--muted);
+}
+.empty-state-title{font-size:16px;font-weight:500;margin-bottom:8px;color:var(--text)}
+.empty-state-sub{font-size:14px;font-weight:300;line-height:1.6}
+
+/* ===================== LOGIN ===================== */
+.login-wrap{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.login-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:48px 40px;width:100%;max-width:400px;
+  position:relative;z-index:1;
+  box-shadow:0 40px 80px rgba(0,0,0,0.4);
+}
+.login-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:28px;
+  color:var(--green);letter-spacing:1.5px;
+  text-align:center;margin-bottom:4px;
+}
+.login-logo span{color:var(--muted2)}
+.login-tagline{font-size:13px;color:var(--muted);text-align:center;margin-bottom:32px;font-weight:300}
+.login-step{display:none}
+.login-step.active{display:block}
+.input-label{font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.input-field{
+  width:100%;padding:13px 16px;
+  background:var(--bg);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);
+  outline:none;transition:border-color 0.2s;margin-bottom:16px;
+}
+.input-field:focus{border-color:var(--green)}
+.input-field::placeholder{color:rgba(237,240,236,0.2)}
+.login-btn{
+  width:100%;padding:14px;background:var(--green);color:white;
+  border:none;border-radius:var(--radius-sm);
+  font-size:15px;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all 0.2s;
+}
+.login-btn:hover{background:var(--green-d)}
+.login-back{
+  display:block;text-align:center;margin-top:12px;
+  font-size:13px;color:var(--muted);cursor:pointer;
+  background:none;border:none;font-family:'DM Sans',sans-serif;
+}
+.login-back:hover{color:var(--text)}
+.otp-hint{font-size:13px;color:var(--muted);text-align:center;margin-bottom:20px;font-weight:300;line-height:1.6}
+.otp-input{
+  text-align:center;font-size:28px;font-weight:600;letter-spacing:8px;
+  font-family:'DM Mono',monospace;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{padding:20px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .vip-features{grid-template-columns:1fr}
+  .ref-stats{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">Clube<span>USA</span></div>
+    <div class="login-tagline">Acesse seu painel de pontos e deals</div>
+
+    <div class="login-step active" id="step-phone">
+      <div class="input-label">Seu WhatsApp</div>
+      <input class="input-field" id="phone-input" type="tel" placeholder="+1 (555) 000-0000">
+      <button class="login-btn" onclick="requestOTP()">Receber codigo por WhatsApp</button>
+    </div>
+
+    <div class="login-step" id="step-otp">
+      <div class="otp-hint" id="otp-hint">Enviamos um codigo de 6 digitos para o seu WhatsApp.</div>
+      <div class="input-label">Codigo de verificacao</div>
+      <input class="input-field otp-input" id="otp-input" type="text" maxlength="6" placeholder="000000">
+      <button class="login-btn" onclick="verifyOTP()">Entrar</button>
+      <button class="login-back" onclick="backToPhone()">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== APP ===================== -->
+<div id="app-screen" class="app" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">Clube<span>USA</span></div>
+
+    <button class="nav-item active" onclick="showScreen('dashboard',this)">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </span>
+      Dashboard
+    </button>
+
+    <button class="nav-item" onclick="showScreen('deals',this)">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1" fill="currentColor"/></svg>
+      </span>
+      Deals da semana
+    </button>
+
+    <button class="nav-item" onclick="showScreen('referral',this)">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      </span>
+      Indicar amigos
+    </button>
+
+    <button class="nav-item" onclick="showScreen('ranking',this)">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </span>
+      Ranking
+    </button>
+
+    <button class="nav-item" onclick="showScreen('vip',this)">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </span>
+      Assinar VIP
+    </button>
+
+    <div class="sidebar-footer">
+      <div class="plan-badge" id="sidebar-plan">
+        <div class="plan-dot"></div>
+        <div class="plan-info">
+          <div class="plan-name" id="plan-label">Plano Free</div>
+          <div class="plan-sub" id="plan-sub">Upgrade para VIP</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="screen active" id="screen-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title" id="dash-greeting">Boa tarde!</div>
+          <div class="page-sub">Aqui esta seu resumo de pontos e atividade</div>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Seus pontos</div>
+          <div class="stat-value" id="stat-points">0</div>
+          <div class="stat-sub" id="stat-level">Nivel Bronze</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Indicacoes</div>
+          <div class="stat-value" id="stat-refs">0</div>
+          <div class="stat-sub">+200 pts cada</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cliques</div>
+          <div class="stat-value" id="stat-clicks">0</div>
+          <div class="stat-sub">+10 pts cada</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Seu plano</div>
+          <div class="stat-value" id="stat-plan" style="font-size:28px;margin-top:4px">Free</div>
+          <div class="stat-sub">clubeusa.com/vip</div>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-header">
+          <div class="progress-level" id="prog-level">Bronze</div>
+          <div class="progress-next" id="prog-next">400 pts para Prata</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="prog-fill" style="width:20%"></div>
+        </div>
+        <div class="progress-labels">
+          <span>Bronze</span><span>Prata</span><span>Ouro</span><span>VIP</span>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">Deals de hoje</div>
+        <button class="btn-primary" onclick="showScreen('deals',document.querySelector('.nav-item:nth-child(3)'))">Ver todos</button>
+      </div>
+      <div class="deals-grid" id="dash-deals"></div>
+    </div>
+
+    <!-- DEALS -->
+    <div class="screen" id="screen-deals">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Deals da semana</div>
+          <div class="page-sub" id="deals-plan-note">Voce esta vendo deals enviados</div>
+        </div>
+      </div>
+
+      <div id="vip-upsell" style="display:none">
+        <div class="vip-lock">
+          <div class="vip-lock-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <div class="vip-lock-text">
+            <div class="vip-lock-title">VIP ve os deals antes de todo mundo</div>
+            <div class="vip-lock-sub">Aprove deals exclusivos + acesso antecipado por $4.99/mes</div>
+          </div>
+          <button class="vip-lock-btn" onclick="showScreen('vip',null)">Assinar VIP</button>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">Filtrar por categoria</div>
+      </div>
+      <div class="filter-row" style="margin-bottom:20px">
+        <button class="filter-btn active" onclick="filterDeals('all',this)">Todos</button>
+        <button class="filter-btn" onclick="filterDeals('electronics',this)">Eletronicos</button>
+        <button class="filter-btn" onclick="filterDeals('kitchen',this)">Cozinha</button>
+        <button class="filter-btn" onclick="filterDeals('baby',this)">Bebe</button>
+        <button class="filter-btn" onclick="filterDeals('fitness',this)">Fitness</button>
+        <button class="filter-btn" onclick="filterDeals('fashion',this)">Moda</button>
+        <button class="filter-btn" onclick="filterDeals('tools',this)">Ferramentas</button>
+      </div>
+
+      <div class="deals-grid" id="all-deals"></div>
+    </div>
+
+    <!-- REFERRAL -->
+    <div class="screen" id="screen-referral">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Indicar amigos</div>
+          <div class="page-sub">Ganhe 200 pontos por cada pessoa que entrar pelo seu link</div>
+        </div>
+      </div>
+
+      <div class="referral-card">
+        <div class="section-title">Seu link de indicacao</div>
+        <div class="ref-link-wrap">
+          <div class="ref-link" id="ref-link-text">clubeusa.com?ref=CARREGANDO</div>
+          <button class="ref-copy" id="ref-copy-btn" onclick="copyReferral()">Copiar</button>
+        </div>
+        <div class="ref-stats">
+          <div class="ref-stat">
+            <div class="ref-stat-n" id="ref-count">0</div>
+            <div class="ref-stat-l">Indicacoes</div>
+          </div>
+          <div class="ref-stat">
+            <div class="ref-stat-n" id="ref-pts">0</div>
+            <div class="ref-stat-l">Pontos ganhos</div>
+          </div>
+          <div class="ref-stat">
+            <div class="ref-stat-n" id="ref-total-pts">0</div>
+            <div class="ref-stat-l">Total de pontos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-bottom:12px">Como funciona</div>
+      <div class="how-it-works">
+        <div class="how-step">
+          <div class="how-num">1</div>
+          <div class="how-text">Copie seu link exclusivo e compartilhe com amigos e familia</div>
+        </div>
+        <div class="how-step">
+          <div class="how-num">2</div>
+          <div class="how-text">Quando a pessoa se cadastrar pelo seu link voce ganha <strong>+200 pontos</strong> automaticamente</div>
+        </div>
+        <div class="how-step">
+          <div class="how-num">3</div>
+          <div class="how-text">Pontos sobem seu nivel — <strong>Bronze, Prata, Ouro, VIP</strong> — cada nivel tem mais beneficios</div>
+        </div>
+        <div class="how-step">
+          <div class="how-num">4</div>
+          <div class="how-text">Membros VIP com mais pontos tem <strong>mais chances no sorteio semanal</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RANKING -->
+    <div class="screen" id="screen-ranking">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Ranking semanal</div>
+          <div class="page-sub">Top membros por pontos — sorteio premia os mais ativos</div>
+        </div>
+      </div>
+      <div class="ranking-list" id="ranking-list"></div>
+    </div>
+
+    <!-- VIP -->
+    <div class="screen" id="screen-vip">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Clube USA VIP</div>
+          <div class="page-sub">Acesso completo por menos que um cafe por mes</div>
+        </div>
+      </div>
+
+      <div class="vip-hero">
+        <div class="vip-hero-badge">Oferta de lancamento</div>
+        <div class="vip-hero-price"><span>$</span>4.99</div>
+        <div class="vip-hero-per">por mes — cancele quando quiser</div>
+        <div class="vip-hero-trial">30 dias gratis para novos membros</div>
+        <br>
+        <button class="vip-cta" onclick="subscribeVIP()">Comecar 30 dias gratis</button>
+      </div>
+
+      <div class="vip-features">
+        <div class="vip-feat">
+          <div class="vip-feat-dot"></div>
+          <div>
+            <div class="vip-feat-title">Deals antecipados</div>
+            <div class="vip-feat-desc">Receba os deals horas antes dos membros free</div>
+          </div>
+        </div>
+        <div class="vip-feat">
+          <div class="vip-feat-dot"></div>
+          <div>
+            <div class="vip-feat-title">Painel completo</div>
+            <div class="vip-feat-desc">Todos os deals da semana organizados por categoria</div>
+          </div>
+        </div>
+        <div class="vip-feat">
+          <div class="vip-feat-dot"></div>
+          <div>
+            <div class="vip-feat-title">Sorteio VIP $150</div>
+            <div class="vip-feat-desc">Gift card Amazon exclusivo para membros VIP</div>
+          </div>
+        </div>
+        <div class="vip-feat">
+          <div class="vip-feat-dot"></div>
+          <div>
+            <div class="vip-feat-title">3 categorias personalizadas</div>
+            <div class="vip-feat-desc">Escolha exatamente quais produtos quer receber</div>
+          </div>
+        </div>
+        <div class="vip-feat">
+          <div class="vip-feat-dot"></div>
+          <div>
+            <div class="vip-feat-title">500 pontos de boas-vindas</div>
+            <div class="vip-feat-desc">Sobe direto para o nivel Prata ao assinar</div>
+          </div>
+        </div>
+        <div class="vip-feat">
+          <div class="vip-feat-dot"></div>
+          <div>
+            <div class="vip-feat-title">Sem anuncios</div>
+            <div class="vip-feat-desc">Experiencia limpa sem interrupcoes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ============================================================
+//  ESTADO DA APP
+// ============================================================
+const API = 'https://clubeusa.com/api';  // trocar pela URL real
+let token = localStorage.getItem('clube_token');
+let member = null;
+let allDeals = [];
+
+// ============================================================
+//  BOOT
+// ============================================================
+window.onload = () => {
+  if (token) {
+    loadApp();
+  } else {
+    showLogin();
+  }
+};
+
+function showLogin() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'grid';
+}
+
+// ============================================================
+//  LOGIN
+// ============================================================
+async function requestOTP() {
+  const phone = document.getElementById('phone-input').value.trim();
+  if (!phone) return alert('Digite seu numero de WhatsApp.');
+
+  try {
+    // Em DEV: simula OTP sem chamar API
+    if (window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+      document.getElementById('otp-hint').textContent =
+        '[DEV] Use o codigo: 123456';
+      switchStep('step-otp');
+      return;
+    }
+
+    const r = await fetch(`${API}/auth/otp/request`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({phone}),
+    });
+    if (!r.ok) throw new Error((await r.json()).detail);
+    switchStep('step-otp');
+  } catch(e) {
+    alert('Erro: ' + e.message);
+  }
+}
+
+async function verifyOTP() {
+  const phone = document.getElementById('phone-input').value.trim();
+  const otp   = document.getElementById('otp-input').value.trim();
+  if (otp.length !== 6) return alert('O codigo tem 6 digitos.');
+
+  try {
+    // DEV mock
+    if (window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+      token = 'dev_token_mock';
+      localStorage.setItem('clube_token', token);
+      member = mockMember();
+      showApp();
+      loadDashboard();
+      return;
+    }
+
+    const r = await fetch(`${API}/auth/otp/verify`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({phone, otp}),
+    });
+    if (!r.ok) throw new Error((await r.json()).detail);
+    const data = await r.json();
+    token = data.token;
+    localStorage.setItem('clube_token', token);
+    await loadApp();
+  } catch(e) {
+    alert('Codigo incorreto ou expirado.');
+  }
+}
+
+function backToPhone() {
+  switchStep('step-phone');
+  document.getElementById('otp-input').value = '';
+}
+
+function switchStep(id) {
+  document.querySelectorAll('.login-step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ============================================================
+//  CARREGAR APP
+// ============================================================
+async function loadApp() {
+  try {
+    if (token === 'dev_token_mock') {
+      member = mockMember();
+    } else {
+      const r = await fetch(`${API}/member/profile`, {
+        headers: {'Authorization': `Bearer ${token}`}
+      });
+      if (r.status === 401) { logout(); return; }
+      member = await r.json();
+    }
+    showApp();
+    loadDashboard();
+  } catch(e) {
+    logout();
+  }
+}
+
+async function loadDashboard() {
+  if (!member) return;
+
+  // Atualiza sidebar
+  const isVip = member.plan === 'vip';
+  document.getElementById('plan-label').textContent = isVip ? 'Plano VIP' : 'Plano Free';
+  document.getElementById('plan-sub').textContent   = isVip ? 'Ativo' : 'Upgrade para VIP';
+
+  // Greeting
+  const h = new Date().getHours();
+  const greeting = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  document.getElementById('dash-greeting').textContent = greeting + '!';
+
+  // Stats
+  animateNumber('stat-points', member.points || 0);
+  animateNumber('stat-refs',   member.referral_count || 0);
+  animateNumber('stat-clicks', member.total_clicks || 0);
+  document.getElementById('stat-plan').textContent = isVip ? 'VIP' : 'Free';
+
+  // Progress
+  updateProgress(member.points || 0, member.level || 'bronze');
+
+  // Deals
+  await loadDeals();
+  renderDeals('dash-deals', allDeals.slice(0, 6));
+
+  // Referral
+  document.getElementById('ref-link-text').textContent =
+    `clubeusa.com?ref=${member.referral_code || 'XXXXXXXX'}`;
+  document.getElementById('ref-count').textContent     = member.referral_count || 0;
+  document.getElementById('ref-pts').textContent       = (member.referral_count || 0) * 200;
+  document.getElementById('ref-total-pts').textContent = member.points || 0;
+
+  // Ranking
+  loadRanking();
+}
+
+// ============================================================
+//  DEALS
+// ============================================================
+async function loadDeals() {
+  try {
+    if (token === 'dev_token_mock') {
+      allDeals = mockDeals();
+      return;
+    }
+    const r = await fetch(`${API}/member/deals?limit=30`, {
+      headers: {'Authorization': `Bearer ${token}`}
+    });
+    const data = await r.json();
+    allDeals = data.deals || [];
+
+    // VIP upsell
+    if (data.plan !== 'vip') {
+      document.getElementById('vip-upsell').style.display = 'flex';
+      document.getElementById('deals-plan-note').textContent =
+        'Voce esta vendo os deals enviados. VIP ve tudo antes.';
+    }
+  } catch(e) {
+    allDeals = mockDeals();
+  }
+}
+
+function renderDeals(containerId, deals) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+  if (!deals.length) {
+    el.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-state-title">Nenhum deal disponivel</div>
+      <div class="empty-state-sub">Os deals chegam as 09:00, 13:00 e 20:00 todo dia.</div>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = deals.map(d => {
+    const scoreCls = d.score >= 80 ? 'score-ex' : 'score-ok';
+    const ctxShow  = d.price_context ? 'show' : '';
+    return `
+    <div class="deal-card" onclick="openDeal('${d.id}','${d.affiliate_url}')">
+      <div class="deal-top">
+        <div class="deal-pct">-${d.discount_pct}%</div>
+        <div class="deal-score ${scoreCls}">${d.score} • ${d.score_label || 'Bom'}</div>
+      </div>
+      <div class="deal-ctx ${ctxShow}">${d.price_context || ''}</div>
+      <div class="deal-title">${d.title?.substring(0,75) || ''}${(d.title?.length||0)>75?'...':''}</div>
+      <div class="deal-prices">
+        <div class="deal-now">$${Number(d.price_now).toFixed(2)}</div>
+        <div class="deal-was">$${Number(d.price_was||0).toFixed(2)}</div>
+      </div>
+      <div class="deal-meta">
+        ${d.rating ? `<span class="deal-tag">${'★'.repeat(Math.round(d.rating))} ${d.rating}</span>` : ''}
+        ${d.reviews ? `<span class="deal-tag">${Number(d.reviews).toLocaleString()} rev</span>` : ''}
+        ${d.category ? `<span class="deal-tag">${d.category}</span>` : ''}
+      </div>
+      <button class="deal-btn">Ver oferta na Amazon</button>
+    </div>`;
+  }).join('');
+}
+
+async function openDeal(dealId, url) {
+  // Registra clique e abre URL rastreada
+  try {
+    if (token !== 'dev_token_mock') {
+      const r = await fetch(`${API}/member/click`, {
+        method: 'POST',
+        headers: {'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+        body: JSON.stringify({deal_id: dealId}),
+      });
+      if (r.ok) {
+        const data = await r.json();
+        window.open(data.url, '_blank');
+        return;
+      }
+    }
+  } catch(e) {}
+  window.open(url, '_blank');
+}
+
+function filterDeals(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const filtered = cat === 'all' ? allDeals : allDeals.filter(d => d.category === cat);
+  renderDeals('all-deals', filtered);
+}
+
+// ============================================================
+//  RANKING
+// ============================================================
+async function loadRanking() {
+  let data;
+  try {
+    if (token === 'dev_token_mock') {
+      data = {leaderboard: mockRanking(), my_rank: 4};
+    } else {
+      const r = await fetch(`${API}/member/leaderboard`, {
+        headers: {'Authorization': `Bearer ${token}`}
+      });
+      data = await r.json();
+    }
+  } catch(e) {
+    data = {leaderboard: mockRanking(), my_rank: null};
+  }
+
+  const el = document.getElementById('ranking-list');
+  const posColors = ['gold','silver','bronze'];
+  el.innerHTML = data.leaderboard.map((row, i) => {
+    const isMe = row.member_id === member?.id;
+    const posCls = posColors[i] || '';
+    return `
+    <div class="rank-item ${isMe?'me':''}">
+      <div class="rank-pos ${posCls}">${row.rank}</div>
+      <div class="rank-avatar ${isMe?'me-av':''}">${isMe?'EU':'M'+(i+1)}</div>
+      <div class="rank-info">
+        <div class="rank-name">${isMe?'Voce':'Membro'} ${isMe?'':('#'+(i+1))}</div>
+        <div class="rank-level">${row.level||'bronze'} · ${row.referral_count||0} indicacoes</div>
+      </div>
+      <div class="rank-pts">${Number(row.points||0).toLocaleString()}</div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+//  VIP
+// ============================================================
+async function subscribeVIP() {
+  try {
+    if (token === 'dev_token_mock') {
+      alert('Em producao: redireciona para o checkout Stripe ($4.99/mes, 30 dias gratis)');
+      return;
+    }
+    const r = await fetch(`${API}/billing/subscribe`, {
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${token}`}
+    });
+    const data = await r.json();
+    if (data.checkout_url) window.location.href = data.checkout_url;
+  } catch(e) {
+    alert('Erro ao iniciar checkout. Tente novamente.');
+  }
+}
+
+// ============================================================
+//  REFERRAL
+// ============================================================
+function copyReferral() {
+  const link = document.getElementById('ref-link-text').textContent;
+  navigator.clipboard.writeText(link).then(() => {
+    const btn = document.getElementById('ref-copy-btn');
+    btn.textContent = 'Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// ============================================================
+//  NAVEGACAO
+// ============================================================
+function showScreen(name, navEl) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+
+  if (name === 'deals') renderDeals('all-deals', allDeals);
+  if (name === 'ranking') loadRanking();
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function updateProgress(points, level) {
+  const levels = [
+    {name:'Bronze', min:0,   max:500,  next:'Prata'},
+    {name:'Prata',  min:500, max:2000, next:'Ouro'},
+    {name:'Ouro',   min:2000,max:5000, next:'VIP'},
+    {name:'VIP',    min:5000,max:5000, next:null},
+  ];
+  const lvl = levels.find(l => l.name.toLowerCase() === level) || levels[0];
+  const pct = lvl.next
+    ? Math.min(((points - lvl.min) / (lvl.max - lvl.min)) * 100, 100)
+    : 100;
+
+  document.getElementById('prog-level').textContent = lvl.name;
+  document.getElementById('prog-next').textContent  = lvl.next
+    ? `${lvl.max - points} pts para ${lvl.next}` : 'Nivel maximo atingido';
+  document.getElementById('prog-fill').style.width  = pct + '%';
+  document.getElementById('stat-level').textContent = 'Nivel ' + lvl.name;
+}
+
+function animateNumber(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let current = 0;
+  const step  = Math.ceil(target / 30);
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = current.toLocaleString();
+    if (current >= target) clearInterval(timer);
+  }, 30);
+}
+
+function logout() {
+  localStorage.removeItem('clube_token');
+  token  = null;
+  member = null;
+  showLogin();
+}
+
+// ============================================================
+//  MOCK DATA (para teste sem API)
+// ============================================================
+function mockMember() {
+  return {
+    id: 'mock-member-id',
+    name: 'Gerson',
+    phone: '*****5678',
+    plan: 'free',
+    points: 350,
+    level: 'bronze',
+    referral_code: 'GERSON01',
+    referral_count: 1,
+    total_clicks: 24,
+  };
+}
+
+function mockDeals() {
+  return [
+    {id:'d1',title:'Echo Dot (4th Gen) Smart Speaker with Alexa — Charcoal',price_now:22.99,price_was:49.99,discount_pct:54,rating:4.7,reviews:847203,score:88,score_label:'Excelente',price_context:'menor preco em 60 dias',affiliate_url:'https://amazon.com',category:'electronics'},
+    {id:'d2',title:'Ninja AF101 Air Fryer that Cooks, Crisps and Roasts, 4 Quart',price_now:69.99,price_was:129.99,discount_pct:46,rating:4.7,reviews:58900,score:83,score_label:'Excelente',price_context:'menor preco em 45 dias',affiliate_url:'https://amazon.com',category:'kitchen'},
+    {id:'d3',title:'Pampers Swaddlers Disposable Baby Diapers, Size 3, 204 Count',price_now:34.94,price_was:54.99,discount_pct:36,rating:4.8,reviews:187500,score:82,score_label:'Excelente',price_context:'menor preco em 90 dias',affiliate_url:'https://amazon.com',category:'baby'},
+    {id:'d4',title:'DEWALT 20V MAX Cordless Drill/Driver Kit, Compact',price_now:79.00,price_was:139.00,discount_pct:43,rating:4.8,reviews:42300,score:80,score_label:'Excelente',price_context:null,affiliate_url:'https://amazon.com',category:'tools'},
+    {id:'d5',title:'iRobot Roomba i4 EVO Robot Vacuum — Wi-Fi Connected',price_now:129.99,price_was:274.99,discount_pct:53,rating:4.3,reviews:28200,score:79,score_label:'Otimo',price_context:'menor preco registrado',affiliate_url:'https://amazon.com',category:'electronics'},
+    {id:'d6',title:'Optimum Nutrition Gold Standard 100% Whey Protein, 5 lbs',price_now:54.97,price_was:89.99,discount_pct:39,rating:4.6,reviews:63100,score:71,score_label:'Otimo',price_context:null,affiliate_url:'https://amazon.com',category:'fitness'},
+  ];
+}
+
+function mockRanking() {
+  return [
+    {rank:1,member_id:'a',points:1840,level:'prata',referral_count:8},
+    {rank:2,member_id:'b',points:1200,level:'prata',referral_count:5},
+    {rank:3,member_id:'c',points:980,level:'bronze',referral_count:4},
+    {rank:4,member_id:'mock-member-id',points:350,level:'bronze',referral_count:1},
+    {rank:5,member_id:'e',points:280,level:'bronze',referral_count:1},
+  ];
+}
+</script>
+
+<!-- ============ ALERTAS DE PREÇO ============ -->
+<section id="alerts-section" style="display:none">
+  <h2>🔔 Meus Alertas de Preço</h2>
+  <p id="alerts-upgrade-msg" style="display:none">
+    <a href="#upgrade">Faça upgrade do seu plano para ativar alertas de preço.</a>
+  </p>
+
+  <div id="alerts-content" style="display:none">
+    <form id="alert-form">
+      <input type="text" id="alert-url" placeholder="Cole o link da Amazon aqui" required />
+      <select id="alert-type">
+        <option value="price">Preço alvo ($)</option>
+        <option value="percent">Queda mínima (%)</option>
+      </select>
+      <input type="number" id="alert-value" placeholder="Ex: 29.99 ou 15" min="0.01" step="0.01" required />
+      <button type="submit">Criar Alerta</button>
+    </form>
+    <p id="alert-limit-msg"></p>
+
+    <ul id="alerts-list"></ul>
+  </div>
+</section>
+
+<script>
+(function() {
+  const API = 'https://clubeusa.com';
+
+  function getToken() { return localStorage.getItem('token'); }
+
+  async function loadAlerts() {
+    const token = getToken();
+    if (!token) return;
+
+    const res = await fetch(`${API}/alerts`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const section = document.getElementById('alerts-section');
+    section.style.display = 'block';
+
+    if (res.status === 403) {
+      document.getElementById('alerts-upgrade-msg').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('alerts-content').style.display = 'block';
+    const alerts = await res.json();
+    renderAlerts(alerts);
+  }
+
+  function renderAlerts(alerts) {
+    const list = document.getElementById('alerts-list');
+    list.innerHTML = '';
+    const limitMsg = document.getElementById('alert-limit-msg');
+    limitMsg.textContent = `${alerts.filter(a => a.status === 'active').length}/10 alertas ativos`;
+
+    alerts.forEach(a => {
+      const li = document.createElement('li');
+      const label = a.target_type === 'price'
+        ? `Avise quando chegar em $${a.target_value}`
+        : `Avise quando cair ${a.target_value}%`;
+      li.innerHTML = `
+        <strong>${a.product_title || a.asin}</strong> — ${label}
+        <span class="badge-${a.status}">${a.status}</span>
+        ${a.status === 'active'
+          ? `<button onclick="cancelAlert('${a.id}')">Cancelar</button>`
+          : ''}
+      `;
+      list.appendChild(li);
+    });
+  }
+
+  async function cancelAlert(id) {
+    await fetch(`${API}/alerts/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    });
+    loadAlerts();
+  }
+
+  document.getElementById('alert-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url          = document.getElementById('alert-url').value;
+    const target_type  = document.getElementById('alert-type').value;
+    const target_value = parseFloat(document.getElementById('alert-value').value);
+
+    const res = await fetch(`${API}/alerts/from-link`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ url, target_type, target_value })
+    });
+
+    if (res.ok) {
+      document.getElementById('alert-url').value = '';
+      document.getElementById('alert-value').value = '';
+      loadAlerts();
+    } else {
+      const err = await res.json();
+      alert(err.detail || 'Erro ao criar alerta.');
+    }
+  });
+
+  loadAlerts();
+})();
+</script>
+
+</body>
+</html>

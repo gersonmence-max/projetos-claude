@@ -1,0 +1,12 @@
+# NUNCA subir esses arquivos pro git
+.env
+.env.local
+.env.production
+*.pem
+*.key
+secrets/
+data/
+logs/
+__pycache__/
+*.pyc
+.DS_Store

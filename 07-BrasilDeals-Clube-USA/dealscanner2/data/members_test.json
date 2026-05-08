@@ -1,0 +1,64 @@
+[
+  {
+    "id": "m1",
+    "phone": "+15085551001",
+    "plan": "free",
+    "categories": [
+      "electronics"
+    ],
+    "state": "massachusetts"
+  },
+  {
+    "id": "m2",
+    "phone": "+16175551002",
+    "plan": "vip",
+    "categories": [
+      "beauty",
+      "fashion",
+      "shoes"
+    ],
+    "state": "new york"
+  },
+  {
+    "id": "m3",
+    "phone": "+14085551003",
+    "plan": "free",
+    "categories": [
+      "baby"
+    ],
+    "state": "california"
+  },
+  {
+    "id": "m4",
+    "phone": "+13055551004",
+    "plan": "vip",
+    "categories": [
+      "fitness",
+      "electronics",
+      "home"
+    ],
+    "state": "florida"
+  },
+  {
+    "id": "m5",
+    "phone": "+17735551005",
+    "plan": "free",
+    "categories": [
+      "home"
+    ],
+    "state": "illinois"
+  },
+  {
+    "id": "m6",
+    "phone": "+13235551006",
+    "plan": "vip",
+    "categories": [
+      "fashion",
+      "shoes",
+      "fragrance",
+      "beauty",
+      "automotive"
+    ],
+    "state": "california"
+  }
+]

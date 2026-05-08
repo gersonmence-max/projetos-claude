@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clube USA — Admin</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+  header { background: #1e293b; padding: 16px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #334155; }
+  header h1 { font-size: 18px; font-weight: 700; color: #f8fafc; }
+  header span { font-size: 12px; color: #64748b; }
+  nav { display: flex; gap: 4px; padding: 16px 24px 0; border-bottom: 1px solid #334155; }
+  nav button { background: none; border: none; color: #94a3b8; padding: 10px 16px; cursor: pointer; font-size: 14px; border-bottom: 2px solid transparent; }
+  nav button.active { color: #f8fafc; border-bottom-color: #3b82f6; }
+  main { padding: 24px; }
+  .tab { display: none; }
+  .tab.active { display: block; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card { background: #1e293b; border-radius: 8px; padding: 20px; }
+  .card .label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
+  .card .value { font-size: 32px; font-weight: 700; margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid #334155; }
+  td { padding: 10px 12px; border-bottom: 1px solid #1e293b; }
+  tr:hover td { background: #1e293b; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-active   { background: #166534; color: #86efac; }
+  .badge-vip      { background: #713f12; color: #fcd34d; }
+  .badge-free     { background: #1e3a5f; color: #93c5fd; }
+  .badge-pending  { background: #1e3a5f; color: #93c5fd; }
+  .badge-approved { background: #166534; color: #86efac; }
+  .badge-sent     { background: #374151; color: #9ca3af; }
+  .badge-rejected { background: #7f1d1d; color: #fca5a5; }
+  .badge-inactive { background: #374151; color: #9ca3af; }
+  .badge-banned   { background: #7f1d1d; color: #fca5a5; }
+  .badge-triggered{ background: #713f12; color: #fcd34d; }
+  .btn { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; }
+  .btn-green  { background: #166534; color: #86efac; }
+  .btn-red    { background: #7f1d1d; color: #fca5a5; }
+  .btn-blue   { background: #1e3a5f; color: #93c5fd; }
+  .btn-gray   { background: #334155; color: #cbd5e1; }
+  .toolbar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  input[type=text], select { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 8px 12px; border-radius: 6px; font-size: 14px; }
+  #token-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; gap: 16px; }
+  #token-screen h2 { font-size: 20px; }
+  #token-screen input { width: 320px; }
+  #token-screen button { width: 320px; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; }
+  .msg { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+  .msg-error { background: #7f1d1d; color: #fca5a5; }
+  .msg-success { background: #166534; color: #86efac; }
+</style>
+</head>
+<body>
+
+<div id="token-screen">
+  <h2>🔐 Clube USA Admin</h2>
+  <input type="password" id="token-input" placeholder="Token de administrador" />
+  <button onclick="saveToken()">Entrar</button>
+  <p id="token-error" style="color:#fca5a5;display:none">Token inválido.</p>
+</div>
+
+<div id="app" style="display:none">
+  <header>
+    <h1>Clube USA Admin</h1>
+    <span id="header-stats"></span>
+    <button class="btn btn-gray" style="margin-left:auto" onclick="logout()">Sair</button>
+  </header>
+  <nav>
+    <button class="active" onclick="showTab('dashboard',this)">Dashboard</button>
+    <button onclick="showTab('members',this)">Membros</button>
+    <button onclick="showTab('deals',this)">Deals</button>
+    <button onclick="showTab('alerts',this)">Alertas</button>
+  </nav>
+  <main>
+    <div id="msg-bar" style="display:none"></div>
+
+    <!-- DASHBOARD -->
+    <div id="tab-dashboard" class="tab active">
+      <div class="cards" id="metrics-cards"></div>
+    </div>
+
+    <!-- MEMBROS -->
+    <div id="tab-members" class="tab">
+      <div class="toolbar">
+        <input type="text" id="m-search" placeholder="Buscar nome ou telefone..." oninput="loadMembers()" style="width:240px" />
+        <select id="m-plan" onchange="loadMembers()">
+          <option value="">Todos os planos</option>
+          <option value="free">Free</option>
+          <option value="vip">VIP</option>
+        </select>
+        <select id="m-status" onchange="loadMembers()">
+          <option value="">Todos os status</option>
+          <option value="active">Ativo</option>
+          <option value="inactive">Inativo</option>
+          <option value="banned">Banido</option>
+        </select>
+      </div>
+      <table>
+        <thead><tr><th>Nome</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Pontos</th><th>Cliques</th><th>Cadastro</th><th>Ações</th></tr></thead>
+        <tbody id="members-body"></tbody>
+      </table>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="btn btn-gray" id="m-prev" onclick="membersPage(-1)">← Anterior</button>
+        <button class="btn btn-gray" id="m-next" onclick="membersPage(1)">Próxima →</button>
+      </div>
+    </div>
+
+    <!-- DEALS -->
+    <div id="tab-deals" class="tab">
+      <div class="toolbar">
+        <select id="d-status" onchange="loadDeals()">
+          <option value="pending">Pendentes</option>
+          <option value="approved">Aprovados</option>
+          <option value="sent">Enviados</option>
+          <option value="rejected">Rejeitados</option>
+          <option value="">Todos</option>
+        </select>
+        <button class="btn btn-blue" onclick="triggerScan()">⟳ Scan Amazon</button>
+        <button class="btn btn-green" onclick="triggerSend()">▶ Enviar Aprovados</button>
+      </div>
+      <table>
+        <thead><tr><th>Título</th><th>Preço</th><th>Desconto</th><th>Score</th><th>Fonte</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="deals-body"></tbody>
+      </table>
+    </div>
+
+    <!-- ALERTAS -->
+    <div id="tab-alerts" class="tab">
+      <table>
+        <thead><tr><th>Produto / ASIN</th><th>Tipo</th><th>Alvo</th><th>Status</th><th>Criado em</th></tr></thead>
+        <tbody id="alerts-body"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+// Fix 1: HTML escaping helper — prevents XSS when inserting user data into innerHTML
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+const API = '';  // mesmo origin
+
+function token() { return localStorage.getItem('admin_token') || ''; }
+function authHeader() { return { 'Authorization': 'Bearer ' + token(), 'Content-Type': 'application/json' }; }
+
+function showMsg(text, type='success') {
+  const bar = document.getElementById('msg-bar');
+  bar.className = 'msg msg-' + type;
+  bar.textContent = text;
+  bar.style.display = 'block';
+  setTimeout(() => bar.style.display = 'none', 4000);
+}
+
+// Fix 3: saveToken — require res.ok, show specific error messages, wrap in try/catch
+async function saveToken() {
+  const t = document.getElementById('token-input').value.trim();
+  if (!t) return;
+  try {
+    const res = await fetch(API + '/admin/metrics', { headers: { 'Authorization': 'Bearer ' + t } });
+    if (!res.ok) {
+      const errEl = document.getElementById('token-error');
+      errEl.textContent = res.status === 401 ? 'Token inválido.' : `Erro ${res.status}. Tente novamente.`;
+      errEl.style.display = 'block';
+    } else {
+      localStorage.setItem('admin_token', t);
+      document.getElementById('token-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      init();
+    }
+  } catch (e) {
+    const errEl = document.getElementById('token-error');
+    errEl.textContent = 'Sem conexão com o servidor.';
+    errEl.style.display = 'block';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('admin_token');
+  location.reload();
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'dashboard') loadMetrics();
+  if (name === 'members')   loadMembers();
+  if (name === 'deals')     loadDeals();
+  if (name === 'alerts')    loadAlerts();
+}
+
+// ---- DASHBOARD ----
+// Fix 4: try/catch + auto-logout on 401
+async function loadMetrics() {
+  try {
+    const res = await fetch(API + '/admin/metrics', { headers: authHeader() });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) { showMsg(`Erro ${res.status} ao carregar métricas.`, 'error'); return; }
+    const d = await res.json();
+    document.getElementById('metrics-cards').innerHTML = `
+      <div class="card"><div class="label">Total Membros</div><div class="value">${d.members.total}</div></div>
+      <div class="card"><div class="label">Ativos</div><div class="value">${d.members.active}</div></div>
+      <div class="card"><div class="label">VIP</div><div class="value" style="color:#fcd34d">${d.members.vip}</div></div>
+      <div class="card"><div class="label">Novos (7d)</div><div class="value">${d.members.new_this_week}</div></div>
+      <div class="card"><div class="label">Cliques (7d)</div><div class="value">${d.engagement.clicks_this_week}</div></div>
+      <div class="card"><div class="label">Deals Pendentes</div><div class="value" style="color:#93c5fd">${d.deals.pending}</div></div>
+      <div class="card"><div class="label">Enviados (7d)</div><div class="value">${d.deals.sent_this_week}</div></div>
+      <div class="card"><div class="label">Alertas Ativos</div><div class="value">${d.alerts.active}</div></div>
+    `;
+    document.getElementById('header-stats').textContent =
+      `${d.members.active} ativos · ${d.members.vip} VIP · ${d.deals.pending} deals pendentes`;
+  } catch (e) {
+    showMsg('Sem conexão com o servidor.', 'error');
+  }
+}
+
+// ---- MEMBROS ----
+let membersOffset = 0;
+
+// Fix 5: loadMembers resets offset to 0; _fetchMembers does the actual fetch
+async function loadMembers() {
+  membersOffset = 0;
+  await _fetchMembers();
+}
+
+async function _fetchMembers() {
+  const q      = document.getElementById('m-search').value;
+  const plan   = document.getElementById('m-plan').value;
+  const status = document.getElementById('m-status').value;
+  const params = new URLSearchParams({ limit: 50, offset: membersOffset });
+  if (q)      params.set('q', q);
+  if (plan)   params.set('plan', plan);
+  if (status) params.set('status', status);
+
+  // Fix 4: try/catch + auto-logout on 401
+  try {
+    const res = await fetch(`${API}/admin/members?${params}`, { headers: authHeader() });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) { showMsg(`Erro ${res.status} ao carregar membros.`, 'error'); return; }
+    const members = await res.json();
+    const tbody = document.getElementById('members-body');
+    // Fix 1: esc() applied to all user data; Fix 2: data-* attributes instead of inline onclick
+    tbody.innerHTML = members.map(m => `
+      <tr>
+        <td>${esc(m.name) || '—'}</td>
+        <td>${esc(m.phone) || '—'}</td>
+        <td><span class="badge badge-${esc(m.plan)}">${esc(m.plan)}</span></td>
+        <td><span class="badge badge-${esc(m.status)}">${esc(m.status)}</span></td>
+        <td>${esc(m.points)}</td>
+        <td>${esc(m.total_clicks)}</td>
+        <td>${esc((m.created_at||'').slice(0,10))}</td>
+        <td style="display:flex;gap:4px">
+          <button class="btn btn-green" data-id="${esc(m.id)}" data-status="active">Ativar</button>
+          <button class="btn btn-gray"  data-id="${esc(m.id)}" data-status="inactive">Inativar</button>
+          <button class="btn btn-red"   data-id="${esc(m.id)}" data-status="banned">Banir</button>
+        </td>
+      </tr>
+    `).join('');
+    // Fix 2: event delegation for member action buttons
+    document.getElementById('members-body').querySelectorAll('button[data-status]').forEach(btn => {
+      btn.addEventListener('click', () => setStatus(btn.dataset.id, btn.dataset.status));
+    });
+    document.getElementById('m-prev').disabled = membersOffset === 0;
+    document.getElementById('m-next').disabled = members.length < 50;
+  } catch (e) {
+    showMsg('Sem conexão com o servidor.', 'error');
+  }
+}
+
+// Fix 5: membersPage adjusts offset and calls _fetchMembers directly (no reset)
+function membersPage(dir) {
+  membersOffset = Math.max(0, membersOffset + dir * 50);
+  _fetchMembers();
+}
+
+async function setStatus(id, status) {
+  // Fix 4: try/catch for network errors
+  try {
+    const res = await fetch(`${API}/admin/members/${id}/status`, {
+      method: 'POST', headers: authHeader(),
+      body: JSON.stringify({ status })
+    });
+    if (res.status === 401) { logout(); return; }
+    if (res.ok) { showMsg('Status atualizado.'); loadMembers(); }
+    else showMsg(`Erro ${res.status} ao atualizar.`, 'error');
+  } catch (e) {
+    showMsg('Sem conexão com o servidor.', 'error');
+  }
+}
+
+// ---- DEALS ----
+// Fix 4: try/catch + auto-logout on 401
+async function loadDeals() {
+  const status = document.getElementById('d-status').value;
+  const params = status ? `?status=${status}` : '';
+  try {
+    const res = await fetch(`${API}/admin/deals${params}`, { headers: authHeader() });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) { showMsg(`Erro ${res.status} ao carregar deals.`, 'error'); return; }
+    const deals = await res.json();
+    // Fix 1: esc() applied to all user data; Fix 2: data-* attributes instead of inline onclick
+    document.getElementById('deals-body').innerHTML = deals.map(d => `
+      <tr>
+        <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(d.title)}">${esc(d.title)}</td>
+        <td>$${parseFloat(d.price_now).toFixed(2)}</td>
+        <td>${parseFloat(d.discount_pct||0)}%</td>
+        <td>${parseFloat(d.score||0).toFixed(0)}</td>
+        <td>${esc(d.source)}</td>
+        <td><span class="badge badge-${esc(d.status)}">${esc(d.status)}</span></td>
+        <td style="display:flex;gap:4px">
+          ${d.status === 'pending' ? `
+            <button class="btn btn-green" data-id="${esc(d.id)}" data-action="approve">✓</button>
+            <button class="btn btn-red"   data-id="${esc(d.id)}" data-action="reject">✗</button>
+          ` : ''}
+        </td>
+      </tr>
+    `).join('');
+    // Fix 2: event delegation for deal action buttons
+    document.getElementById('deals-body').querySelectorAll('button[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => dealAction(btn.dataset.id, btn.dataset.action));
+    });
+  } catch (e) {
+    showMsg('Sem conexão com o servidor.', 'error');
+  }
+}
+
+async function dealAction(id, action) {
+  // Fix 4: try/catch for network errors
+  try {
+    const res = await fetch(`${API}/admin/deals/${id}/${action}`, { method: 'POST', headers: authHeader() });
+    if (res.status === 401) { logout(); return; }
+    if (res.ok) { showMsg(action === 'approve' ? 'Deal aprovado.' : 'Deal rejeitado.'); loadDeals(); }
+    else showMsg(`Erro ${res.status}.`, 'error');
+  } catch (e) {
+    showMsg('Sem conexão com o servidor.', 'error');
+  }
+}
+
+async function triggerScan() {
+  // Fix 4: try/catch for network errors
+  try {
+    const res = await fetch(`${API}/admin/deals/scan`, { method: 'POST', headers: authHeader() });
+    if (res.status === 401) { logout(); return; }
+    if (res.ok) showMsg('Varredura iniciada em background.');
+    else showMsg(`Erro ${res.status} ao iniciar varredura.`, 'error');
+  } catch (e) {
+    showMsg('Sem conexão com o servidor.', 'error');
+  }
+}
+
+async function triggerSend() {
+  // Fix 4: try/catch for network errors
+  try {
+    const res = await fetch(`${API}/admin/deals/send`, { method: 'POST', headers: authHeader() });
+    if (res.status === 401) { logout(); return; }
+    if (res.ok) showMsg('Envio de deals iniciado em background.');
+    else showMsg(`Erro ${res.status} ao iniciar envio.`, 'error');
+  } catch (e) {
+    showMsg('Sem conexão com o servidor.', 'error');
+  }
+}
+
+// ---- ALERTAS ----
+// Fix 4: try/catch + auto-logout on 401
+async function loadAlerts() {
+  try {
+    const res = await fetch(`${API}/admin/alerts`, { headers: authHeader() });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) { showMsg(`Erro ${res.status} ao carregar alertas.`, 'error'); return; }
+    const alerts = await res.json();
+    // Fix 1: esc() applied to all user data
+    document.getElementById('alerts-body').innerHTML = alerts.map(a => `
+      <tr>
+        <td>${esc(a.product_title) || esc(a.asin)}</td>
+        <td>${a.target_type === 'price' ? 'Preço alvo' : 'Queda %'}</td>
+        <td>${a.target_type === 'price' ? '$' : ''}${esc(a.target_value)}${a.target_type === 'percent' ? '%' : ''}</td>
+        <td><span class="badge badge-${esc(a.status)}">${esc(a.status)}</span></td>
+        <td>${esc((a.created_at||'').slice(0,10))}</td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    showMsg('Sem conexão com o servidor.', 'error');
+  }
+}
+
+// ---- INIT ----
+function init() {
+  if (!token()) return;
+  document.getElementById('token-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  loadMetrics();
+}
+
+init();
+</script>
+</body>
+</html>

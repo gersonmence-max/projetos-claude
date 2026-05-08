@@ -1,0 +1,26 @@
+{
+  "date": "2026-04-24",
+  "slots": {
+    "m1:9:electronics": [
+      "wm1"
+    ],
+    "m2:9:beauty": [
+      "eb1",
+      "bb1",
+      "sd2"
+    ],
+    "m2:9:fashion": [
+      "eb1",
+      "bb1",
+      "sd2"
+    ],
+    "m2:9:shoes": [
+      "eb1",
+      "bb1",
+      "sd2"
+    ],
+    "m3:9:baby": [
+      "am2"
+    ]
+  }
+}

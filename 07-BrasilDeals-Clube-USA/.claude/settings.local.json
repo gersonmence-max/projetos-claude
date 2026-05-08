@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip -l files.zip)",
+      "Bash(unzip -l files2.zip)",
+      "Bash(unzip -l files3.zip)",
+      "Bash(unzip -l ClubeUSA_Final.zip)",
+      "Bash(unzip *)",
+      "Bash(awk '{print $NF}')",
+      "Bash(awk '{print $5, $NF}')",
+      "Bash(sort -k2)",
+      "Bash(dir \"C:\\\\Users\\\\g-fil\\\\Desktop\\\\ClubeUSA\")",
+      "Bash(python3 -c ' *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git -C \"C:\\\\Users\\\\g-fil\\\\Desktop\\\\ClubeUSA\" status)",
+      "Bash(pip install *)",
+      "Bash(python *)",
+      "Bash(pytest tests/test_admin_service.py -v)",
+      "Bash(pytest tests/ -v)"
+    ]
+  }
+}
