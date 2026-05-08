@@ -1,0 +1,151 @@
+=============================================================================
+PROJETO: TAX DEED FINDER
+=============================================================================
+
+STATUS: MVP funcional (95/95 testes passando)
+PRIORIDADE: MÉDIA
+CATEGORIA: Investimento Imobiliário / Real Estate
+MERCADO-ALVO: Alabama e Arkansas (leilões tax deed)
+
+-----------------------------------------------------------------------------
+O QUE É
+-----------------------------------------------------------------------------
+
+Sistema de busca e análise automatizada de propriedades em leilão tax deed
+nos estados de Alabama e Arkansas. Scraping de listings, enriquecimento com
+dados externos (valor de mercado, flood zones), scoring automático, e
+dashboard React para análise.
+
+Objetivo: Encontrar oportunidades de investimento imobiliário com alto ROI
+antes da concorrência.
+
+-----------------------------------------------------------------------------
+STACK TÉCNICA
+-----------------------------------------------------------------------------
+
+Backend:  Python + FastAPI + SQLite (porta 8000)
+Frontend: React + Vite + TailwindCSS (porta 5173)
+APIs:     FEMA NFHL (flood zones, gratuita)
+          Alabama ALDOR (PDFs de 67 condados)
+          COSL Arkansas (site de leilões)
+Infra:    VPS Hetzner
+
+-----------------------------------------------------------------------------
+SISTEMA DE SCORING (3 COMPONENTES)
+-----------------------------------------------------------------------------
+
+Componente A - Desconto/Preço por Acre (50 pontos):
+  - Compara lance inicial vs valor de mercado
+  - Normaliza por tamanho da propriedade
+
+Componente B - Liquidez de Mercado (35 pontos):
+  - Valor mediano de imóveis no condado
+  - Quanto mais alto o valor, mais líquido o mercado
+
+Componente C - FEMA Flood Zone (15 pontos):
+  - Propriedades em zona de alagamento perdem pontos
+  - API FEMA gratuita
+
+Classificações:
+  FORTE:    75-100 pontos
+  MODERADO: 50-74 pontos
+  FRACO:    25-49 pontos
+  EVITAR:   0-24 pontos
+
+-----------------------------------------------------------------------------
+O QUE PRECISA SER IMPLEMENTADO
+-----------------------------------------------------------------------------
+
+PRIORIDADE ALTA:
+□ Automação completa de scraping
+  - Script agendado via cron para rodar diariamente
+  - Scraping de todos os 67 condados do Alabama
+  - Scraping do COSL Arkansas
+  - Armazenamento no SQLite
+
+□ Cache inteligente de APIs
+  - SQLite cache com TTL de 30 dias
+  - Reduzir chamadas redundantes
+  - Economia de requests
+
+PRIORIDADE MÉDIA:
+□ Melhorias no frontend
+  - Filtros avançados (por condado, faixa de preço, score)
+  - Exportação para Excel
+  - Mapa interativo de propriedades
+
+□ Validação de Census API
+  - Substituir chave de API inválida atual
+  - Buscar alternativa se necessário
+
+□ TomTom Traffic Flow API
+  - Substituir chamada A→A (origem=destino)
+  - Usar Traffic Flow para densidade real
+
+PRIORIDADE BAIXA:
+□ Expansão para outros estados
+  - Texas (muito competitivo)
+  - Florida (muito competitivo)
+  - Georgia (processo mais acessível)
+
+□ Alertas automáticos
+  - Email/Telegram quando aparecer FORTE score
+  - Acompanhamento de propriedades favoritas
+
+-----------------------------------------------------------------------------
+DECISÕES ARQUITETURAIS (ADRs)
+-----------------------------------------------------------------------------
+
+SQLite em vez de PostgreSQL:
+- Projeto single-user, sem multi-tenancy
+- Simplicidade de deploy
+- Zero overhead de manutenção
+
+Alabama + Arkansas:
+- Processo mais acessível a não-residentes
+- Texas e Florida são muito competitivos
+- Menos concorrência de investidores
+
+3 componentes de scoring em vez de AI:
+- Transparente e auditável
+- Sem caixa preta
+- Fácil de explicar e ajustar
+
+FEMA API gratuita em vez de Regrid Premium:
+- Flood zone data disponível gratuitamente
+- Regrid Premium custa $200-500/mês
+- Economia de $2.400-6.000/ano
+
+-----------------------------------------------------------------------------
+RECURSOS EXISTENTES
+-----------------------------------------------------------------------------
+
+✅ Backend FastAPI completo
+✅ Frontend React + Vite funcional
+✅ 95/95 testes passando
+✅ Sistema de scoring calibrado
+✅ Integração FEMA API
+✅ Scraping Alabama ALDOR PDFs
+✅ Scraping COSL Arkansas
+
+-----------------------------------------------------------------------------
+TESTES E VALIDAÇÃO
+-----------------------------------------------------------------------------
+
+Rodando em: http://localhost:8000 (backend)
+            http://localhost:5173 (frontend)
+
+Status: Backend e frontend confirmados funcionando em Windows
+
+-----------------------------------------------------------------------------
+PRÓXIMOS PASSOS IMEDIATOS
+-----------------------------------------------------------------------------
+
+1. Configurar scraping agendado (cron job)
+2. Implementar cache SQLite com TTL
+3. Validar/substituir Census API key
+4. Corrigir TomTom Traffic Flow call
+5. Deploy no VPS Hetzner
+6. Monitorar por 1 semana para estabilidade
+
+=============================================================================

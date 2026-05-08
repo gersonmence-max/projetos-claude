@@ -1,0 +1,167 @@
+=============================================================================
+PROJETO: EV VIABILITY FINDER
+=============================================================================
+
+STATUS: Pausado / MVP funcional mas incompleto
+PRIORIDADE: BAIXA
+CATEGORIA: Electrical Business / Ziontec
+MERCADO-ALVO: Massachusetts (341 cidades)
+
+-----------------------------------------------------------------------------
+O QUE É
+-----------------------------------------------------------------------------
+
+Sistema de análise de viabilidade para instalação de carregadores de veículos
+elétricos (DCFC e Level 2) em Massachusetts. Pipeline de 5 agentes que avalia
+demanda, competição, adequação do local e afinidade com EVs para gerar score
+de oportunidade de negócio.
+
+Objetivo: Identificar as melhores cidades de Massachusetts para instalar
+carregadores EV e gerar leads para a Ziontec.
+
+-----------------------------------------------------------------------------
+STACK TÉCNICA
+-----------------------------------------------------------------------------
+
+Backend:  Python + Flask (porta 5000)
+Frontend: React + Vite + TailwindCSS (porta 5173)
+APIs:     LocationIQ (geocoding)
+          TomTom (tráfego)
+          OCM - Open Charge Map (chargers existentes)
+          Google Places (pontos de interesse)
+Banco:    SQLite
+Cidades:  341 municípios de Massachusetts
+Infra:    VPS Hetzner (planejado)
+
+-----------------------------------------------------------------------------
+PIPELINE DE 5 AGENTES
+-----------------------------------------------------------------------------
+
+1. GEOCODING AGENT
+   - LocationIQ → OpenCage → Nominatim (fallback)
+   - Obtém coordenadas da cidade
+
+2. LOCAL SEARCH AGENT
+   - Google Places API
+   - Identifica pontos de interesse (restaurantes, hotéis, shopping centers)
+
+3. VIABILITY AGENT
+   - TomTom Traffic API (densidade de tráfego)
+   - OCM (chargers já existentes na área)
+   - Cruza dados de demanda vs competição
+
+4. SCORING AGENT
+   - Demand (peso 35%): Tráfego + POIs de alto valor
+   - Competition (peso 25%): Chargers existentes / densidade
+   - Site Fit (peso 20%): Adequação do local (zoning, acesso)
+   - EV Affinity (peso 20%): Renda média, educação, adoção de EVs
+
+5. REPORTING AGENT
+   - Gera relatório consolidado
+   - Ranking de cidades
+   - Exportação PDF (planejado)
+
+-----------------------------------------------------------------------------
+O QUE PRECISA SER IMPLEMENTADO
+-----------------------------------------------------------------------------
+
+PRIORIDADE ALTA:
+□ Otimização de chamadas OCM
+  - Atualmente: 240 chamadas por cidade (inviável)
+  - Objetivo: 2 chamadas por cidade (regional search)
+  - Economia: 99% de requests
+
+□ Cache SQLite com TTL
+  - Geocoding: cache de 90 dias
+  - POIs: cache de 30 dias
+  - Tráfego: cache de 7 dias
+  - Redução massiva de custos de API
+
+PRIORIDADE MÉDIA:
+□ Validar Census API key
+  - Chave atual está inválida
+  - Necessário para dados de renda/educação
+  - Buscar alternativa se necessário
+
+□ Corrigir TomTom Traffic Flow
+  - Substituir chamada A→A (origem=destino não faz sentido)
+  - Usar Traffic Flow API corretamente
+
+□ Frontend: Mapa interativo
+  - Visualizar cidades no mapa de MA
+  - Heatmap de scores
+  - Filtros por score mínimo
+
+PRIORIDADE BAIXA:
+□ Expansão para outros estados
+  - Connecticut (similar a MA)
+  - Rhode Island (pequeno, fácil de cobrir)
+  - New Hampshire (mercado menor mas menos saturado)
+
+□ Geração de leads automática
+  - Identificar proprietários de locais viáveis
+  - Scraping de contatos
+  - Email outreach automatizado
+
+□ Integração com Ziontec Bot
+  - Notificação de novas oportunidades
+  - Pipeline de follow-up
+
+-----------------------------------------------------------------------------
+DECISÕES ARQUITETURAIS (ADRs)
+-----------------------------------------------------------------------------
+
+Flask em vez de FastAPI:
+- Projeto iniciado antes do Tax Deed Finder
+- Flask é mais simples para MVPs rápidos
+- Migração para FastAPI pode ser feita depois
+
+SQLite em vez de PostgreSQL:
+- Single-user, sem multi-tenancy
+- 341 cidades é dataset pequeno
+- Simplicidade de deploy
+
+Pipeline de agentes sequencial:
+- Mais fácil de debugar que paralelo
+- Latência não é crítica (batch processing)
+- Clareza de lógica
+
+Massachusetts como estado piloto:
+- Ziontec já opera em MA
+- Incentivos estaduais para EVs
+- Alta densidade populacional
+
+-----------------------------------------------------------------------------
+RECURSOS EXISTENTES
+-----------------------------------------------------------------------------
+
+✅ Backend Flask funcional
+✅ Frontend React + Vite básico
+✅ Pipeline de 5 agentes implementado
+✅ Integração com 4 APIs
+✅ Scoring de 4 dimensões
+✅ Lista completa das 341 cidades de MA
+
+-----------------------------------------------------------------------------
+STATUS ATUAL
+-----------------------------------------------------------------------------
+
+PAUSADO - Motivos:
+- OCM API rate limiting (240 chamadas/cidade é inviável)
+- Census API key inválida
+- Prioridade menor que Tax Deed Finder e SMB OS
+
+Arquitetura de scoring foi reutilizada e melhorada no Tax Deed Finder.
+
+-----------------------------------------------------------------------------
+PRÓXIMOS PASSOS (QUANDO RETOMAR)
+-----------------------------------------------------------------------------
+
+1. Implementar OCM regional search (2 calls/cidade)
+2. Substituir/validar Census API
+3. Corrigir TomTom Traffic Flow API
+4. Implementar cache SQLite
+5. Testar pipeline completo com 10 cidades
+6. Avaliar se vale a pena continuar ou arquivar
+
+=============================================================================

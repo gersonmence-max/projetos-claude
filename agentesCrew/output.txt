@@ -1,0 +1,19 @@
+Elegibilidade: True - eligible
+==================================================
+  Meadow Glen Mall [DCFC]
+==================================================
+  Score Final:  9.1 / 10
+  Potencial:    VERY HIGH
+  Confianca:    0.98
+  Breakdown:
+    demand         8.8
+    competition    9.7
+    site_fit       10.0
+    ev_affinity    8.6
+  Pontos Fortes:
+    + Sem concorrencia direta - zona de monopolio
+    + Alto fluxo de trafego no horario de pico
+  Riscos:
+    ! Fecha antes das 22h - limita uso noturno
+  Concorrente: Level 2 - 1.2mi (ChargePoint)
+==================================================

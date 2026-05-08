@@ -1,0 +1,8 @@
+{
+  "valor_hora": 25,
+  "timezone": "America/New_York",
+  "regra_8_8_igual_12h": true,
+  "permitir_horas_sem_periodo": true,
+  "confirmar_financeiro": true,
+  "empresa": "Ziontec"
+}

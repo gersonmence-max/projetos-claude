@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev Creator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d1117;
+      --surface:  #161b22;
+      --border:   #30363d;
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --accent:   #7c3aed;
+      --accent2:  #a78bfa;
+      --green:    #3fb950;
+      --red:      #f85149;
+      --yellow:   #d29922;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 0.9rem 1.75rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--accent2);
+    }
+
+    .logo-dot { color: var(--accent); }
+
+    .tagline {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── Layout ── */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      overflow: hidden;
+    }
+
+    /* ── Form panel ── */
+    .form-panel {
+      padding: 1.75rem;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      overflow-y: auto;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .field-hint {
+      display: block;
+      font-size: 0.72rem;
+      color: #484f58;
+      margin-top: 0.35rem;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 0.65rem 0.9rem;
+      font-size: 0.85rem;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 260px;
+      line-height: 1.65;
+    }
+
+    .btn-run {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.15s, opacity 0.15s;
+    }
+
+    .btn-run:hover:not(:disabled) { background: #6d28d9; }
+
+    .btn-run:disabled {
+      background: #21262d;
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Log panel ── */
+    .log-panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .log-topbar {
+      padding: 0.65rem 1.25rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--bg);
+    }
+
+    .status-pill.running { color: var(--accent2); border-color: var(--accent); }
+    .status-pill.success { color: var(--green); border-color: var(--green); }
+    .status-pill.error   { color: var(--red);   border-color: var(--red); }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .pill-dot.blink { animation: blink 1.2s ease-in-out infinite; }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+    .log-actions { display: flex; gap: 0.5rem; }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 5px;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .btn-ghost:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    .log-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem 1.5rem;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.78rem;
+      line-height: 1.75;
+      background: #090d13;
+    }
+
+    .empty-state {
+      color: #2d333b;
+      text-align: center;
+      margin-top: 5rem;
+      font-size: 0.85rem;
+      line-height: 2;
+    }
+
+    /* log line colours */
+    .l { display: block; white-space: pre-wrap; word-break: break-all; }
+    .l-sep   { color: #7c3aed; }
+    .l-phase { color: var(--accent2); font-weight: 600; }
+    .l-ok    { color: var(--green); }
+    .l-err   { color: var(--red); }
+    .l-warn  { color: var(--yellow); }
+    .l-info  { color: #6e7681; }
+    .l-file  { color: #79c0ff; }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+      .form-panel { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    .phase-track  { display: flex; gap: 0.4rem; align-items: center; }
+    .phase-step   { font-size: 0.68rem; color: #484f58; padding: 0.15rem 0.4rem;
+                    border-radius: 4px; border: 1px solid #21262d; }
+    .phase-step.active { color: var(--accent2); border-color: var(--accent); }
+    .phase-step.done   { color: var(--green);   border-color: #1a4028; background:#0d2318; }
+    .phase-arrow  { color: #30363d; font-size: 0.75rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">DEV<span class="logo-dot">.</span>CREATOR</div>
+    <div class="tagline">Sistema Autonomo de Desenvolvimento por IA</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Campo esquerdo: Formulario ── -->
+  <section class="form-panel">
+
+    <div>
+      <label class="field-label" for="destination">📁 Pasta de Destino</label>
+      <input
+        type="text"
+        id="destination"
+        placeholder="Ex: C:\projetos\meu-app"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <span class="field-hint">Caminho completo onde o projeto sera gerado</span>
+    </div>
+
+    <div>
+      <label class="field-label" for="spec">📝 Prompt / Especificacao</label>
+      <textarea
+        id="spec"
+        placeholder="Descreva o projeto que quer criar...
+
+Exemplo:
+Criar uma API REST com FastAPI para gerenciar tarefas.
+
+Features:
+- CRUD completo (criar, listar, editar, deletar)
+- Cada tarefa: titulo, descricao, status, data_criacao
+- Banco SQLite com SQLAlchemy
+- Autenticacao JWT basica
+- Swagger habilitado
+
+Stack: Python 3.11, FastAPI, SQLAlchemy, uvicorn"
+      ></textarea>
+      <span class="field-hint">Ctrl + Enter para executar rapidamente</span>
+    </div>
+
+    <button class="btn-run" id="btn-run" onclick="startRun()">
+      <div class="spinner" id="spinner"></div>
+      <span id="btn-label">🚀&nbsp; Executar</span>
+    </button>
+
+  </section>
+
+  <!-- ── Painel direito: Log ── -->
+  <section class="log-panel">
+
+    <div class="log-topbar">
+      <div class="status-pill" id="pill">
+        <span class="pill-dot" id="pill-dot"></span>
+        <span id="pill-text">Aguardando</span>
+      </div>
+      <div class="phase-track" id="phase-track" style="display:none;">
+        <span class="phase-step" id="ph1">1·Generate</span>
+        <span class="phase-arrow">›</span>
+        <span class="phase-step" id="ph2">2·Write</span>
+        <span class="phase-arrow">›</span>
+        <span class="phase-step" id="ph3">3·Check</span>
+        <span class="phase-arrow">›</span>
+        <span class="phase-step" id="ph4">4·Report</span>
+      </div>
+      <div class="log-actions">
+        <button class="btn-ghost" onclick="copyLog()">Copiar</button>
+        <button class="btn-ghost" onclick="clearLog()">Limpar</button>
+      </div>
+    </div>
+
+    <div class="log-body" id="log">
+      <div class="empty-state" id="empty">
+        Preencha os campos e clique em <strong>Executar</strong><br/>
+        O log aparecera aqui em tempo real
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+  let es = null;   // EventSource
+
+  // ── Status pill ──────────────────────────────────────────
+
+  function setStatus(state, text) {
+    const pill = document.getElementById('pill');
+    const dot  = document.getElementById('pill-dot');
+    const lbl  = document.getElementById('pill-text');
+    pill.className = 'status-pill ' + state;
+    dot.className  = 'pill-dot' + (state === 'running' ? ' blink' : '');
+    lbl.textContent = text;
+  }
+
+  // ── Log helpers ──────────────────────────────────────────
+
+  function cls(text) {
+    if (/={3,}|-{3,}/.test(text))                            return 'l-sep';
+    if (/^\[1\/4\]/.test(text))                              return 'l-phase';
+    if (/^\[2\/4\]/.test(text))                              return 'l-phase';
+    if (/^\[3\/4\]/.test(text))                              return 'l-phase';
+    if (/^\[4\/4\]/.test(text))                              return 'l-phase';
+    if (/CONCLUIDO|Sintaxe OK|success/i.test(text))          return 'l-ok';
+    if (/ERRO|FALHOU|FAILED|ERROR|erro/i.test(text))         return 'l-err';
+    if (/Gemini falhou|usando Groq|corrigido/i.test(text))   return 'l-warn';
+    if (/^\s*->\s*\d+ arquivo/.test(text))                   return 'l-ok';
+    if (/\.(py|js|ts|html|css|json|yaml|md|txt|sql)\b/.test(text)) return 'l-file';
+    return 'l-info';
+  }
+
+  function appendLine(text) {
+    const log = document.getElementById('log');
+    const empty = document.getElementById('empty');
+    if (empty) empty.remove();
+
+    const span = document.createElement('span');
+    span.className = 'l ' + cls(text);
+    span.textContent = text;
+    log.appendChild(span);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function clearLog() {
+    document.getElementById('log').innerHTML =
+      '<div class="empty-state" id="empty">Log limpo</div>';
+    document.getElementById('phase-track').style.display = 'none';
+    for (let i = 1; i <= 4; i++)
+      document.getElementById('ph' + i).className = 'phase-step';
+  }
+
+  function copyLog() {
+    const text = document.getElementById('log').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = event.currentTarget;
+      const orig = btn.textContent;
+      btn.textContent = 'Copiado!';
+      setTimeout(() => btn.textContent = orig, 1500);
+    });
+  }
+
+  // ── Button state ─────────────────────────────────────────
+
+  function setBusy(busy) {
+    const btn     = document.getElementById('btn-run');
+    const label   = document.getElementById('btn-label');
+    const spinner = document.getElementById('spinner');
+    btn.disabled      = busy;
+    spinner.style.display = busy ? 'block' : 'none';
+    label.textContent = busy ? 'Executando...' : '🚀  Executar';
+  }
+
+  // ── Main run flow ─────────────────────────────────────────
+
+  async function startRun() {
+    const destination = document.getElementById('destination').value.trim();
+    const spec        = document.getElementById('spec').value.trim();
+
+    if (!destination) { alert('Informe a pasta de destino.'); return; }
+    if (!spec)        { alert('Informe a especificacao/prompt.'); return; }
+
+    if (es) { es.close(); es = null; }
+
+    clearLog();
+    setBusy(true);
+    setStatus('running', 'Executando...');
+
+    // POST to start the pipeline
+    let jobId;
+    try {
+      const res = await fetch('/api/run', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ destination, spec }),
+      });
+      if (res.status === 409) {
+        alert('Ja existe uma execucao em andamento. Aguarde terminar.');
+        setBusy(false);
+        setStatus('', 'Aguardando');
+        return;
+      }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || res.statusText);
+      }
+      const data = await res.json();
+      jobId = data.job_id;
+    } catch (e) {
+      appendLine('Erro ao iniciar: ' + e.message);
+      setBusy(false);
+      setStatus('error', 'Erro de conexao');
+      return;
+    }
+
+    // Connect to SSE stream
+    es = new EventSource('/api/stream/' + jobId);
+
+    es.onmessage = (e) => {
+      if (e.data) {
+        detectPhase(e.data);
+        appendLine(e.data);
+      }
+    };
+
+    es.addEventListener('done', (e) => {
+      es.close(); es = null;
+      setBusy(false);
+      if (e.data === 'success') {
+        setStatus('success', 'Concluido');
+        appendLine('');
+        appendLine('✅  Pipeline concluido com sucesso!');
+      } else {
+        setStatus('error', 'Erro');
+        appendLine('❌  Pipeline encerrado com erro.');
+      }
+    });
+
+    es.onerror = () => {
+      if (es) { es.close(); es = null; }
+      setBusy(false);
+      setStatus('error', 'Conexao perdida');
+      appendLine('[conexao com o servidor encerrada]');
+    };
+  }
+
+  // ── Phase tracker ─────────────────────────────────────────
+
+  function detectPhase(text) {
+    if (/^\[1\/4\]/.test(text)) activatePhase(1);
+    if (/^\[2\/4\]/.test(text)) activatePhase(2);
+    if (/^\[3\/4\]/.test(text)) activatePhase(3);
+    if (/^\[4\/4\]/.test(text)) activatePhase(4);
+  }
+
+  function activatePhase(n) {
+    document.getElementById('phase-track').style.display = 'flex';
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('ph' + i);
+      el.className = 'phase-step' + (i < n ? ' done' : i === n ? ' active' : '');
+    }
+  }
+
+  // Ctrl+Enter submits from the textarea
+  document.getElementById('spec').addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'Enter') startRun();
+  });
+</script>
+
+</body>
+</html>

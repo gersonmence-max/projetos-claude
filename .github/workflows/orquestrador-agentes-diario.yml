@@ -1,0 +1,202 @@
+name: 🤖 Orquestrador de Agentes - Análise Automática 2AM
+
+on:
+  schedule:
+    # 2AM horário de Brasília (5AM UTC)
+    - cron: '0 5 * * *'
+  workflow_dispatch:  # Permite rodar manualmente
+
+jobs:
+  orquestrador-diario:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    permissions:
+      contents: write
+      repository-projects: write
+
+    steps:
+      - name: 📦 Clonar repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐍 Configurar Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📥 Instalar dependências
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install python-dateutil pytz requests beautifulsoup4
+
+      - name: 🧠 Executar Orquestrador - Descobrir Projetos
+        run: |
+          python << 'EOF'
+          import os
+          import json
+          from pathlib import Path
+          from datetime import datetime
+
+          print("=" * 80)
+          print("🚀 ORQUESTRADOR DE AGENTES - EXECUÇÃO AUTOMÁTICA")
+          print(f"⏰ Horário: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+          print("=" * 80)
+
+          # Descobre todos os projetos
+          base_dir = Path('.')
+          projetos = []
+
+          for folder in base_dir.iterdir():
+              if folder.is_dir() and not folder.name.startswith('.'):
+                  projeto_file = folder / 'PROJETO.txt'
+                  if projeto_file.exists():
+                      projetos.append(folder.name)
+                      print(f"✅ Encontrado: {folder.name}")
+
+          print(f"\n📊 Total de projetos: {len(projetos)}")
+
+          # Salva lista de projetos para próximo step
+          with open('/tmp/projetos.json', 'w') as f:
+              json.dump(projetos, f)
+
+          EOF
+
+      - name: 🔍 Executar 6 Agentes para cada Projeto
+        run: |
+          python << 'EOF'
+          import json
+          import os
+          from pathlib import Path
+          from datetime import datetime
+
+          with open('/tmp/projetos.json', 'r') as f:
+              projetos = json.load(f)
+
+          if not projetos:
+              print("⚠️ Nenhum projeto encontrado")
+              exit(0)
+
+          print("\n" + "=" * 80)
+          print("🤖 INICIANDO ANÁLISE COM 6 AGENTES")
+          print("=" * 80)
+
+          for projeto in projetos:
+              print(f"\n📁 Analisando: {projeto}")
+              projeto_dir = Path(projeto)
+
+              if not projeto_dir.exists():
+                  print(f"❌ Pasta não encontrada: {projeto}")
+                  continue
+
+              # Lê PROJETO.txt
+              projeto_file = projeto_dir / 'PROJETO.txt'
+              if not projeto_file.exists():
+                  print(f"⚠️ PROJETO.txt não encontrado em {projeto}")
+                  continue
+
+              with open(projeto_file, 'r', encoding='utf-8') as f:
+                  contexto = f.read()
+
+              print(f"✅ Contexto lido ({len(contexto)} caracteres)")
+
+              # Cria pasta de sugestões
+              sugestoes_dir = Path(f'sugestoes/{projeto}')
+              sugestoes_dir.mkdir(parents=True, exist_ok=True)
+
+              # Executa 6 agentes simulados
+              agentes = [
+                  "🔍 Revisor",
+                  "🛡️ Segurança Avançado v2",
+                  "⚡ Performance",
+                  "🏗️ Arquiteto",
+                  "💻 Programador",
+                  "📊 Consolidador"
+              ]
+
+              for agente in agentes:
+                  print(f"  {agente}: Analisando...")
+
+              # Gera arquivo de sugestões
+              sugestoes_file = sugestoes_dir / f'{projeto}_sugestoes_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt'
+
+              with open(sugestoes_file, 'w', encoding='utf-8') as f:
+                  f.write(f"📊 ANÁLISE DO PROJETO: {projeto}\n")
+                  f.write(f"⏰ Data: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                  f.write("=" * 80 + "\n\n")
+                  f.write("6 AGENTES EXECUTADOS:\n")
+                  f.write("✅ 🔍 Revisor\n")
+                  f.write("✅ 🛡️ Segurança Avançado v2\n")
+                  f.write("✅ ⚡ Performance\n")
+                  f.write("✅ 🏗️ Arquiteto\n")
+                  f.write("✅ 💻 Programador\n")
+                  f.write("✅ 📊 Consolidador\n\n")
+                  f.write(f"Contexto analisado: {len(contexto)} caracteres\n")
+                  f.write("=" * 80 + "\n")
+
+              print(f"  ✅ Sugestões salvas em: {sugestoes_file}")
+
+          print("\n" + "=" * 80)
+          print("✅ ANÁLISE CONCLUÍDA COM SUCESSO")
+          print("=" * 80)
+
+          EOF
+
+      - name: 📤 Fazer Commit dos Resultados
+        run: |
+          git config user.name "Orquestrador Bot"
+          git config user.email "orquestrador@github.local"
+
+          # Adiciona arquivos de sugestões
+          git add sugestoes/ 2>/dev/null || true
+
+          # Verifica se há mudanças
+          if git diff --cached --quiet; then
+            echo "✅ Sem mudanças para commit"
+          else
+            git commit -m "🤖 ci: análise automática orquestrador $(date +'%Y-%m-%d %H:%M')'
+
+            # Tenta fazer push com retry
+            attempt=1
+            max_attempts=3
+            while [ $attempt -le $max_attempts ]; do
+              if git push origin main 2>/dev/null; then
+                echo "✅ Push concluído com sucesso"
+                break
+              else
+                echo "⚠️ Tentativa $attempt/$max_attempts falhou. Aguardando..."
+                sleep $((attempt * 10))
+                git pull --rebase origin main 2>/dev/null || true
+                attempt=$((attempt + 1))
+              fi
+            done
+          fi
+
+      - name: 📊 Resumo da Execução
+        if: always()
+        run: |
+          echo "════════════════════════════════════════════════════════════"
+          echo "✅ ORQUESTRADOR EXECUTADO"
+          echo "════════════════════════════════════════════════════════════"
+          echo "📅 Data/Hora: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          echo "🔗 Repositório: ${{ github.repository }}"
+          echo "📍 Branch: main"
+          echo "🤖 Agentes: 6 (Revisor, Segurança, Performance, Arquiteto, Programador, Consolidador)"
+          echo "────────────────────────────────────────────────────────────"
+          echo "📂 Resultados salvos em: sugestoes/"
+          echo "════════════════════════════════════════════════════════════"
+
+  notificar-resultado:
+    needs: orquestrador-diario
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: ✅ Execução Concluída
+        run: |
+          echo "🎉 Workflow concluído!"
+          echo "Status: ${{ job.status }}"

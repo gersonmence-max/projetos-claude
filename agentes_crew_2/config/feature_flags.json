@@ -1,0 +1,9 @@
+{
+    "USE_DYNAMIC_PENALTIES":    true,
+    "USE_CONFIDENCE_WEIGHTING": true,
+    "USE_NEW_TIMEOUT":          true,
+    "USE_NEW_RANKING":          true,
+    "USE_PDF_GENERATION":       true,
+    "USE_NOMINATIM_FALLBACK":   true,
+    "DEBUG_API_CALLS":          false
+}

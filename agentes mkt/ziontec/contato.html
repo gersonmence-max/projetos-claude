@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Schedule your free EV charger and solar assessment with Ziontec. Serving all of New England — Massachusetts, Connecticut, Rhode Island, New Hampshire, Vermont, Maine.">
+  <title>Schedule Your Free Assessment — ZionTec Power Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="logo">
+          <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:42px;width:auto;">
+        </a>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="servicos.html" data-i18n="nav.services">Services</a></li>
+          <li><a href="calculadora.html" data-i18n="nav.calculator">Savings Calculator</a></li>
+          <li><a href="sobre.html" data-i18n="nav.about">About</a></li>
+          <li><a href="contato.html" class="active" data-i18n="nav.contact">Contact</a></li>
+          <li class="nav-cta"><a href="contato.html" class="btn btn-primary" data-i18n="nav.cta">Free Assessment</a></li>
+        </ul>
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" onclick="setLang('pt')">PT</button>
+          <button class="lang-btn" onclick="setLang('es')">ES</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="section-label" data-i18n="contact.label">Free. No Obligation.</div>
+      <h1 data-i18n="contact.h1">Schedule Your Free Site Assessment</h1>
+      <p data-i18n="contact.p">We'll visit your property, evaluate your electrical panel and roof, and give you a precise quote — on the same day.</p>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+      <div class="grid-2" style="gap:48px; align-items:start;">
+
+        <!-- FORM -->
+        <div>
+          <div class="form-card">
+            <h3 style="margin-bottom:6px;" data-i18n="contact.form.h">Book Your Assessment</h3>
+            <p style="font-size:0.9rem; margin-bottom:28px;" data-i18n="contact.form.p">Fill in your details. We'll confirm within 1 business day and schedule your on-site visit.</p>
+
+            <div class="alert alert-success" id="successAlert">
+              <i class="fa-solid fa-circle-check"></i> &nbsp;Thank you! We received your request and will contact you within 1 business day to confirm your assessment.
+            </div>
+            <div class="alert alert-error" id="errorAlert">
+              <i class="fa-solid fa-triangle-exclamation"></i> &nbsp;Something went wrong. Please try again or call us directly at (781) 866-7085.
+            </div>
+
+            <form id="assessmentForm" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="firstName" data-i18n="contact.fname">First Name *</label>
+                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="John" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="lastName" data-i18n="contact.lname">Last Name *</label>
+                  <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Smith" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="email" data-i18n="contact.email">Email Address *</label>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="john@email.com" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="phone" data-i18n="contact.phone">Phone Number *</label>
+                  <input type="tel" class="form-control" id="phone" name="phone" placeholder="(781) 866-7085" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="address" data-i18n="contact.address">Property Address *</label>
+                <input type="text" class="form-control" id="address" name="address" placeholder="123 Main St, Boston, MA 02101" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="state" data-i18n="contact.state">State *</label>
+                  <select class="form-control" id="state" name="state" required>
+                    <option value="" data-i18n="contact.state.sel">Select state...</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="VT">Vermont</option>
+                    <option value="ME">Maine</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="propertyType" data-i18n="contact.proptype">Property Type *</label>
+                  <select class="form-control" id="propertyType" name="propertyType" required>
+                    <option value="" data-i18n="contact.proptype.sel">Select type...</option>
+                    <option value="residential_home" data-i18n="contact.proptype.rh">Residential — Single Family Home</option>
+                    <option value="residential_condo" data-i18n="contact.proptype.rc">Residential — Condo/Townhouse</option>
+                    <option value="commercial_small" data-i18n="contact.proptype.cs">Commercial — Small Business</option>
+                    <option value="commercial_large" data-i18n="contact.proptype.cl">Commercial — Large/Multi-unit</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="services" data-i18n="contact.services">Services Interested In *</label>
+                <select class="form-control" id="services" name="services" required>
+                  <option value="" data-i18n="contact.services.sel">Select service(s)...</option>
+                  <option value="ev_l2_residential" data-i18n="contact.services.evr">EV Charging — Level 2 (Residential)</option>
+                  <option value="ev_commercial" data-i18n="contact.services.evc">EV Charging — Commercial (Level 2 + DC Fast)</option>
+                  <option value="solar_residential" data-i18n="contact.services.sr">Solar Panels — Residential</option>
+                  <option value="solar_commercial" data-i18n="contact.services.sc">Solar Panels — Commercial</option>
+                  <option value="ev_solar_residential" data-i18n="contact.services.evsr">EV Charging + Solar — Residential (Recommended)</option>
+                  <option value="ev_solar_commercial" data-i18n="contact.services.evsc">EV Charging + Solar — Commercial</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="evBrand" data-i18n="contact.evbrand">EV Brand (if applicable)</label>
+                  <select class="form-control" id="evBrand" name="evBrand">
+                    <option value="" data-i18n="contact.evbrand.sel">Select or N/A</option>
+                    <option value="tesla">Tesla</option>
+                    <option value="rivian">Rivian</option>
+                    <option value="ford">Ford (Mustang Mach-E / F-150 Lightning)</option>
+                    <option value="bmw">BMW</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                    <option value="volvo">Volvo</option>
+                    <option value="chevrolet">Chevrolet</option>
+                    <option value="hyundai_kia">Hyundai / Kia</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="preferredDate" data-i18n="contact.date">Preferred Assessment Date</label>
+                  <input type="date" class="form-control" id="preferredDate" name="preferredDate" min="">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="message" data-i18n="contact.message">Additional Notes</label>
+                <textarea class="form-control" id="message" name="message" placeholder="Tell us anything relevant — current panel size, specific concerns, questions about rebates, etc." rows="3" data-i18n-placeholder="contact.message.ph"></textarea>
+              </div>
+
+              <div style="background:rgba(0,212,255,0.06); border:1px solid rgba(0,212,255,0.2); border-radius:var(--radius); padding:16px; margin-bottom:24px;">
+                <div style="font-family:var(--font-heading); font-weight:600; font-size:0.85rem; color:var(--dark); margin-bottom:4px;"><i class="fa-solid fa-shield-check" style="color:var(--accent);"></i> <span data-i18n="contact.next.h">What Happens Next</span></div>
+                <ul style="font-size:0.82rem; color:var(--gray); line-height:2; padding-left:16px; list-style:disc;">
+                  <li data-i18n="contact.next.1">We'll call or email you within 1 business day</li>
+                  <li data-i18n="contact.next.2">We'll schedule your on-site visit at your convenience</li>
+                  <li data-i18n="contact.next.3">Assessment takes 45–60 minutes — you'll get a quote the same day</li>
+                  <li data-i18n="contact.next.4">No pressure, no obligation</li>
+                </ul>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width:100%; justify-content:center;" id="submitBtn">
+                <i class="fa-solid fa-calendar-check"></i> <span data-i18n="contact.submit">Schedule My Free Assessment</span>
+              </button>
+              <p style="text-align:center; font-size:0.8rem; color:var(--gray); margin-top:12px;" data-i18n="contact.privacy">We'll never share your information with third parties.</p>
+            </form>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+          <div class="contact-info-card">
+            <h4 style="font-family:var(--font-heading); color:var(--dark); margin-bottom:20px;" data-i18n="contact.info.h">Get in Touch Directly</h4>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+              <div>
+                <h4 data-i18n="contact.info.call.h">Call or Text</h4>
+                <p>(781) 866-7085<br><span data-i18n="contact.info.call.p">Mon–Sat, 8am–6pm</span></p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+              <div>
+                <h4 data-i18n="contact.info.email.h">Email Us</h4>
+                <p>contact@ziontecpower.com<br><span data-i18n="contact.info.email.p">Response within 4 hours</span></p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-map-marker-alt"></i></div>
+              <div>
+                <h4 data-i18n="contact.info.loc.h">Based In</h4>
+                <p>Boston, MA<br><span data-i18n-html="contact.info.loc.p">On-site across all New England</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-areas">
+            <h3><i class="fa-solid fa-map"></i> &nbsp;<span data-i18n="contact.area.h">Service Area</span></h3>
+            <p style="color:rgba(255,255,255,0.75); font-size:0.9rem; margin-bottom:16px;" data-i18n="contact.area.p">We serve residential and commercial clients across all of New England.</p>
+            <div class="state-tags">
+              <span class="state-tag">Massachusetts</span>
+              <span class="state-tag">Connecticut</span>
+              <span class="state-tag">Rhode Island</span>
+              <span class="state-tag">New Hampshire</span>
+              <span class="state-tag">Vermont</span>
+              <span class="state-tag">Maine</span>
+            </div>
+          </div>
+
+          <div class="card mt-24">
+            <div class="stars" style="font-size:1rem; margin-bottom:12px;">★★★★★</div>
+            <p style="color:var(--dark); font-style:italic; font-size:0.9rem; margin-bottom:16px;">"Ziontec handled everything from permits to the utility company. I just said yes and came home to a working system. Best decision we made."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar" style="width:36px;height:36px;font-size:0.9rem;">JT</div>
+              <div>
+                <div class="testimonial-name" style="font-size:0.85rem;">James T.</div>
+                <div class="testimonial-location">Greenwich, CT</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:38px;width:auto;">
+          </a>
+          <p>New England's integrated clean energy company. Solar panels + EV charging systems for homes and businesses.</p>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.services">Services</div>
+          <ul class="footer-links">
+            <li><a href="servicos.html">Residential EV Charging</a></li>
+            <li><a href="servicos.html">Commercial EV Charging</a></li>
+            <li><a href="servicos.html">Residential Solar</a></li>
+            <li><a href="servicos.html">Commercial Solar</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.company">Company</div>
+          <ul class="footer-links">
+            <li><a href="sobre.html">About Ziontec</a></li>
+            <li><a href="calculadora.html">Savings Calculator</a></li>
+            <li><a href="contato.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.contact">Contact</div>
+          <div class="footer-contact-item"><i class="fa-solid fa-phone"></i><span>(781) 866-7085</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><span>contact@ziontecpower.com</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-map-marker-alt"></i><span>Boston, MA — All New England</span></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 ZionTec Power Solutions. All rights reserved.</p>
+        <p>MA · CT · RI · NH · VT · ME</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/form.js"></script>
+</body>
+</html>

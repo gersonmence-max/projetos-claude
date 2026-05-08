@@ -1,0 +1,108 @@
+=============================================================================
+PROJETO: SMB OS (Small Business Operating System)
+=============================================================================
+
+STATUS: Em planejamento / Parcialmente desenvolvido
+PRIORIDADE: ALTA
+CATEGORIA: SaaS / ERP
+MERCADO-ALVO: Pequenas empresas brasileiras (faturamento até R$ 1,5M/mês)
+
+-----------------------------------------------------------------------------
+O QUE É
+-----------------------------------------------------------------------------
+
+SaaS completo de gestão empresarial voltado para pequenas empresas, com foco
+inicial no segmento de joalherias. Plataforma multi-tenant que integra CRM,
+vendas, estoque, faturamento (NF-e/NFS-e), financeiro, ordens de serviço e
+IA conversacional nativa.
+
+Diferencial competitivo: IA integrada em todos os módulos + foco em 
+terceirização de ourives (gap que Omie/Bling não cobrem).
+
+-----------------------------------------------------------------------------
+STACK TÉCNICA
+-----------------------------------------------------------------------------
+
+Backend:  FastAPI + Python
+Frontend: Next.js + TypeScript + TailwindCSS
+Mobile:   Expo (React Native)
+Banco:    PostgreSQL (Supabase) com Row-Level Security (multi-tenant)
+Infra:    Railway (backend) + Vercel (frontend)
+Payments: Stripe + Plaid
+
+-----------------------------------------------------------------------------
+MODELO DE PREÇOS
+-----------------------------------------------------------------------------
+
+Starter:    R$ 397/mês (setup R$ 497)
+Pro:        R$ 697/mês (setup R$ 997)
+Enterprise: R$ 1.197/mês (setup R$ 1.997)
+
+-----------------------------------------------------------------------------
+ROADMAP DE DESENVOLVIMENTO (8 SESSÕES)
+-----------------------------------------------------------------------------
+
+Sessão 1: Setup monorepo + Supabase + autenticação multi-tenant
+Sessão 2: CRM - modelo Cliente + CRUD + busca
+Sessão 3: Ordem de Serviço (OS) de restauro + terceirização ourives
+Sessão 4: PDV básico + NF-e/NFS-e
+Sessão 5: Financeiro básico + DRE + fluxo de caixa
+Sessão 6: Estoque por composição (ouro/pedras)
+Sessão 7: Portal do cliente + fotos antes/depois
+Sessão 8: App mobile Expo
+
+-----------------------------------------------------------------------------
+O QUE PRECISA SER IMPLEMENTADO
+-----------------------------------------------------------------------------
+
+FASE 1 - MVP (Sessões 1-5):
+✅ Setup completo do monorepo (Next.js + FastAPI + Supabase)
+✅ Autenticação JWT + multi-tenancy com RLS
+✅ Módulo CRM completo
+✅ Módulo OS de restauro + terceirização
+✅ Integração NF-e/NFS-e (API Focus NFe ou NFe.io)
+✅ Financeiro básico funcional
+
+FASE 2 - Expansão (Sessões 6-8):
+□ Estoque por composição com baixa automática
+□ Portal do cliente web
+□ App mobile Expo
+□ Multi-CNPJ (Enterprise tier)
+
+FASE 3 - Escala:
+□ IA conversacional integrada (assistente por módulo)
+□ Módulo de fabricação por composição
+□ Integração Open Finance para conciliação bancária
+□ Vertical para outros segmentos além de joalheria
+
+-----------------------------------------------------------------------------
+ARQUIVOS E RECURSOS EXISTENTES
+-----------------------------------------------------------------------------
+
+- Schema do banco de dados PostgreSQL completo
+- Definição de rotas FastAPI
+- Estrutura do monorepo
+- Modelo de preços e tiers
+- ADRs (Architecture Decision Records)
+
+-----------------------------------------------------------------------------
+CLIENTE PILOTO PLANEJADO
+-----------------------------------------------------------------------------
+
+Joalheria pequena (1-3 funcionários) que faz:
+- Venda de joias prontas
+- Fabricação própria
+- Restauro e conserto
+- Terceirização para ourives
+
+-----------------------------------------------------------------------------
+PRÓXIMOS PASSOS IMEDIATOS
+-----------------------------------------------------------------------------
+
+1. Executar Sessão 1: criar monorepo funcional
+2. Configurar Supabase com esquema multi-tenant
+3. Implementar autenticação completa
+4. Deploy básico em Railway + Vercel
+5. Iniciar Sessão 2 (CRM)
+
+=============================================================================

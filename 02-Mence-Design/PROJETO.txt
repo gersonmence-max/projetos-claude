@@ -1,0 +1,133 @@
+=============================================================================
+PROJETO: MENCE DESIGN
+=============================================================================
+
+STATUS: Website pronto / Infraestrutura blockchain pendente
+PRIORIDADE: MÉDIA-ALTA
+CATEGORIA: E-commerce / Blockchain / Fine Jewelry
+MERCADO-ALVO: Global (EUA, Brasil, UK, Portugal, UAE, Singapura)
+
+-----------------------------------------------------------------------------
+O QUE É
+-----------------------------------------------------------------------------
+
+Marca global de fine jewelry phygital. Cada peça é feita em ouro 18k com
+pedras preciosas naturais, incorpora chip NFC, é gravada a laser com número
+serial único, e é tokenizada como NFT no momento da criação.
+
+Posicionamento: Maison global online-only, sem lojas físicas.
+Estética: British Racing Green + branco + ouro (editorial, clean)
+
+Tagline: "Forged in gold. Sealed in code. Yours forever."
+
+-----------------------------------------------------------------------------
+STACK TÉCNICA
+-----------------------------------------------------------------------------
+
+Website:    HTML/CSS puro (v4 - British Racing Green editorial)
+Blockchain: Polygon (minting NFTs) + Arweave (storage permanente)
+NFC:        Chips embutidos em cada peça para verificação física
+Payments:   USDC, USDT, USD via Stripe
+Referência: Mousson Atelier (moussonatelier.com)
+
+-----------------------------------------------------------------------------
+ARQUITETURA DE PRODUTO
+-----------------------------------------------------------------------------
+
+Tier 1 - SIGNATURE: Open edition, entrada da marca
+Tier 2 - ANNUAL: 250 peças por ano, numeradas
+Tier 3 - DROPS: 30-50 peças surpresa
+Tier 4 - 1-OF-1: Leilão, peças únicas
+
+Coleções: Raiz · Forma · Terra · Memória
+
+-----------------------------------------------------------------------------
+O QUE PRECISA SER IMPLEMENTADO
+-----------------------------------------------------------------------------
+
+PRIORIDADE ALTA:
+□ Pipeline de minting NFT (Polygon + Arweave)
+  - Smart contract de minting
+  - Integração Arweave para metadata/imagens
+  - Gas automation (wallet da marca)
+  - Digital Passport NFT (card visual)
+
+□ Sistema de verificação NFC
+  - App ou web app para scan de chips
+  - Verificação blockchain on-chain
+  - Registro anti-roubo
+
+□ Website v5 com hierarquia tipográfica corrigida
+  - Ajustes finais de legibilidade
+  - Grid de 3 colunas no header
+  - Níveis tipográficos consistentes
+
+PRIORIDADE MÉDIA:
+□ E-commerce checkout completo
+  - Integração Stripe (USDC/USDT/USD)
+  - Carrinho de compras
+  - Gestão de inventory on-chain
+
+□ Holders Club - Benefícios para detentores
+  - Early access a drops
+  - Desconto em Annual tiers
+  - Eventos exclusivos
+
+□ Custom orders workflow
+  - Formulário de pedido personalizado
+  - Pricing dinâmico
+  - Aprovação de design
+
+PRIORIDADE BAIXA:
+□ Portal do colecionador
+  - Dashboard com NFTs owned
+  - Histórico de provenance
+  - Certificados digitais
+
+-----------------------------------------------------------------------------
+DECISÕES ARQUITETURAIS (ADRs)
+-----------------------------------------------------------------------------
+
+Polygon em vez de Ethereum:
+- Gas fees muito menores (~$0.01 vs $50+)
+- Velocidade de confirmação (2s vs 15min)
+- Ecossistema maduro para NFTs
+
+Arweave para storage:
+- Permanente (pay once, store forever)
+- Descentralizado (não depende de IPFS pinning)
+- ~$5 para armazenar 1GB permanentemente
+
+Online-only sem loja física:
+- Margens maiores (60-70% vs 40-50%)
+- Mercado global desde o dia 1
+- Zero custo fixo de locação
+
+British Racing Green como cor principal:
+- Diferencia de joalherias padrão (preto/dourado genérico)
+- Editorial, sofisticado, atemporal
+- Associação com heritage brands (Jaguar, Aston Martin)
+
+-----------------------------------------------------------------------------
+RECURSOS EXISTENTES
+-----------------------------------------------------------------------------
+
+✅ Website v4 completo (HTML/CSS)
+✅ Identidade visual definida
+✅ Arquitetura de produto estabelecida
+✅ Coleções nomeadas
+✅ Tagline e messaging
+✅ Card visual do Digital Passport NFT
+
+-----------------------------------------------------------------------------
+PRÓXIMOS PASSOS IMEDIATOS
+-----------------------------------------------------------------------------
+
+1. Desenvolver smart contract Polygon para minting
+2. Configurar integração Arweave
+3. Criar workflow de minting (manual primeiro)
+4. Testar mint de NFT de teste
+5. Implementar sistema NFC básico
+6. Integrar Stripe checkout
+
+=============================================================================

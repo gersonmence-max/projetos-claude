@@ -1,0 +1,27 @@
+# Ambiente virtual
+venv/
+env/
+.venv/
+
+# Variaveis de ambiente (NUNCA commitar!)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db

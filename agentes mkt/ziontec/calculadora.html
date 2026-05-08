@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculate how much you could save annually with a Ziontec EV charger and solar installation in New England.">
+  <title>Energy Savings Calculator — ZionTec Power Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="logo">
+          <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:42px;width:auto;">
+        </a>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="servicos.html" data-i18n="nav.services">Services</a></li>
+          <li><a href="calculadora.html" class="active" data-i18n="nav.calculator">Savings Calculator</a></li>
+          <li><a href="sobre.html" data-i18n="nav.about">About</a></li>
+          <li><a href="contato.html" data-i18n="nav.contact">Contact</a></li>
+          <li class="nav-cta"><a href="contato.html" class="btn btn-primary" data-i18n="nav.cta">Free Assessment</a></li>
+        </ul>
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" onclick="setLang('pt')">PT</button>
+          <button class="lang-btn" onclick="setLang('es')">ES</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="section-label" data-i18n="calc.label">Energy Savings Calculator</div>
+      <h1 data-i18n="calc.h1">How Much Could You Save?</h1>
+      <p data-i18n="calc.p">Get your personalized annual savings estimate for EV home charging and solar installation in New England.</p>
+    </div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <section class="section">
+    <div class="container">
+      <div class="calc-container">
+        <div class="calc-grid">
+
+          <!-- INPUTS -->
+          <div class="calc-inputs">
+            <h3 style="margin-bottom:8px;" data-i18n="calc.inputs.h">Your Energy Profile</h3>
+            <p style="font-size:0.9rem; margin-bottom:32px;" data-i18n="calc.inputs.p">Adjust the sliders to match your situation.</p>
+
+            <!-- EV Section -->
+            <div style="margin-bottom:32px; padding-bottom:32px; border-bottom:2px solid var(--light);">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+                <div class="card-icon card-icon-blue" style="width:36px;height:36px;border-radius:10px;flex-shrink:0;"><i class="fa-solid fa-bolt" style="color:var(--accent);font-size:0.9rem;"></i></div>
+                <h4 style="color:var(--dark);" data-i18n="calc.ev.label">EV Charging</h4>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Miles driven per month: <span class="range-value" id="milesVal">1,000</span></label>
+                <input type="range" class="range-input" id="miles" min="300" max="3000" value="1000" step="100" oninput="calculate()">
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--gray);margin-top:4px;">
+                  <span>300 mi</span><span>3,000 mi</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" data-i18n="calc.charge.label">Current charging method</label>
+                <select class="form-control" id="chargingMethod" onchange="calculate()">
+                  <option value="public_fast" data-i18n="calc.charge.opt1">Mostly DC Fast Chargers ($0.55/kWh avg)</option>
+                  <option value="public_l2" selected data-i18n="calc.charge.opt2">Mix of public Level 2 stations ($0.42/kWh avg)</option>
+                  <option value="home_120" data-i18n="calc.charge.opt3">Home 120V outlet only ($0.28/kWh + slow)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Your EV efficiency: <span class="range-value" id="effVal">3.5</span> mi/kWh</label>
+                <input type="range" class="range-input" id="efficiency" min="2.5" max="5.0" value="3.5" step="0.1" oninput="calculate()">
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--gray);margin-top:4px;">
+                  <span>2.5 (trucks/SUVs)</span><span>5.0 (small EVs)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Solar Section -->
+            <div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+                <div class="card-icon card-icon-gold" style="width:36px;height:36px;border-radius:10px;flex-shrink:0;"><i class="fa-solid fa-solar-panel" style="color:var(--gold);font-size:0.9rem;"></i></div>
+                <h4 style="color:var(--dark);" data-i18n="calc.solar.label">Solar Power</h4>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Monthly electric bill: <span class="range-value" id="billVal">$200</span></label>
+                <input type="range" class="range-input" id="electricBill" min="50" max="800" value="200" step="10" oninput="calculate()">
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--gray);margin-top:4px;">
+                  <span>$50</span><span>$800</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" data-i18n="calc.state.label">State</label>
+                <select class="form-control" id="state" onchange="calculate()">
+                  <option value="MA" selected>Massachusetts</option>
+                  <option value="CT">Connecticut</option>
+                  <option value="RI">Rhode Island</option>
+                  <option value="NH">New Hampshire</option>
+                  <option value="VT">Vermont</option>
+                  <option value="ME">Maine</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" data-i18n="calc.want.label">Interested in solar?</label>
+                <select class="form-control" id="wantSolar" onchange="calculate()">
+                  <option value="yes" selected data-i18n="calc.want.yes">Yes — include solar in my estimate</option>
+                  <option value="no" data-i18n="calc.want.no">No — EV charger only</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- RESULTS -->
+          <div class="calc-results">
+            <div class="section-label-gold" style="font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; font-family:var(--font-heading); font-weight:600; color:var(--gold); margin-bottom:8px;" data-i18n="calc.res.title">Your Estimate</div>
+            <h3 style="color:var(--white); margin-bottom:24px;" data-i18n="calc.res.h">Annual Savings Breakdown</h3>
+
+            <div class="result-item">
+              <div class="result-item-label" data-i18n="calc.res.ev">⚡ EV Charging Savings / Year</div>
+              <div class="result-item-value cyan" id="evSavings">$0</div>
+            </div>
+
+            <div class="result-item" id="solarRow">
+              <div class="result-item-label" data-i18n="calc.res.solar">☀️ Solar Savings / Year</div>
+              <div class="result-item-value gold" id="solarSavings">$0</div>
+            </div>
+
+            <div class="result-item" style="border:1px solid rgba(52,211,153,0.4); background:rgba(52,211,153,0.08);">
+              <div class="result-item-label" data-i18n="calc.res.total">💰 Total Annual Savings</div>
+              <div class="result-item-value green" id="totalSavings">$0</div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:4px;">
+              <div class="result-item">
+                <div class="result-item-label" data-i18n="calc.res.payback">Payback Period</div>
+                <div class="result-item-value" id="payback" style="font-size:1.3rem; color:var(--white);">—</div>
+              </div>
+              <div class="result-item">
+                <div class="result-item-label" data-i18n="calc.res.10yr">10-Year Savings</div>
+                <div class="result-item-value" id="tenYear" style="font-size:1.3rem; color:var(--white);">—</div>
+              </div>
+            </div>
+
+            <div style="margin-top:24px; padding:16px; background:rgba(0,0,0,0.2); border-radius:var(--radius);">
+              <div style="font-size:0.75rem; color:rgba(255,255,255,0.5); margin-bottom:4px; font-family:var(--font-heading); font-weight:600; text-transform:uppercase; letter-spacing:0.5px;" data-i18n="calc.res.incentive">State Incentives Available</div>
+              <div id="incentiveText" style="font-size:0.9rem; color:rgba(255,255,255,0.85); line-height:1.6;"></div>
+            </div>
+
+            <div style="margin-top:24px;">
+              <p style="color:rgba(255,255,255,0.6); font-size:0.8rem; margin-bottom:20px;" data-i18n="calc.res.p">Ready for a precise quote? Schedule your free site assessment — no obligation, just real numbers for your specific property.</p>
+              <a href="contato.html" class="btn btn-primary" style="width:100%; justify-content:center;">
+                <i class="fa-solid fa-calendar-check"></i> <span data-i18n="common.free_assessment">Get My Free Assessment</span>
+              </a>
+            </div>
+
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.35); margin-top:16px; line-height:1.6;" data-i18n="calc.res.note">*Estimates based on New England average utility rates and typical system performance. Actual savings depend on property specifics, system size, usage patterns, and available incentives. Results not guaranteed.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW WE CALCULATE -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-label" data-i18n="calc.how.label">Transparency</div>
+        <h2 data-i18n="calc.how.h2">How We Calculate Your Savings</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon card-icon-blue"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i></div>
+          <h3 data-i18n="calc.how.c1.h">EV Charging Savings</h3>
+          <p data-i18n="calc.how.c1.p">We compare your current public charging cost per kWh vs. home charging with Eversource/National Grid off-peak EV rates (~$0.14/kWh). The difference × your monthly kWh usage = your annual savings.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-gold"><i class="fa-solid fa-solar-panel" style="color:var(--gold)"></i></div>
+          <h3 data-i18n="calc.how.c2.h">Solar Savings</h3>
+          <p data-i18n="calc.how.c2.p">Based on your state's solar irradiance data and average utility rate, we estimate how much of your bill a standard rooftop system would offset — typically 70-90% in New England.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-green"><i class="fa-solid fa-piggy-bank" style="color:var(--success)"></i></div>
+          <h3 data-i18n="calc.how.c3.h">Payback Period</h3>
+          <p data-i18n="calc.how.c3.p">We use average installation costs (EV charger: ~$2,000; Solar: ~$18,000 after federal 30% ITC credit) divided by your annual savings to estimate when your system pays for itself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2 data-i18n="calc.cta.h2">Want Your Exact Numbers?</h2>
+        <p data-i18n="calc.cta.p">Our free site assessment gives you a precise quote based on your actual property, panel, and usage — not estimates.</p>
+        <div class="cta-actions">
+          <a href="contato.html" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-calendar-check"></i> <span data-i18n="common.free_assessment">Schedule Free Assessment</span>
+          </a>
+        </div>
+        <p style="color:rgba(255,255,255,0.5); font-size:0.8rem; margin-top:16px;" data-i18n="common.free_note">Free. No obligation. On-site visit within 5 business days.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:38px;width:auto;">
+          </a>
+          <p>New England's integrated clean energy company. Solar panels + EV charging systems for homes and businesses.</p>
+          <div class="footer-social">
+            <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.services">Services</div>
+          <ul class="footer-links">
+            <li><a href="servicos.html">Residential EV Charging</a></li>
+            <li><a href="servicos.html">Commercial EV Charging</a></li>
+            <li><a href="servicos.html">Residential Solar</a></li>
+            <li><a href="servicos.html">Commercial Solar</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.company">Company</div>
+          <ul class="footer-links">
+            <li><a href="sobre.html">About Ziontec</a></li>
+            <li><a href="calculadora.html">Savings Calculator</a></li>
+            <li><a href="contato.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.contact">Contact</div>
+          <div class="footer-contact-item"><i class="fa-solid fa-phone"></i><span>(781) 866-7085</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><span>contact@ziontecpower.com</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-map-marker-alt"></i><span>Boston, MA — Serving all New England</span></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 ZionTec Power Solutions. All rights reserved.</p>
+        <p>MA · CT · RI · NH · VT · ME</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/calculator.js"></script>
+</body>
+</html>

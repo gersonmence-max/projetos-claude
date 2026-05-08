@@ -1,0 +1,193 @@
+=============================================================================
+PROJETO: MARIA MADAH
+=============================================================================
+
+STATUS: Website pronto / E-commerce pendente
+PRIORIDADE: MÉDIA
+CATEGORIA: E-commerce / Semi-joias
+MERCADO-ALVO: Mulheres brasileiras residentes nos EUA (25-45 anos)
+
+-----------------------------------------------------------------------------
+O QUE É
+-----------------------------------------------------------------------------
+
+E-commerce de semi-joias banhadas a ouro (mínimo 3 microns) para mulheres
+brasileiras vivendo nos Estados Unidos. Posicionamento: peças com alma
+brasileira, design contemporâneo, entregues nos EUA.
+
+Diferencial: Qualidade superior (3+ microns gold plating) vs costume jewelry
+genérica, com preço acessível (ticket médio $30-80).
+
+-----------------------------------------------------------------------------
+STACK TÉCNICA
+-----------------------------------------------------------------------------
+
+Website: HTML/CSS/JavaScript puro
+Score:   100/100 em audit de performance
+Hosting: (a definir - Vercel/Netlify recomendados)
+
+E-commerce futuro:
+- Shopify (mais fácil) ou
+- WooCommerce (mais controle) ou
+- Stripe Payment Links (mais simples)
+
+-----------------------------------------------------------------------------
+MODELO DE NEGÓCIO
+-----------------------------------------------------------------------------
+
+Sourcing: Alibaba (fornecedores verificados de Dongguan/Guangzhou)
+          - Xuping Jewelry
+          - Sevena Jewelry
+          - Skysweet Jewelry Factory
+          - Dongguan Azone Jewelry
+
+Especificações técnicas obrigatórias:
+- Base metal: Copper ou Brass
+- Plating: Gold 3 microns MÍNIMO (verificar certificado)
+- Não aceitar: "gold plated" sem especificação de espessura
+
+Preços estimados:
+- Custo FOB: $3-8/peça
+- Markup: 5-8x
+- Preço de venda: $30-80
+- Margem: 60-70%
+
+Canais de divulgação:
+- BrasilDeals (comunidade de brasileiros nos EUA)
+- Instagram orgânico
+- TikTok (product showcase)
+- Google Ads (long-tail keywords)
+
+-----------------------------------------------------------------------------
+O QUE PRECISA SER IMPLEMENTADO
+-----------------------------------------------------------------------------
+
+PRIORIDADE ALTA:
+□ E-commerce checkout funcional
+  - Escolher plataforma (Shopify recomendado para MVP)
+  - Configurar produtos e variações
+  - Integrar Stripe/PayPal
+  - Shipping zones (USPS, FedEx, UPS)
+
+□ Primeiro pedido de amostras
+  - Selecionar 10-15 peças dos fornecedores
+  - Validar qualidade de plating (teste de espessura)
+  - Fotos profissionais para o site
+  - Definir SKUs e inventory
+
+□ Legal compliance
+  - Business license (LLC ou DBA)
+  - Sales tax registration (estados necessários)
+  - Import compliance (joias < $800 geralmente isentas)
+
+PRIORIDADE MÉDIA:
+□ Marketing inicial
+  - Instagram: 20-30 posts prontos
+  - TikTok: 10 vídeos curtos
+  - Post no BrasilDeals apresentando a marca
+  - Google Ads: 3-5 campanhas de teste ($300 budget)
+
+□ Automação de email marketing
+  - Klaviyo ou Mailchimp
+  - Welcome series
+  - Abandoned cart
+  - Recompra (60-90 dias)
+
+□ Reviews e social proof
+  - Integrar sistema de reviews (Judge.me ou similar)
+  - Seedear 10-20 primeiras clientes (desconto em troca de review)
+  - User-generated content (fotos de clientes)
+
+PRIORIDADE BAIXA:
+□ Expansão de catálogo
+  - Anéis, brincos, colares, pulseiras
+  - Linhas temáticas (minimalista, statement, clássica)
+
+□ Programa de afiliados
+  - Comissão 10-15% para influencers
+  - Tracking via Refersion ou similar
+
+□ Marketplace expansion
+  - Amazon Handmade
+  - Etsy (opcional, concorrência alta)
+
+-----------------------------------------------------------------------------
+INTEGRAÇÃO COM OUTROS PROJETOS
+-----------------------------------------------------------------------------
+
+BrasilDeals:
+- Maria Madah será divulgada dentro da comunidade
+- Canal natural de distribuição (200k membros projetados)
+- Produto próprio = margem 65% vs afiliado 4%
+
+SMB OS:
+- Maria Madah pode ser cliente piloto do módulo de e-commerce
+- Testar inventory management
+- Validar módulo financeiro com transações reais
+
+-----------------------------------------------------------------------------
+DECISÕES ARQUITETURAIS (ADRs)
+-----------------------------------------------------------------------------
+
+Semi-joias (3+ microns) em vez de fine jewelry:
+- Ticket acessível ($30-80 vs $300-3000)
+- Recompra frequente (moda, não investimento)
+- Margem ainda alta (60-70%)
+
+Foco em brasileiras nos EUA:
+- Mercado específico, menos concorrência
+- Confiança cultural (comprar de marca brasileira)
+- Entrega rápida (fulfillment nos EUA)
+
+Online-only sem loja física:
+- Zero custo fixo de locação
+- Pode operar de qualquer lugar
+- Escalável sem limite geográfico
+
+Shopify em vez de custom build:
+- MVP rápido (1-2 semanas vs 3-6 meses)
+- Templates prontos e otimizados
+- Apps de marketing/analytics integrados
+
+-----------------------------------------------------------------------------
+RECURSOS EXISTENTES
+-----------------------------------------------------------------------------
+
+✅ Website HTML/CSS completo (100/100 audit score)
+✅ Identidade visual definida
+✅ Fornecedores Alibaba mapeados
+✅ Especificações técnicas (3 microns gold plating)
+✅ Canal de distribuição planejado (BrasilDeals)
+
+-----------------------------------------------------------------------------
+PROJEÇÃO FINANCEIRA (12 MESES)
+-----------------------------------------------------------------------------
+
+Cenário Conservador:
+- 50 vendas/mês × $50 ticket médio = $2.500/mês
+- Margem 65% = $1.625 lucro bruto/mês
+- Ads $500/mês → Lucro líquido ~$1.100/mês
+
+Cenário Moderado (com BrasilDeals):
+- 200 vendas/mês × $55 ticket médio = $11.000/mês
+- Margem 65% = $7.150 lucro bruto/mês
+- Ads $1.500/mês → Lucro líquido ~$5.600/mês
+
+Cenário Otimista (BrasilDeals + viral TikTok):
+- 500 vendas/mês × $60 ticket médio = $30.000/mês
+- Margem 65% = $19.500 lucro bruto/mês
+- Ads $3.000/mês → Lucro líquido ~$16.500/mês
+
+-----------------------------------------------------------------------------
+PRÓXIMOS PASSOS IMEDIATOS
+-----------------------------------------------------------------------------
+
+1. Criar conta Shopify (trial 3 dias grátis)
+2. Configurar 5 produtos iniciais (mockup)
+3. Fazer pedido de amostras (10-15 peças, ~$100)
+4. Fotografar produtos quando chegarem
+5. Ativar loja e testar checkout completo
+6. Soft launch no Instagram pessoal
+7. Post no BrasilDeals (quando tiver 20k+ membros)
+
+=============================================================================

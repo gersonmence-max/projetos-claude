@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EV Site Intelligence — Massachusetts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --emerald:      #059669;
+  --emerald-lt:   #10b981;
+  --emerald-dk:   #047857;
+  --emerald-glow: rgba(5,150,105,.12);
+  --emerald-pale: rgba(5,150,105,.08);
+}
+[data-theme="light"] {
+  --bg:     #f8fafb; --bg2: #ffffff; --bg3: #f1f5f8;
+  --bg4:    #e8eef3; --bg5: #dde5ec;
+  --border: #e2e8f0; --border2: #cbd5e1;
+  --text:   #0f1923; --text2: #546478; --text3: #94a3b8;
+  --shadow: 0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,.14);
+  --overlay: rgba(15,25,35,.5);
+}
+[data-theme="dark"] {
+  --bg:     #080d12; --bg2: #0d1520; --bg3: #121d2a;
+  --bg4:    #182433; --bg5: #1e2d3e;
+  --border: rgba(255,255,255,.07); --border2: rgba(255,255,255,.13);
+  --text:   #e8f0f8; --text2: #7a96b0; --text3: #3d5570;
+  --shadow: 0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.3);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,.5);
+  --overlay: rgba(0,0,0,.75);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.55;transition:background .25s,color .25s}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:200;background:var(--bg2);border-bottom:1px solid var(--border);height:62px;display:flex;align-items:center;padding:0 32px;gap:16px;box-shadow:var(--shadow);transition:background .25s,border-color .25s}
+.logo-wrap{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.logo-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--emerald-dk),var(--emerald-lt));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 12px var(--emerald-glow)}
+.logo-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.2px}
+.logo-sub{font-size:10px;color:var(--text2);font-family:'DM Mono',monospace;letter-spacing:.3px}
+.header-spacer{flex:1}
+.dark-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;padding:7px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;transition:background .2s,color .2s;white-space:nowrap}
+.dark-toggle:hover{background:var(--bg4);color:var(--text)}
+.toggle-icon{font-size:14px;transition:transform .3s}
+[data-theme="dark"] .toggle-icon{transform:rotate(180deg)}
+.lbl-light{display:block}
+.lbl-dark{display:none}
+[data-theme="dark"] .lbl-light{display:none}
+[data-theme="dark"] .lbl-dark{display:block}
+
+/* LAYOUT */
+.container{max-width:1280px;margin:0 auto;padding:28px 32px 64px}
+
+/* SEARCH */
+.search-panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:20px;box-shadow:var(--shadow);transition:background .25s,border-color .25s}
+.panel-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:13px}
+.search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+select{flex:1;min-width:200px;height:42px;padding:0 38px 0 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;transition:border-color .2s,box-shadow .2s,background .25s}
+select:focus{outline:none;border-color:var(--emerald);box-shadow:0 0 0 3px var(--emerald-glow)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:42px;padding:0 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;transition:opacity .18s,transform .1s,box-shadow .2s;text-decoration:none}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+.btn-primary{background:var(--emerald);color:#fff;box-shadow:0 2px 12px var(--emerald-glow);min-width:130px}
+.btn-primary:hover:not(:disabled){background:var(--emerald-dk);box-shadow:0 4px 20px rgba(5,150,105,.25)}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border2)}
+.btn-secondary:hover:not(:disabled){background:var(--bg4)}
+.btn-pdf{display:none}
+
+/* STATUS */
+.status{padding:13px 18px;border-radius:12px;font-size:13px;margin-bottom:18px;display:none;line-height:1.65}
+.status.info{background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.2);color:#1d4ed8}
+.status.success{background:rgba(5,150,105,.07);border:1px solid rgba(5,150,105,.2);color:var(--emerald-dk)}
+.status.error{background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.2);color:#b91c1c}
+[data-theme="dark"] .status.info{color:#93c5fd}
+[data-theme="dark"] .status.success{color:#6ee7b7}
+[data-theme="dark"] .status.error{color:#fca5a5}
+
+/* LOADER */
+.loader{text-align:center;padding:60px 0;display:none}
+.loader-ring{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--emerald);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 16px}
+.loader-text{font-size:14px;font-weight:500;color:var(--text2)}
+.loader-sub{font-size:11px;color:var(--text3);margin-top:4px;font-family:'DM Mono',monospace}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;box-shadow:var(--shadow);transition:background .25s,border-color .2s,transform .15s}
+.stat-card:hover{transform:translateY(-1px);border-color:var(--border2)}
+.stat-num{font-size:30px;font-weight:700;color:var(--emerald);line-height:1;font-variant-numeric:tabular-nums}
+.stat-label{font-size:10px;color:var(--text2);margin-top:6px;text-transform:uppercase;letter-spacing:.8px;font-weight:500}
+
+/* ROUTE BAR */
+.route-bar{background:var(--bg2);border:1px solid rgba(5,150,105,.3);border-radius:14px;padding:16px 20px;margin-bottom:16px;display:none;flex-wrap:wrap;gap:12px;align-items:center;box-shadow:0 0 0 3px var(--emerald-pale),var(--shadow);transition:background .25s}
+.route-bar.visible{display:flex}
+.route-info{flex:1;min-width:160px}
+.rc-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.rc-count{font-size:22px;font-weight:700;color:var(--emerald);line-height:1}
+.rc-sub{font-size:11px;color:var(--text2);margin-top:3px}
+.route-stats-row{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.rs-val{font-size:15px;font-weight:700;color:var(--text)}
+.rs-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-top:1px}
+.divider-v{width:1px;height:32px;background:var(--border2)}
+.route-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-route{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity .18s,transform .1s;white-space:nowrap}
+.btn-route:active{transform:scale(.97)}
+.btn-route:disabled{opacity:.35;cursor:not-allowed}
+.btn-route.primary{background:var(--emerald);color:#fff;box-shadow:0 2px 10px var(--emerald-glow)}
+.btn-route.primary:hover:not(:disabled){background:var(--emerald-dk)}
+.btn-route.outline{background:var(--emerald-pale);color:var(--emerald-dk);border:1px solid rgba(5,150,105,.25)}
+.btn-route.outline:hover:not(:disabled){background:rgba(5,150,105,.14)}
+[data-theme="dark"] .btn-route.outline{color:var(--emerald-lt)}
+.btn-route.ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.btn-route.ghost:hover:not(:disabled){background:var(--bg4);color:var(--text)}
+.route-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;width:100%}
+.route-tag{display:inline-flex;align-items:center;gap:5px;background:var(--emerald-pale);border:1px solid rgba(5,150,105,.2);color:var(--emerald-dk);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+[data-theme="dark"] .route-tag{color:var(--emerald-lt)}
+.rt-num{background:var(--emerald);color:#fff;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0}
+
+/* TABLE */
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:background .25s,border-color .25s}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--bg3);padding:11px 16px;text-align:left;color:var(--text3);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.9px;border-bottom:1px solid var(--border);white-space:nowrap;transition:background .25s}
+thead th.th-check{width:48px;text-align:center}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg3)}
+tbody tr.sel-row{background:rgba(5,150,105,.05)!important;border-left:3px solid var(--emerald)}
+tbody td{padding:11px 16px;vertical-align:middle}
+.td-click{cursor:pointer}
+.td-check{text-align:center}
+input[type=checkbox].row-cb{width:16px;height:16px;accent-color:var(--emerald);cursor:pointer}
+
+.rank-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--bg4);color:var(--text2);font-size:12px;font-weight:700}
+.rank-num.gold{background:rgba(217,119,6,.12);color:#b45309}
+.rank-num.silver{background:rgba(100,116,139,.12);color:#475569}
+.rank-num.bronze{background:rgba(180,83,9,.1);color:#92400e}
+[data-theme="dark"] .rank-num.gold{color:#fcd34d}
+[data-theme="dark"] .rank-num.silver{color:#cbd5e1}
+[data-theme="dark"] .rank-num.bronze{color:#fdba74}
+.sel-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--emerald);color:#fff;border-radius:8px;font-size:12px;font-weight:700}
+
+.loc-name{font-weight:600;color:var(--text);font-size:13px}
+.loc-addr{font-size:11px;color:var(--text2);margin-top:2px}
+.type-pill{display:inline-block;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:500;white-space:nowrap}
+.score-wrap{display:flex;align-items:center;gap:10px}
+.score-val{font-size:16px;font-weight:700;color:var(--emerald);font-variant-numeric:tabular-nums;min-width:34px}
+.score-bar{width:52px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.score-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--emerald-dk),var(--emerald-lt))}
+.pot-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.pot-badge.VERY_HIGH{background:rgba(5,150,105,.1);color:var(--emerald-dk);border:1px solid rgba(5,150,105,.2)}
+.pot-badge.HIGH{background:rgba(37,99,235,.08);color:#1d4ed8;border:1px solid rgba(37,99,235,.2)}
+.pot-badge.MEDIUM{background:var(--bg4);color:var(--text2);border:1px solid var(--border2)}
+.pot-badge.LOW{background:rgba(220,38,38,.08);color:#b91c1c;border:1px solid rgba(220,38,38,.2)}
+[data-theme="dark"] .pot-badge.VERY_HIGH{color:#6ee7b7}
+[data-theme="dark"] .pot-badge.HIGH{color:#93c5fd}
+[data-theme="dark"] .pot-badge.LOW{color:#fca5a5}
+.conf-val{font-size:12px;color:var(--text2);font-variant-numeric:tabular-nums}
+.btn-detail{display:inline-flex;align-items:center;gap:5px;background:var(--emerald-pale);color:var(--emerald-dk);border:1px solid rgba(5,150,105,.22);border-radius:8px;padding:6px 13px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s,border-color .15s;white-space:nowrap}
+.btn-detail:hover{background:rgba(5,150,105,.14);border-color:var(--emerald)}
+[data-theme="dark"] .btn-detail{color:var(--emerald-lt)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:var(--overlay);display:none;align-items:center;justify-content:center;z-index:500;padding:16px;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:860px;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-lg);transition:background .25s}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:sticky;top:0;background:var(--bg2);border-radius:20px 20px 0 0;z-index:10;transition:background .25s}
+.modal-header h2{font-size:17px;font-weight:700;color:var(--text)}
+.modal-header p{font-size:12px;color:var(--text2);margin-top:3px}
+.modal-close{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);width:32px;height:32px;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s;line-height:1}
+.modal-close:hover{background:var(--bg4);color:var(--text)}
+.modal-body{padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:600px){.modal-body{grid-template-columns:1fr}}
+.sec-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;margin-bottom:8px}
+.mini-map{border-radius:12px;overflow:hidden;height:210px;border:1px solid var(--border)}
+.mini-map iframe{width:100%;height:100%;border:none}
+.sv-wrap{border-radius:12px;height:210px;border:1px solid var(--border);background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.sv-btn{display:inline-flex;align-items:center;gap:9px;background:var(--emerald);color:#fff;border:none;border-radius:10px;padding:13px 26px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;box-shadow:0 2px 12px var(--emerald-glow);transition:background .15s}
+.sv-btn:hover{background:var(--emerald-dk)}
+.sv-hint{font-size:11px;color:var(--text3)}
+.bd-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bd-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;transition:background .25s}
+.bd-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;font-weight:500}
+.bd-val{font-size:22px;font-weight:700;color:var(--emerald);margin-top:2px}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px}
+.tag-str{background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.18);color:var(--emerald-dk);padding:4px 11px;border-radius:20px;font-size:11px;font-weight:500}
+.tag-risk{background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.18);color:#b91c1c;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:500}
+[data-theme="dark"] .tag-str{color:#6ee7b7}
+[data-theme="dark"] .tag-risk{color:#fca5a5}
+.ext-btns{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--border)}
+.ext-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:opacity .15s,transform .1s;white-space:nowrap}
+.ext-btn:active{transform:scale(.97)}
+.ext-btn.maps{background:var(--emerald);color:#fff;box-shadow:0 2px 10px var(--emerald-glow)}
+.ext-btn.maps:hover{background:var(--emerald-dk)}
+.ext-btn.ev{background:var(--emerald-pale);color:var(--emerald-dk);border:1px solid rgba(5,150,105,.25)}
+.ext-btn.ev:hover{background:rgba(5,150,105,.14)}
+.ext-btn.sv{background:var(--emerald-pale);color:var(--emerald-dk);border:1px solid rgba(5,150,105,.25)}
+.ext-btn.sv:hover{background:rgba(5,150,105,.14)}
+.ext-btn.waze{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.ext-btn.waze:hover{background:var(--bg4);color:var(--text)}
+[data-theme="dark"] .ext-btn.ev,[data-theme="dark"] .ext-btn.sv{color:var(--emerald-lt)}
+
+/* MODAL ROTA */
+.modal-rota{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);transition:background .25s}
+.rota-stop{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.rota-stop:last-child{border-bottom:none}
+.rota-dot{width:30px;height:30px;background:var(--emerald);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px;box-shadow:0 2px 8px var(--emerald-glow)}
+.ri-name{font-weight:600;font-size:14px;color:var(--text)}
+.ri-addr{font-size:12px;color:var(--text2);margin-top:2px}
+.ri-score{font-size:11px;color:var(--emerald);margin-top:3px;font-weight:500}
+.rota-line{width:2px;height:14px;background:var(--border2);margin-left:14px}
+.rota-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--border)}
+
+footer{text-align:center;padding:24px;color:var(--text3);font-size:11px;border-top:1px solid var(--border);margin-top:40px;font-family:'DM Mono',monospace;letter-spacing:.3px}
+
+@media(max-width:768px){
+  header{padding:0 16px}
+  .container{padding:20px 16px 48px}
+  .search-panel{padding:16px}
+  .logo-sub{display:none}
+}
+
+/* CHARGERS NEARBY */
+.chargers-wrap { display: flex; flex-direction: column; gap: 10px; }
+.charger-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+  transition: background .2s;
+}
+.charger-card:hover { border-color: var(--border2); }
+.charger-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.charger-icon.dcfc  { background: rgba(5,150,105,.1); }
+.charger-icon.l2    { background: rgba(37,99,235,.08); }
+.charger-info { flex: 1; min-width: 0; }
+.charger-type  { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text2); margin-bottom: 2px; }
+.charger-name  { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.charger-net   { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.charger-dist  { text-align: right; flex-shrink: 0; }
+.charger-dist-val  { font-size: 16px; font-weight: 700; color: var(--emerald); font-variant-numeric: tabular-nums; }
+.charger-dist-unit { font-size: 10px; color: var(--text3); margin-top: 1px; }
+.charger-plugs { font-size: 10px; color: var(--text3); margin-top: 3px; }
+.charger-none  { padding: 20px 16px; text-align: center; color: var(--text3); font-size: 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; line-height: 1.6; }
+
+.charger-type-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.charger-kw  { background: rgba(5,150,105,.1); color: var(--emerald-dk); border: 1px solid rgba(5,150,105,.2); border-radius: 4px; padding: 1px 6px; font-size: 10px; font-weight: 700; }
+.charger-src { background: var(--bg4); color: var(--text3); border-radius: 4px; padding: 1px 6px; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+[data-theme="dark"] .charger-kw { color: var(--emerald-lt); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-mark">⚡</div>
+    <div>
+      <div class="logo-title">EV Site Intelligence</div>
+      <div class="logo-sub">Massachusetts · v2.1</div>
+    </div>
+  </div>
+  <div class="header-spacer"></div>
+  <button class="dark-toggle" onclick="toggleTheme()">
+    <span class="toggle-icon">🌙</span>
+    <span class="lbl-light">Modo Escuro</span>
+    <span class="lbl-dark">Modo Claro</span>
+  </button>
+</header>
+
+<div class="container">
+
+  <div class="search-panel">
+    <div class="panel-label">Análise de viabilidade EV — Massachusetts</div>
+    <div class="search-row">
+      <select id="cidade-select"><option value="">Carregando cidades...</option></select>
+      <select id="modo-select">
+        <option value="dcfc">⚡ DCFC — Fast Charging</option>
+        <option value="level2">🔌 Level 2 — Slow Charging</option>
+      </select>
+      <button class="btn btn-primary" id="btn-buscar" onclick="buscar()">🔍 Analisar</button>
+      <button class="btn btn-secondary btn-pdf" id="btn-pdf" onclick="gerarPDF()">📄 Relatório PDF</button>
+    </div>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="loader" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Analisando locais em Massachusetts</div>
+    <div class="loader-sub">Google Places · TomTom · Census</div>
+  </div>
+
+  <div class="stats-grid" id="stats" style="display:none"></div>
+
+  <div class="route-bar" id="route-bar">
+    <div class="route-info">
+      <div class="rc-label">Rota de visitas</div>
+      <div class="rc-count"><span id="rc-n">0</span> locais</div>
+      <div class="rc-sub" id="rc-sub"></div>
+    </div>
+    <div class="route-stats-row" id="route-stats-row" style="display:none">
+      <div>
+        <div class="rs-val" id="rs-dist">—</div>
+        <div class="rs-label">Distância est.</div>
+      </div>
+      <div class="divider-v"></div>
+      <div>
+        <div class="rs-val" id="rs-time">—</div>
+        <div class="rs-label">Tempo est.</div>
+      </div>
+      <div class="divider-v"></div>
+      <div>
+        <div class="rs-val" id="rs-stops">—</div>
+        <div class="rs-label">Paradas</div>
+      </div>
+    </div>
+    <div class="route-actions">
+      <button class="btn-route outline" id="btn-otimiza" onclick="otimizarRota()" disabled>⚙️ Otimizar</button>
+      <button class="btn-route primary" id="btn-gmaps"   onclick="abrirRotaGMaps()" disabled>🗺️ Abrir no Maps</button>
+      <button class="btn-route outline" id="btn-pdf-rt"  onclick="gerarRotaPDF()" disabled>📋 PDF da Rota</button>
+      <button class="btn-route ghost"                    onclick="limparSelecao()">✕ Limpar</button>
+    </div>
+    <div class="route-tags" id="route-order-list"></div>
+  </div>
+
+  <div class="table-wrap" id="table-wrap" style="display:none">
+    <table>
+      <thead><tr>
+        <th class="th-check">✓</th>
+        <th>#</th>
+        <th>Local / Endereço</th>
+        <th>Tipo</th>
+        <th>Score</th>
+        <th>Potencial</th>
+        <th>Confiança</th>
+        <th>Ação</th>
+      </tr></thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- MODAL DETALHE -->
+<div class="modal-overlay" id="modal-overlay" onclick="fecharFora(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h2 id="m-nome">—</h2><p id="m-addr">—</p></div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="sec-label">📍 Localização</div>
+        <div class="mini-map" id="m-map"></div>
+      </div>
+      <div>
+        <div class="sec-label">⚡ Carregadores Próximos</div>
+        <div class="chargers-wrap" id="m-chargers"></div>
+      </div>
+      <div>
+        <div class="sec-label">📊 Score Breakdown</div>
+        <div class="bd-grid" id="m-bd"></div>
+      </div>
+      <div>
+        <div class="sec-label">⭐ Pontos Fortes &amp; Riscos</div>
+        <div class="tag-list" id="m-tags"></div>
+      </div>
+      <div class="ext-btns" id="m-btns"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ROTA -->
+<div class="modal-overlay" id="modal-rota-overlay" onclick="fecharRotaFora(event)">
+  <div class="modal-rota">
+    <div class="modal-header">
+      <div><h2>📋 Roteiro de Visitas</h2><p id="rp-sub">—</p></div>
+      <button class="modal-close" onclick="closeRotaModal()">×</button>
+    </div>
+    <div style="padding:18px 24px">
+      <div id="rota-preview-list"></div>
+      <div class="rota-actions">
+        <button class="btn-route primary" onclick="abrirRotaGMaps()">🗺️ Abrir no Maps</button>
+        <button class="btn-route outline" id="btn-dl-pdf-rt" onclick="baixarRotaPDF()">⬇️ Baixar PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>EV Site Intelligence · agentes_crew_2 · Massachusetts 2026</footer>
+
+<script>
+const GKEY = 'AIzaSyDgO70CyM2DT-9MuXIewI6UIA8fe1XAxzM';
+let ultimoResultado = null, top20Data = [], selectedIdx = [];
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('ev-theme', next);
+}
+(function(){ const s = localStorage.getItem('ev-theme'); if(s) document.documentElement.setAttribute('data-theme',s); })();
+
+async function carregarCidades() {
+  try {
+    const r = await fetch('/cidades'), d = await r.json();
+    const sel = document.getElementById('cidade-select');
+    sel.innerHTML = '<option value="">-- Selecione uma cidade --</option>';
+    (d.cidades||[]).forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+  } catch(e){ mostrarStatus('Erro ao carregar cidades.','error'); }
+}
+
+function mostrarStatus(msg,tipo){
+  const el=document.getElementById('status');
+  el.innerHTML=msg; el.className='status '+tipo; el.style.display='block';
+}
+
+async function buscar() {
+  const cidade=document.getElementById('cidade-select').value;
+  const modo=document.getElementById('modo-select').value;
+  if(!cidade){ mostrarStatus('Selecione uma cidade.','error'); return; }
+  selectedIdx=[];
+  document.getElementById('btn-buscar').disabled=true;
+  document.getElementById('loader').style.display='block';
+  document.getElementById('stats').style.display='none';
+  document.getElementById('table-wrap').style.display='none';
+  document.getElementById('btn-pdf').style.display='none';
+  document.getElementById('route-bar').classList.remove('visible');
+  mostrarStatus('Analisando '+cidade+'...','info');
+  try {
+    const r=await fetch('/api/buscar/'+encodeURIComponent(cidade)+'?modo='+modo);
+    const d=await r.json();
+    document.getElementById('loader').style.display='none';
+    document.getElementById('btn-buscar').disabled=false;
+    if(!d.success){
+      let msg='❌ '+d.error;
+      if(d.api) msg+=' <strong>('+d.api+')</strong>';
+      if(d.details) msg+='<br><small style="opacity:.8">'+d.details+'</small>';
+      if(d.solucao) msg+='<br><small style="opacity:.7">💡 '+d.solucao+'</small>';
+      mostrarStatus(msg,'error'); return;
+    }
+    ultimoResultado=d; top20Data=d.top20||[];
+    mostrarStatus('✓ <strong>'+cidade+'</strong> — '+d.total_viavel+' locais viáveis de '+d.total_encontrados+' encontrados.','success');
+    renderStats(d); renderTabela(top20Data);
+    if(top20Data.length>0) document.getElementById('btn-pdf').style.display='inline-flex';
+  } catch(e){
+    document.getElementById('loader').style.display='none';
+    document.getElementById('btn-buscar').disabled=false;
+    mostrarStatus('Erro de conexão: '+e.message,'error');
+  }
+}
+
+function renderStats(d){
+  const el=document.getElementById('stats');
+  const modo=(d.modo||'DCFC').toUpperCase();
+  el.innerHTML=`
+    <div class="stat-card"><div class="stat-num">${d.total_encontrados}</div><div class="stat-label">Encontrados</div></div>
+    <div class="stat-card"><div class="stat-num">${d.total_viavel}</div><div class="stat-label">Viáveis</div></div>
+    <div class="stat-card"><div class="stat-num">${d.total_descartado||0}</div><div class="stat-label">Descartados</div></div>
+    <div class="stat-card"><div class="stat-num">${top20Data.length}</div><div class="stat-label">Top ${top20Data.length}</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:18px">${modo}</div><div class="stat-label">Modo</div></div>`;
+  el.style.display='grid';
+}
+
+function rankClass(i){ return i===0?'gold':i===1?'silver':i===2?'bronze':''; }
+
+function renderTabela(data){
+  const tbody=document.getElementById('table-body');
+  if(!data.length){
+    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:48px;color:var(--text3)">Nenhum resultado encontrado.</td></tr>';
+  } else {
+    tbody.innerHTML=data.map((loc,i)=>{
+      const score=(loc.score_final||loc.score||0).toFixed(1);
+      const pct=Math.round(score*10);
+      const pot=(loc.potencial||'MEDIUM').replace(' ','_');
+      const conf=Math.round((loc.confidence||0)*100);
+      const tipo=(loc.type||'').replace(/_/g,' ');
+      const rc=rankClass(i);
+      return `<tr id="row-${i}">
+        <td class="td-check"><input type="checkbox" class="row-cb" id="cb-${i}" onchange="toggleSelect(${i})"></td>
+        <td class="td-click" onclick="abrirModal(${i})"><span class="rank-num ${rc}" id="rb-${i}">${i+1}</span></td>
+        <td class="td-click" onclick="abrirModal(${i})">
+          <div class="loc-name">${loc.name||'—'}</div>
+          <div class="loc-addr">${loc.address||''}</div>
+        </td>
+        <td class="td-click" onclick="abrirModal(${i})"><span class="type-pill">${tipo}</span></td>
+        <td class="td-click" onclick="abrirModal(${i})">
+          <div class="score-wrap">
+            <span class="score-val">${score}</span>
+            <div class="score-bar"><div class="score-fill" style="width:${pct}%"></div></div>
+          </div>
+        </td>
+        <td class="td-click" onclick="abrirModal(${i})"><span class="pot-badge ${pot}">${pot.replace('_',' ')}</span></td>
+        <td class="td-click conf-val" onclick="abrirModal(${i})">${conf}%</td>
+        <td><button class="btn-detail" onclick="abrirModal(${i})">Ver detalhes →</button></td>
+      </tr>`;
+    }).join('');
+  }
+  document.getElementById('table-wrap').style.display='block';
+}
+
+function toggleSelect(idx){
+  const cb=document.getElementById('cb-'+idx);
+  if(cb.checked){ if(!selectedIdx.includes(idx)) selectedIdx.push(idx); }
+  else { selectedIdx=selectedIdx.filter(i=>i!==idx); }
+  atualizarSelecaoVisual(); atualizarRouteBar();
+}
+
+function atualizarSelecaoVisual(){
+  top20Data.forEach((_,i)=>{
+    const row=document.getElementById('row-'+i);
+    const rb=document.getElementById('rb-'+i);
+    const pos=selectedIdx.indexOf(i);
+    if(pos>=0){
+      row.classList.add('sel-row');
+      rb.outerHTML=`<span class="sel-badge" id="rb-${i}">${pos+1}</span>`;
+    } else {
+      const el=document.getElementById('rb-'+i);
+      const rc=rankClass(i);
+      el.outerHTML=`<span class="rank-num ${rc}" id="rb-${i}">${i+1}</span>`;
+      row.classList.remove('sel-row');
+    }
+  });
+}
+
+function limparSelecao(){
+  selectedIdx=[];
+  top20Data.forEach((_,i)=>{ const cb=document.getElementById('cb-'+i); if(cb) cb.checked=false; });
+  atualizarSelecaoVisual(); atualizarRouteBar();
+}
+
+function atualizarRouteBar(){
+  const n=selectedIdx.length;
+  const bar=document.getElementById('route-bar');
+  document.getElementById('rc-n').textContent=n;
+  if(n===0){ bar.classList.remove('visible'); return; }
+  bar.classList.add('visible');
+  const ok=n>=2;
+  document.getElementById('btn-gmaps').disabled=!ok;
+  document.getElementById('btn-otimiza').disabled=!ok;
+  document.getElementById('btn-pdf-rt').disabled=!ok;
+  document.getElementById('rc-sub').textContent=ok?'Pronto para criar rota':'Selecione mais 1 local';
+  if(ok){
+    const s=calcularEstatisticasRota();
+    document.getElementById('rs-dist').textContent=s.dist+' km';
+    document.getElementById('rs-time').textContent=s.time;
+    document.getElementById('rs-stops').textContent=n;
+    document.getElementById('route-stats-row').style.display='flex';
+  } else { document.getElementById('route-stats-row').style.display='none'; }
+  document.getElementById('route-order-list').innerHTML=selectedIdx.map((idx,pos)=>{
+    const loc=top20Data[idx];
+    return `<span class="route-tag"><span class="rt-num">${pos+1}</span>${loc.name}</span>`;
+  }).join('');
+}
+
+function haversine(la1,lo1,la2,lo2){
+  const R=6371,dL=(la2-la1)*Math.PI/180,dG=(lo2-lo1)*Math.PI/180;
+  const a=Math.sin(dL/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dG/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function calcularEstatisticasRota(){
+  let dist=0;
+  for(let i=0;i<selectedIdx.length-1;i++){
+    const a=top20Data[selectedIdx[i]],b=top20Data[selectedIdx[i+1]];
+    if(a.lat&&b.lat) dist+=haversine(a.lat,a.lng,b.lat,b.lng);
+  }
+  const mins=Math.round((dist/40)*60),h=Math.floor(mins/60),m=mins%60;
+  return{dist:dist.toFixed(1),time:h>0?`${h}h ${m}min`:`${m} min`};
+}
+
+function otimizarRota(){
+  if(selectedIdx.length<2) return;
+  const locs=selectedIdx.map(i=>({i,lat:top20Data[i].lat,lng:top20Data[i].lng}));
+  const visited=[locs[0]],remaining=locs.slice(1);
+  while(remaining.length>0){
+    const last=visited[visited.length-1];
+    let bi=0,bd=Infinity;
+    remaining.forEach((loc,ri)=>{ const d=haversine(last.lat,last.lng,loc.lat,loc.lng); if(d<bd){bd=d;bi=ri;} });
+    visited.push(remaining[bi]); remaining.splice(bi,1);
+  }
+  selectedIdx=visited.map(v=>v.i);
+  atualizarSelecaoVisual(); atualizarRouteBar();
+  mostrarStatus('✓ Rota otimizada por proximidade!','success');
+}
+
+function abrirRotaGMaps(){
+  if(selectedIdx.length<2) return;
+  const locs=selectedIdx.map(i=>top20Data[i]);
+  const origin=encodeURIComponent(locs[0].address||(locs[0].lat+','+locs[0].lng));
+  const dest=encodeURIComponent(locs[locs.length-1].address||(locs[locs.length-1].lat+','+locs[locs.length-1].lng));
+  const wp=locs.slice(1,-1).map(l=>encodeURIComponent(l.address||(l.lat+','+l.lng))).join('|');
+  let url=`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=driving`;
+  if(wp) url+=`&waypoints=${wp}`;
+  window.open(url,'_blank');
+}
+
+function gerarRotaPDF(){
+  if(selectedIdx.length<2) return;
+  const locs=selectedIdx.map(i=>top20Data[i]);
+  const s=calcularEstatisticasRota();
+  const cidade=ultimoResultado?ultimoResultado.cidade:'';
+  document.getElementById('rp-sub').textContent=`${cidade} · ${locs.length} paradas · ${s.dist} km · ${s.time}`;
+  let html='';
+  locs.forEach((loc,i)=>{
+    const score=(loc.score_final||loc.score||0).toFixed(1);
+    html+=`<div class="rota-stop">
+      <div class="rota-dot">${i+1}</div>
+      <div><div class="ri-name">${loc.name}</div><div class="ri-addr">📍 ${loc.address||'—'}</div><div class="ri-score">Score ${score} · ${(loc.potencial||'').replace('_',' ')}</div></div>
+    </div>`;
+    if(i<locs.length-1) html+=`<div class="rota-line"></div>`;
+  });
+  document.getElementById('rota-preview-list').innerHTML=html;
+  document.getElementById('modal-rota-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+async function baixarRotaPDF(){
+  const btn=document.getElementById('btn-dl-pdf-rt');
+  btn.disabled=true; btn.textContent='Gerando...';
+  const locs=selectedIdx.map(i=>top20Data[i]);
+  const s=calcularEstatisticasRota();
+  const cidade=ultimoResultado?ultimoResultado.cidade:'rota';
+  try{
+    const r=await fetch('/api/gerar-pdf-rota',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cidade,locais:locs,dist_km:s.dist,tempo:s.time})});
+    const d=await r.json();
+    if(d.success){ const a=document.createElement('a'); a.href='data:application/pdf;base64,'+d.pdf; a.download=d.filename; a.click(); }
+    else alert('Erro PDF: '+d.error);
+  } catch(e){ alert('Erro: '+e.message); }
+  btn.disabled=false; btn.innerHTML='⬇️ Baixar PDF';
+}
+
+function fecharRotaFora(e){ if(e.target===document.getElementById('modal-rota-overlay')) closeRotaModal(); }
+function closeRotaModal(){ document.getElementById('modal-rota-overlay').classList.remove('open'); document.body.style.overflow=''; }
+
+function abrirModal(idx){
+  const loc=top20Data[idx]; if(!loc) return;
+  const lat=loc.lat,lng=loc.lng,nome=loc.name||'—',addr=loc.address||'';
+  document.getElementById('m-nome').textContent=nome;
+  document.getElementById('m-addr').textContent=addr;
+  document.getElementById('m-map').innerHTML=`<iframe loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${lng-.005},${lat-.005},${lng+.005},${lat+.005}&layer=mapnik&marker=${lat},${lng}" style="width:100%;height:100%;border:none;"></iframe>`;
+  // Carregadores próximos
+  const chEl = document.getElementById('m-chargers');
+  const l2   = loc.nearest_l2;
+  const dcfc = loc.nearest_dcfc;
+  let chHtml = '';
+  if (!l2 && !dcfc) {
+    chHtml = `<div class="charger-none">
+      Dados de carregadores indisponíveis<br>
+      <small>NREL API bloqueado pela rede</small>
+    </div>`;
+  } else {
+    function chargerCard(c, label, iconClass, icon) {
+      const kw   = c.max_kw ? `<span class="charger-kw">${c.max_kw} kW</span>` : '';
+      const plugs = c.plugs_dcfc || c.plugs_l2 || c.plugs_total || 0;
+      const src  = c.source ? `<span class="charger-src">${c.source}</span>` : '';
+      return `<div class="charger-card">
+        <div class="charger-icon ${iconClass}">${icon}</div>
+        <div class="charger-info">
+          <div class="charger-type-row">
+            <span class="charger-type">${label}</span>
+            ${kw}${src}
+          </div>
+          <div class="charger-name">${c.name||'—'}</div>
+          <div class="charger-net">${c.network||'—'}</div>
+          ${plugs ? `<div class="charger-plugs">${plugs} conector(es)</div>` : ''}
+        </div>
+        <div class="charger-dist">
+          <div class="charger-dist-val">${c.distance_km}</div>
+          <div class="charger-dist-unit">km</div>
+          <div class="charger-dist-unit">${c.distance_mi} mi</div>
+        </div>
+      </div>`;
+    }
+    if (dcfc) chHtml += chargerCard(dcfc, 'DCFC mais próximo', 'dcfc', '⚡');
+    if (l2)   chHtml += chargerCard(l2,   'Level 2 mais próximo', 'l2', '🔌');
+  }
+  chEl.innerHTML = chHtml;
+  const bd=loc.breakdown||{};
+  const labels={demand:'Demanda',competition:'Competição',site_fit:'Site Fit',ev_affinity:'EV Affinity'};
+  document.getElementById('m-bd').innerHTML=Object.entries(labels).map(([k,v])=>`<div class="bd-item"><div class="bd-label">${v}</div><div class="bd-val">${bd[k]||0}</div></div>`).join('');
+  const str=(loc.strengths||[]).map(s=>`<span class="tag-str">✓ ${s}</span>`).join('');
+  const risk=(loc.risks||[]).map(r=>`<span class="tag-risk">⚠ ${r}</span>`).join('');
+  document.getElementById('m-tags').innerHTML=(str+risk)||`<span style="font-size:12px;color:var(--text3)">Sem dados adicionais</span>`;
+  const q=encodeURIComponent(nome+' '+addr),ll=`${lat},${lng}`;
+  document.getElementById('m-btns').innerHTML=`
+    <a class="ext-btn maps" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Google Maps</a>
+    <a class="ext-btn ev"   href="https://www.google.com/maps/search/EV+charging+stations/@${ll},15z" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Estações EV</a>
+    <a class="ext-btn sv"   href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${ll}" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg> Street View</a>
+    <a class="ext-btn waze" href="https://waze.com/ul?ll=${ll}&navigate=yes" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Waze</a>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function fecharFora(e){ if(e.target===document.getElementById('modal-overlay')) closeModal(); }
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('m-map').innerHTML='';
+  
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeModal(); closeRotaModal(); } });
+
+async function gerarPDF(){
+  if(!ultimoResultado) return;
+  const btn=document.getElementById('btn-pdf');
+  btn.disabled=true; btn.textContent='Gerando...';
+  try{
+    const r=await fetch('/api/gerar-pdf',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cidade:ultimoResultado.cidade,top20:ultimoResultado.top20,descartados:ultimoResultado.descartados})});
+    const d=await r.json();
+    if(d.success){ const a=document.createElement('a'); a.href='data:application/pdf;base64,'+d.pdf; a.download=d.filename; a.click(); }
+    else mostrarStatus('Erro PDF: '+d.error,'error');
+  } catch(e){ mostrarStatus('Erro: '+e.message,'error'); }
+  btn.disabled=false; btn.innerHTML='📄 Relatório PDF';
+}
+
+carregarCidades();
+</script>
+</body>
+</html>

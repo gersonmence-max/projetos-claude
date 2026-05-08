@@ -1,0 +1,143 @@
+=============================================================================
+PROJETO: MORNING BRIEFING
+=============================================================================
+
+STATUS: Desenvolvido / Precisa configurar como serviço 24/7
+PRIORIDADE: MÉDIA
+CATEGORIA: Automação / Produtividade Pessoal
+USO: Interno (Gerson)
+
+-----------------------------------------------------------------------------
+O QUE É
+-----------------------------------------------------------------------------
+
+Sistema de briefing matinal automatizado que gera e envia um podcast diário
+via Telegram às 6:00 AM. Agrega notícias, mercado financeiro, emails urgentes
+e agenda do dia, narrados em formato de áudio estilo podcast.
+
+Objetivo: Começar o dia informado sem precisar checar 5 apps diferentes.
+
+-----------------------------------------------------------------------------
+STACK TÉCNICA
+-----------------------------------------------------------------------------
+
+Orquestrador: Python puro (sem CrewAI/Smolagents)
+LLM:          Gemini 2.0 Flash (gratuito)
+TTS:          gTTS (Google Text-to-Speech, gratuito)
+Interface:    Telegram Bot
+Dados:        Gmail API, Google Calendar API, yfinance, RSS feeds
+Agendador:    schedule (cron-like em Python)
+Infra:        VPS Hetzner
+
+-----------------------------------------------------------------------------
+PIPELINE DE 5 AGENTES
+-----------------------------------------------------------------------------
+
+1. REPÓRTER DE NOTÍCIAS
+   - Fontes: RSS do G1, BBC, Reuters
+   - Output: Resumo em PT-BR das principais notícias
+
+2. ANALISTA DE MERCADO
+   - BTC (via CoinGecko)
+   - Ouro, B3, S&P 500
+   - Câmbio BRL/USD
+   - Output: Resumo dos mercados
+
+3. ASSISTENTE PESSOAL
+   - Gmail: emails urgentes/importantes
+   - Google Calendar: eventos do dia
+   - Output: Agenda + emails prioritários
+
+4. LOCUTOR/EDITOR
+   - Monta roteiro final em formato podcast
+   - Estilo: Conciso, direto, tom conversacional
+
+5. PRODUTOR
+   - Converte roteiro em .mp3 via gTTS
+   - Envia arquivo de áudio pro Telegram
+   - Limpa arquivos temporários
+
+-----------------------------------------------------------------------------
+O QUE PRECISA SER IMPLEMENTADO
+-----------------------------------------------------------------------------
+
+PRIORIDADE ALTA:
+□ Configurar como serviço systemd no VPS Hetzner
+  - Script de inicialização automática
+  - Logs persistentes
+  - Restart automático em caso de erro
+  - Rodar 24/7 sem intervenção manual
+
+□ Adicionar healthcheck e monitoramento
+  - Notificação se o briefing não for enviado
+  - Logs de erros via Telegram
+
+PRIORIDADE MÉDIA:
+□ Adicionar resumo de Slack/WhatsApp
+  - Mensagens não lidas importantes
+  - Integrar APIs do Slack e WhatsApp Business
+
+□ Melhorar qualidade de voz
+  - Trocar gTTS por ElevenLabs quando houver receita
+  - Voz mais natural e profissional
+
+□ Briefing em inglês
+  - Versão alternativa para treino de listening
+  - Toggle via comando Telegram
+
+PRIORIDADE BAIXA:
+□ Dashboard web de configuração
+  - Escolher fontes de notícias
+  - Ajustar horário do briefing
+  - Ativar/desativar módulos
+
+□ Histórico de briefings
+  - Armazenar últimos 30 dias
+  - Possibilidade de ouvir briefings anteriores
+
+-----------------------------------------------------------------------------
+DECISÕES ARQUITETURAIS (ADRs)
+-----------------------------------------------------------------------------
+
+Python puro em vez de CrewAI:
+- CrewAI é instável, muitas dependências
+- Pipeline determinístico é mais confiável
+- Mais fácil de debugar
+
+Gemini 2.0 Flash em vez de Claude Haiku:
+- Gratuito com cota generosa
+- Qualidade suficiente para resumos
+- Claude Haiku custa ~$0.40/dia
+
+gTTS em vez de ElevenLabs:
+- Gratuito
+- Qualidade OK para uso pessoal
+- ElevenLabs custa ~$10/mês
+
+Envio como .mp3 em vez de texto:
+- Mais fácil de consumir enquanto dirige/faz café
+- Experiência mais imersiva tipo podcast
+- Texto puro é menos engajante
+
+-----------------------------------------------------------------------------
+RECURSOS EXISTENTES
+-----------------------------------------------------------------------------
+
+✅ Script completo com 5 agentes funcionando
+✅ Integração Gmail + Google Calendar
+✅ Scheduler configurado (schedule library)
+✅ Geração de áudio .mp3
+✅ Envio via Telegram
+
+-----------------------------------------------------------------------------
+PRÓXIMOS PASSOS IMEDIATOS
+-----------------------------------------------------------------------------
+
+1. Criar arquivo de serviço systemd no VPS
+2. Testar restart automático
+3. Configurar logs em /var/log/morning-briefing/
+4. Adicionar healthcheck via Telegram
+5. Monitorar por 1 semana para garantir estabilidade
+6. Documentar processo de manutenção
+
+=============================================================================

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ziontec installs integrated solar panels and EV charging systems for homes and businesses across New England. Level 2, DC Fast Charger, and Solar. Free site assessment.">
+  <title>ZionTec Power Solutions — Charge Everything. Depend on Nothing.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="logo">
+          <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:42px;width:auto;">
+        </a>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
+          <li><a href="servicos.html" data-i18n="nav.services">Services</a></li>
+          <li><a href="calculadora.html" data-i18n="nav.calculator">Savings Calculator</a></li>
+          <li><a href="sobre.html" data-i18n="nav.about">About</a></li>
+          <li><a href="contato.html" data-i18n="nav.contact">Contact</a></li>
+          <li class="nav-cta"><a href="contato.html" class="btn btn-primary" data-i18n="nav.cta">Free Assessment</a></li>
+        </ul>
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" onclick="setLang('pt')">PT</button>
+          <button class="lang-btn" onclick="setLang('es')">ES</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-badge" data-i18n="home.hero.badge">
+            <span></span> New England's Clean Energy Experts
+          </div>
+          <h1>Complete Power.<br><em data-i18n="home.hero.h1.em">Your Terms.</em></h1>
+          <p class="hero-sub" data-i18n="home.hero.sub">
+            ZionTec engineers integrated solar and EV charging systems for homes and businesses across New England — designed together, installed by certified experts, built to last.
+          </p>
+          <div class="hero-actions">
+            <a href="contato.html" class="btn btn-primary btn-lg">
+              <i class="fa-solid fa-calendar-check"></i> Schedule Free Assessment
+            </a>
+            <a href="calculadora.html" class="btn btn-outline btn-lg">
+              <i class="fa-solid fa-calculator"></i> Calculate Your Savings
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-num">200+</div>
+              <div class="hero-stat-label" data-i18n="home.hero.stat1">Systems Installed</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">6</div>
+              <div class="hero-stat-label" data-i18n="home.hero.stat2">States Served</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">$1,400</div>
+              <div class="hero-stat-label" data-i18n="home.hero.stat3">Avg. Annual Savings</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-cards-grid">
+            <div class="hero-card">
+              <div class="hero-card-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#E8B800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 12h6M12 17v-2"/><path d="M15 2v3M9 2v3"/></svg>
+              </div>
+              <h3 data-i18n="home.hero.card1.h">EV Charging</h3>
+              <p data-i18n="home.hero.card1.p">Level 2 & DC Fast Charger — residential and commercial</p>
+            </div>
+            <div class="hero-card">
+              <div class="hero-card-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#E8B800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="1"/><path d="M8 7V5M12 7V4M16 7V5"/><path d="M8 7v11M16 7v11M2 12h20"/></svg>
+              </div>
+              <h3 data-i18n="home.hero.card2.h">Solar Power</h3>
+              <p data-i18n="home.hero.card2.p">Rooftop solar designed for New England weather</p>
+            </div>
+            <div class="hero-card">
+              <div class="hero-card-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#E8B800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+              </div>
+              <h3 data-i18n="home.hero.card3.h">Commercial</h3>
+              <p data-i18n="home.hero.card3.p">Fleet charging, parking lots, multi-unit properties</p>
+            </div>
+            <div class="hero-card">
+              <div class="hero-card-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#E8B800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.636 5.636l2.122 2.122M16.243 16.243l2.121 2.121M5.636 18.364l2.122-2.121M16.243 7.757l2.121-2.121"/></svg>
+              </div>
+              <h3 data-i18n="home.hero.card4.h">Integrated</h3>
+              <p data-i18n="home.hero.card4.p">One company, one system, one call</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAKES -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="section-label" data-i18n="home.stakes.label">The Real Cost of Waiting</div>
+          <h2>New England Has Some of the <em style="color:var(--accent);font-style:normal;" data-i18n="home.stakes.h2.em">Highest Energy Costs</em> in the Country.</h2>
+        </div>
+        <div>
+          <p style="font-size:1.1rem; color:var(--dark); line-height:1.9;" data-i18n-html="home.stakes.p">
+            Every month without solar, you're paying the utility company for energy that literally falls on your roof.
+            <br><br>
+            Every week without a home charger, you're stopping at public stations — paying <strong>3x more per kilowatt-hour</strong> than you should.
+            <br><br>
+            Most homeowners and businesses are just absorbing these costs. <strong>They don't have to.</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE PROPS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-label" data-i18n="home.why.label">Why Ziontec</div>
+        <h2 data-i18n="home.why.h2">One Company. One System. Complete Power.</h2>
+        <p class="mt-16" data-i18n="home.why.p">We don't install chargers. We don't install solar panels. We engineer complete energy ecosystems.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon card-icon-blue"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i></div>
+          <h3 data-i18n="home.why.c1.h">One Integrated System</h3>
+          <p data-i18n="home.why.c1.p">Solar and EV charging designed together — not two separate jobs, two separate contractors, two separate headaches. One system. One company. One call.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-gold"><i class="fa-solid fa-map-location-dot" style="color:var(--gold)"></i></div>
+          <h3 data-i18n="home.why.c2.h">New England Experts</h3>
+          <p data-i18n="home.why.c2.p">We know the utility companies, the rebate programs, the permit offices, and the weather. 200+ installations across MA, CT, RI, NH, VT, and ME.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-green"><i class="fa-solid fa-shield-check" style="color:var(--success)"></i></div>
+          <h3 data-i18n="home.why.c3.h">End-to-End Service</h3>
+          <p data-i18n="home.why.c3.p">Site evaluation, system design, permits, installation, and utility connection. We handle everything. You flip the switch. We handle the rest.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES OVERVIEW -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-label" data-i18n="home.services.label">Our Services</div>
+        <h2 data-i18n="home.services.h2">Everything You Need to Power Your Property</h2>
+      </div>
+      <div class="grid-4">
+        <div class="service-card">
+          <div class="service-card-image">
+            <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="#E8B800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 12h6M12 17v-2"/><path d="M15 2v3M9 2v3"/></svg>
+          </div>
+          <div class="service-card-body">
+            <h3 data-i18n="home.services.s1.h">Residential EV Charging</h3>
+            <p data-i18n="home.services.s1.p">Level 2 home chargers. Wake up every morning with a full battery.</p>
+            <span class="service-tag">Level 2</span>
+            <br>
+            <a href="servicos.html" class="btn btn-dark mt-16" style="padding:10px 20px;font-size:0.85rem;">Learn More</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-card-image">
+            <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="#E8B800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6M15 11h2M7 11h2M15 15h2M7 15h2"/></svg>
+          </div>
+          <div class="service-card-body">
+            <h3 data-i18n="home.services.s2.h">Commercial EV Charging</h3>
+            <p data-i18n="home.services.s2.p">Level 2 and DC Fast Charger for businesses, fleets, and commercial properties.</p>
+            <span class="service-tag">Level 2</span>
+            <span class="service-tag">DC Fast</span>
+            <br>
+            <a href="servicos.html" class="btn btn-dark mt-16" style="padding:10px 20px;font-size:0.85rem;">Learn More</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-card-image">
+            <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="#E8B800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;"><rect x="2" y="7" width="20" height="11" rx="1"/><path d="M8 7V5M12 7V4M16 7V5"/><path d="M8 7v11M16 7v11M2 12h20"/></svg>
+          </div>
+          <div class="service-card-body">
+            <h3 data-i18n="home.services.s3.h">Residential Solar</h3>
+            <p data-i18n="home.services.s3.p">Rooftop solar designed for New England weather. Maximize production year-round.</p>
+            <span class="service-tag">Solar</span>
+            <br>
+            <a href="servicos.html" class="btn btn-dark mt-16" style="padding:10px 20px;font-size:0.85rem;">Learn More</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-card-image">
+            <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="#E8B800" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;"><rect x="2" y="3" width="20" height="18" rx="1"/><path d="M8 3v18M2 9h20M2 15h20M14 9v6"/></svg>
+          </div>
+          <div class="service-card-body">
+            <h3 data-i18n="home.services.s4.h">Commercial Solar</h3>
+            <p data-i18n="home.services.s4.p">Large-scale solar for businesses and multi-unit properties. Reduce operating costs permanently.</p>
+            <span class="service-tag">Solar</span>
+            <br>
+            <a href="servicos.html" class="btn btn-dark mt-16" style="padding:10px 20px;font-size:0.85rem;">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="stats-row">
+        <div>
+          <span class="stat-num">200+</span>
+          <div class="stat-label" data-i18n="home.stats.s1">Systems Installed</div>
+        </div>
+        <div>
+          <span class="stat-num">6</span>
+          <div class="stat-label" data-i18n="home.stats.s2">New England States</div>
+        </div>
+        <div>
+          <span class="stat-num">$1,400</span>
+          <div class="stat-label" data-i18n="home.stats.s3">Average Annual Savings</div>
+        </div>
+        <div>
+          <span class="stat-num">18mo</span>
+          <div class="stat-label" data-i18n="home.stats.s4">Average Payback Period</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-label" data-i18n="home.process.label">How It Works</div>
+        <h2 data-i18n="home.process.h2">Three Steps to Complete Energy Independence</h2>
+        <p class="mt-16" data-i18n="home.process.p">We make the switch simple. You focus on the result — we handle everything else.</p>
+      </div>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <h3 data-i18n="home.process.s1.h">Free Site Assessment</h3>
+          <p data-i18n="home.process.s1.p">We evaluate your property, electrical panel, roof, and energy needs. No commitment. No pressure. Just clarity.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <h3 data-i18n="home.process.s2.h">Your Custom Power Plan</h3>
+          <p data-i18n="home.process.s2.p">We design your solar + EV charging system together — optimized for your property, usage, and budget.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <h3 data-i18n="home.process.s3.h">Powered Up</h3>
+          <p data-i18n="home.process.s3.p">Our certified team installs everything. We handle permits, utility paperwork, and rebate filings. You flip the switch.</p>
+        </div>
+      </div>
+      <div class="text-center mt-48">
+        <a href="contato.html" class="btn btn-primary btn-lg" data-i18n="common.free_assessment">
+          <i class="fa-solid fa-calendar-check"></i> Schedule Your Free Assessment
+        </a>
+        <p class="mt-16" style="font-size:0.85rem; color:var(--gray);" data-i18n="common.free_note">Free. No obligation. On-site visit within 5 business days.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCULATOR PREVIEW -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="section-label" data-i18n="home.calc.label">Energy Savings Calculator</div>
+          <h2 data-i18n="home.calc.h2">See How Much You Could Save Every Year</h2>
+          <p class="mt-16" data-i18n="home.calc.p">Most New England homeowners with EVs save between $800 and $1,800 per year by switching to home charging + solar. Calculate your specific numbers.</p>
+          <a href="calculadora.html" class="btn btn-primary mt-32" data-i18n="home.calc.btn">
+            <i class="fa-solid fa-calculator"></i> Open Full Calculator
+          </a>
+        </div>
+        <div class="calc-preview">
+          <div class="section-label-gold" style="font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; font-family:var(--font-heading); font-weight:600;" data-i18n="home.calc.quick">Quick Estimate</div>
+          <h3 style="color:var(--white); margin-bottom:24px;" data-i18n="home.calc.snap">Annual Savings Snapshot</h3>
+          <div class="calc-result">
+            <div class="calc-result-label" data-i18n="home.calc.ev">EV Charging Savings / Year</div>
+            <div class="calc-result-value">~ $1,200</div>
+          </div>
+          <div class="calc-result">
+            <div class="calc-result-label" data-i18n="home.calc.solar">Solar Savings / Year</div>
+            <div class="calc-result-value">~ $1,800</div>
+          </div>
+          <div class="calc-result" style="border-color:var(--gold)">
+            <div class="calc-result-label" data-i18n="home.calc.total">Total Annual Savings</div>
+            <div class="calc-result-value" style="color:var(--gold)">~ $3,000</div>
+          </div>
+          <p style="margin-top:16px; font-size:0.8rem; color:rgba(255,255,255,0.5);" data-i18n="home.calc.note">*Based on average New England household. Use our calculator for your exact numbers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-label" data-i18n="home.test.label">Customer Stories</div>
+        <h2 data-i18n="home.test.h2">What New England Homeowners Are Saying</h2>
+      </div>
+      <div class="grid-3">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text" data-i18n="home.test.t1">"Ziontec installed our Level 2 charger and solar panels in one week. Our electric bill dropped from $280 to $45. Best investment we've made in the house."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MR</div>
+            <div>
+              <div class="testimonial-name" data-i18n="home.test.t1.name">Michael R.</div>
+              <div class="testimonial-location" data-i18n="home.test.t1.loc">Newton, MA — Tesla Model 3</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text" data-i18n="home.test.t2">"I was paying $60 a month at public charging stations. Now I wake up with a full charge every morning and my electricity is mostly solar. Paid off in 14 months."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SC</div>
+            <div>
+              <div class="testimonial-name" data-i18n="home.test.t2.name">Sarah C.</div>
+              <div class="testimonial-location" data-i18n="home.test.t2.loc">Brookline, MA — BMW iX</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text" data-i18n="home.test.t3">"The team handled everything — permits, the utility company, the rebate paperwork. I just said yes and came home to a working system. Absolutely professional."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">JT</div>
+            <div>
+              <div class="testimonial-name" data-i18n="home.test.t3.name">James T.</div>
+              <div class="testimonial-location" data-i18n="home.test.t3.loc">Greenwich, CT — Rivian R1T</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BADGES -->
+  <section class="section-sm section-dark">
+    <div class="container">
+      <div style="display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:16px;">
+        <div class="badge"><i class="fa-solid fa-shield-check" style="color:var(--accent)"></i> Licensed & Insured</div>
+        <div class="badge"><i class="fa-solid fa-certificate" style="color:var(--gold)"></i> EV Charging Certified</div>
+        <div class="badge"><i class="fa-solid fa-solar-panel" style="color:var(--accent)"></i> NABCEP Solar Certified</div>
+        <div class="badge"><i class="fa-solid fa-map-marker-alt" style="color:var(--gold)"></i> Serving All New England</div>
+        <div class="badge"><i class="fa-solid fa-piggy-bank" style="color:var(--accent)"></i> Rebate Filing Included</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2 data-i18n="home.cta.h2">Ready to Stop Paying for Energy You Could Be Generating?</h2>
+        <p data-i18n="home.cta.p">Join 200+ New England homes and businesses that made the switch to clean, independent power.</p>
+        <div class="cta-actions">
+          <a href="contato.html" class="btn btn-primary btn-lg" data-i18n="common.free_assessment">
+            <i class="fa-solid fa-calendar-check"></i> Schedule Free Assessment
+          </a>
+          <a href="calculadora.html" class="btn btn-outline btn-lg" data-i18n="home.cta.btn2">
+            <i class="fa-solid fa-calculator"></i> Calculate My Savings First
+          </a>
+        </div>
+        <p style="color:rgba(255,255,255,0.5); font-size:0.8rem; margin-top:16px;" data-i18n="common.free_note">Free. No obligation. On-site visit within 5 business days.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:38px;width:auto;">
+          </a>
+          <p>New England's integrated clean energy company. Solar panels + EV charging systems for homes and businesses. From the sun to the road — fully powered.</p>
+          <div class="footer-social">
+            <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.services">Services</div>
+          <ul class="footer-links">
+            <li><a href="servicos.html">Residential EV Charging</a></li>
+            <li><a href="servicos.html">Commercial EV Charging</a></li>
+            <li><a href="servicos.html">DC Fast Charger</a></li>
+            <li><a href="servicos.html">Residential Solar</a></li>
+            <li><a href="servicos.html">Commercial Solar</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.company">Company</div>
+          <ul class="footer-links">
+            <li><a href="sobre.html">About Ziontec</a></li>
+            <li><a href="calculadora.html">Savings Calculator</a></li>
+            <li><a href="contato.html">Contact</a></li>
+            <li><a href="contato.html">Schedule Assessment</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.contact">Contact</div>
+          <div class="footer-contact-item"><i class="fa-solid fa-phone"></i><span>(781) 866-7085</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><span>contact@ziontecpower.com</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-map-marker-alt"></i><span>Boston, MA<br>Serving all New England</span></div>
+          <div class="badge-strip">
+            <div class="badge" style="font-size:0.7rem;">MA · CT · RI · NH · VT · ME</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 ZionTec Power Solutions. All rights reserved. | <a href="#">Privacy Policy</a></p>
+        <p>Designed for New England's clean energy future.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

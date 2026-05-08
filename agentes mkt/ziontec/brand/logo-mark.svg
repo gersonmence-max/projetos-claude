@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 82" role="img" aria-label="ZionTec Z Mark">
+  <!-- Z GLYPH MARK — standalone, for favicon, icon, stamp, embossing -->
+  <!-- Diagonal angle: 48.5° — references optimal solar panel tilt for New England latitude (~42°N) -->
+  <path d="M 2,0 L 62,0 L 62,14 L 16,66 L 62,66 L 62,80 L 2,80 L 2,66 L 48,14 L 2,14 Z" fill="#E8B800"/>
+</svg>

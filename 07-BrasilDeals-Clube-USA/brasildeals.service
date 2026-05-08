@@ -1,0 +1,19 @@
+[Unit]
+Description=Clube USA Scraper Service
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=clubeusa
+WorkingDirectory=/home/clubeusa/clubeusa-app
+Environment="PATH=/home/clubeusa/clubeusa-app/venv/bin"
+# Ensure .env variables are loaded for the service.
+# For production, it's recommended to load .env variables into the systemd environment directly
+# or use a dotenv loader in your python script.
+# Example: EnvironmentFile=/home/clubeusa/clubeusa-app/.env
+ExecStart=/home/clubeusa/clubeusa-app/venv/bin/python scheduler.py
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

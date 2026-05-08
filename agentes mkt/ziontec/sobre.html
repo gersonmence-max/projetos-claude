@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Ziontec — New England's integrated clean energy company. Our mission, our team, and why we do what we do.">
+  <title>About Us — ZionTec Power Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="logo">
+          <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:42px;width:auto;">
+        </a>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="servicos.html" data-i18n="nav.services">Services</a></li>
+          <li><a href="calculadora.html" data-i18n="nav.calculator">Savings Calculator</a></li>
+          <li><a href="sobre.html" class="active" data-i18n="nav.about">About</a></li>
+          <li><a href="contato.html" data-i18n="nav.contact">Contact</a></li>
+          <li class="nav-cta"><a href="contato.html" class="btn btn-primary" data-i18n="nav.cta">Free Assessment</a></li>
+        </ul>
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" onclick="setLang('pt')">PT</button>
+          <button class="lang-btn" onclick="setLang('es')">ES</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="section-label" data-i18n="about.label">Our Story</div>
+      <h1 data-i18n="about.h1">Built for New England's Clean Energy Future</h1>
+      <p data-i18n="about.p">We started Ziontec because we saw homeowners and businesses trying to navigate solar and EV charging separately — with different contractors, different timelines, and no one looking at the full picture.</p>
+    </div>
+  </div>
+
+  <!-- MISSION -->
+  <section class="section">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="section-label" data-i18n="about.mission.label">Our Mission</div>
+          <h2 data-i18n="about.mission.h2">One Company. Complete Power.</h2>
+          <p class="mt-16" style="font-size:1.1rem; color:var(--dark); line-height:1.9;" data-i18n="about.mission.p1">
+            We believe every home and business in New England should have access to clean, independent power — without having to coordinate multiple contractors, navigate bureaucratic red tape, or figure out which rebates they qualify for.
+          </p>
+          <p class="mt-16" style="font-size:1.1rem; color:var(--dark); line-height:1.9;" data-i18n="about.mission.p2">
+            Ziontec exists to make that simple. We install integrated solar + EV charging systems from start to finish — assessment, design, permits, installation, utility connection, and rebate filing. One company. One point of contact. Complete power.
+          </p>
+        </div>
+        <div>
+          <div style="background:var(--gradient); border-radius:var(--radius-lg); padding:48px; color:var(--white); position:relative; overflow:hidden;">
+            <div style="position:absolute; top:-30px; right:-30px; width:150px; height:150px; border-radius:50%; background:rgba(0,212,255,0.1);"></div>
+            <div style="position:relative; z-index:1;">
+              <div style="font-family:var(--font-heading); font-weight:900; font-size:3.5rem; color:var(--accent); line-height:1;">200+</div>
+              <div style="color:rgba(255,255,255,0.8); margin-bottom:32px;" data-i18n="about.stats.s1">Systems installed across New England</div>
+              <div style="font-family:var(--font-heading); font-weight:900; font-size:3.5rem; color:var(--gold); line-height:1;">6</div>
+              <div style="color:rgba(255,255,255,0.8); margin-bottom:32px;" data-i18n="about.stats.s2">States served — MA, CT, RI, NH, VT, ME</div>
+              <div style="font-family:var(--font-heading); font-weight:900; font-size:3.5rem; color:#34D399; line-height:1;">$1,400</div>
+              <div style="color:rgba(255,255,255,0.8);" data-i18n="about.stats.s3">Average annual savings per customer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-label" data-i18n="about.values.label">What We Believe</div>
+        <h2 data-i18n="about.values.h2">Our Core Principles</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon card-icon-blue" style="font-size:1.4rem;">🔍</div>
+          <h3 data-i18n="about.v1.h">Honest Assessment First</h3>
+          <p data-i18n="about.v1.p">We'll tell you if solar or an EV charger doesn't make sense for your property. We'd rather lose the job than oversell. Our reputation is built on honest recommendations.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-gold" style="font-size:1.4rem;">⚙️</div>
+          <h3 data-i18n="about.v2.h">Engineered, Not Estimated</h3>
+          <p data-i18n="about.v2.p">Every system we design is custom for your property. We don't use standard packages — we evaluate your real roof, your real panel, and your real usage before we spec anything.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon card-icon-green" style="font-size:1.4rem;">🤝</div>
+          <h3 data-i18n="about.v3.h">One Point of Contact</h3>
+          <p data-i18n="about.v3.p">From assessment to activation, you have one team, one project manager, one phone number. No handoffs between contractors. No surprises.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-label" data-i18n="about.cred.label">Credentials</div>
+        <h2 style="color:var(--white);" data-i18n="about.cred.h2">Licensed, Certified, and Insured Across New England</h2>
+      </div>
+      <div class="grid-4">
+        <div style="text-align:center; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius-lg); padding:28px;">
+          <div style="font-size:2.5rem; margin-bottom:12px;">🏆</div>
+          <h4 style="color:var(--white); margin-bottom:8px; font-size:0.95rem;" data-i18n="about.cred.c1.h">NABCEP Certified</h4>
+          <p style="font-size:0.8rem; color:rgba(255,255,255,0.6);" data-i18n="about.cred.c1.p">Solar PV Installation Professional</p>
+        </div>
+        <div style="text-align:center; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius-lg); padding:28px;">
+          <div style="font-size:2.5rem; margin-bottom:12px;">⚡</div>
+          <h4 style="color:var(--white); margin-bottom:8px; font-size:0.95rem;" data-i18n="about.cred.c2.h">EV Charger Certified</h4>
+          <p style="font-size:0.8rem; color:rgba(255,255,255,0.6);" data-i18n="about.cred.c2.p">Level 2 & DC Fast Charger Installation</p>
+        </div>
+        <div style="text-align:center; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius-lg); padding:28px;">
+          <div style="font-size:2.5rem; margin-bottom:12px;">🛡️</div>
+          <h4 style="color:var(--white); margin-bottom:8px; font-size:0.95rem;" data-i18n="about.cred.c3.h">Licensed Electricians</h4>
+          <p style="font-size:0.8rem; color:rgba(255,255,255,0.6);" data-i18n="about.cred.c3.p">Massachusetts Master Electrician License</p>
+        </div>
+        <div style="text-align:center; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius-lg); padding:28px;">
+          <div style="font-size:2.5rem; margin-bottom:12px;">📋</div>
+          <h4 style="color:var(--white); margin-bottom:8px; font-size:0.95rem;" data-i18n="about.cred.c4.h">Fully Insured</h4>
+          <p style="font-size:0.8rem; color:rgba(255,255,255,0.6);" data-i18n="about.cred.c4.p">$2M General Liability + Workers Comp</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2 data-i18n="about.cta.h2">Ready to Work With Us?</h2>
+        <p data-i18n="about.cta.p">Start with a free site assessment. No commitment, no pressure — just honest answers for your property.</p>
+        <div class="cta-actions">
+          <a href="contato.html" class="btn btn-primary btn-lg" data-i18n-html="common.free_assessment">
+            <i class="fa-solid fa-calendar-check"></i> Schedule Free Assessment
+          </a>
+        </div>
+        <p style="color:rgba(255,255,255,0.5); font-size:0.8rem; margin-top:16px;" data-i18n="common.free_note">Free. No obligation. On-site visit within 5 business days.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:38px;width:auto;">
+          </a>
+          <p>New England's integrated clean energy company. Solar panels + EV charging systems for homes and businesses.</p>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.services">Services</div>
+          <ul class="footer-links">
+            <li><a href="servicos.html">Residential EV Charging</a></li>
+            <li><a href="servicos.html">Commercial EV Charging</a></li>
+            <li><a href="servicos.html">Residential Solar</a></li>
+            <li><a href="servicos.html">Commercial Solar</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.company">Company</div>
+          <ul class="footer-links">
+            <li><a href="sobre.html">About Ziontec</a></li>
+            <li><a href="calculadora.html">Savings Calculator</a></li>
+            <li><a href="contato.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.contact">Contact</div>
+          <div class="footer-contact-item"><i class="fa-solid fa-phone"></i><span>(781) 866-7085</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><span>contact@ziontecpower.com</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-map-marker-alt"></i><span>Boston, MA — All New England</span></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 ZionTec Power Solutions. All rights reserved.</p>
+        <p>MA · CT · RI · NH · VT · ME</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+=============================================================================
+PROJETO: CLAUDIA - ASSISTENTE SECRETÁRIA INTELIGENTE
+=============================================================================
+
+Data de criação: Março de 2026
+Descrição: Assistente IA para automação de tarefas administrativas
+
+O QUÊ:
+Assistente inteligente baseado em IA que funciona como secretária virtual.
+Automatiza tarefas como:
+- Agendamento de reuniões
+- Gestão de email e comunicações
+- Organização de documentos
+- Relatórios e analytics
+- Integração com Google Calendar, Gmail, Docs
+
+STACK:
+- Python 3.9+
+- Claude API / Gemini API
+- Telegram Bot API (interface)
+- PostgreSQL (planejado)
+- Dashboard HTML/CSS
+
+VERSÕES CONSOLIDADAS:
+V1 (original): Primeira versão com features básicas
+V2 (atual): Versão melhorada com mais automações
+
+STATUS:
+🚧 EM DESENVOLVIMENTO
+- V1: Funcional mas deprecated
+- V2: Versão ativa, precisa refinamento
+- Features: ~70% implementadas
+- Integração bancária: Planejada
+
+PRÓXIMOS PASSOS:
+1. Finalizar integração com Google Workspace
+2. Implementar análise de emails com IA
+3. Criar dashboard visual
+4. Teste com usuários beta
+5. Deploy como serviço 24/7
+
+ROADMAP 2026:
+MÊS 1-2: Consolidar V2, testes
+MÊS 3: Integração Google Workspace
+MÊS 4-5: Features avançadas
+MÊS 6: MVP para vendas
+
+ROI:
+- Economiza 15-20h por semana em tarefas admin
+- Reduz tempo de resposta de emails em 80%
+- Pode gerar receita: SaaS B2B ($29-99/mês)
+
+ESTRUTURA:
+- claudia_v1/: Código original (reference)
+- claudia_v2/: Versão ativa
+- modules/: Modulos compartilhados
+- config/: Configurações
+- docs/: Documentação
+- auto_dev.py: Orquestrador de desenvolvimento autônomo
+- dashboard.html: Dashboard visual
+
+INTEGRAÇÃO COM OUTROS PROJETOS:
+→ Piloto para SMB-OS módulo de automação
+→ Pode alimentar Bot Ziontec com features admin
+
+LOCALIZAÇÃO ORIGINAL:
+C:\Users\g-fil\Documents\Gerson ai\smb-os-automation\
+
+NOTA IMPORTANTE:
+Este projeto foi consolidado de múltiplas versões.
+V2 é a versão mantida ativamente.
+V1 mantido apenas como referência.
+
+=============================================================================

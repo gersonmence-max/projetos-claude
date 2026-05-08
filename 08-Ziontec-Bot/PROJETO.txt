@@ -1,0 +1,251 @@
+=============================================================================
+PROJETO: ZIONTEC BOT (Assistente Pessoal)
+=============================================================================
+
+STATUS: Funcional mas incompleto
+PRIORIDADE: ALTA
+CATEGORIA: Automação / Gestão Operacional / SaaS (futuro)
+USO: Interno Ziontec → Piloto para SMB OS
+
+-----------------------------------------------------------------------------
+O QUE É
+-----------------------------------------------------------------------------
+
+Bot Telegram para gestão operacional da Ziontec Power Solutions. Gerencia
+projetos, clientes, ordens de serviço, follow-ups, e integração com Google
+Sheets como banco de dados. Sistema determinístico com fallback para LLMs
+(Claude Haiku, Groq, Gemini).
+
+OBJETIVO ESTRATÉGICO: Não é só um bot — é o **piloto do SMB OS**. A lógica
+de gestão aqui valida o que vai virar SaaS para outras empresas.
+
+-----------------------------------------------------------------------------
+STACK TÉCNICA
+-----------------------------------------------------------------------------
+
+Backend:     Python (bot.py + core.py)
+Interface:   Telegram Bot API
+Banco:       Google Sheets (temporário)
+LLMs:        Claude Haiku (primary), Groq (fallback), Gemini (fallback 2)
+Testes:      108 testes automatizados (pytest)
+Arquitetura: Lógica determinística + LLM para casos ambíguos
+Infra:       VPS Hetzner (já rodando)
+
+-----------------------------------------------------------------------------
+ROADMAP PLANEJADO (SaaS)
+-----------------------------------------------------------------------------
+
+O bot atual é PILOTO. Roadmap de transformação em SaaS:
+
+Fase 1 - Bot Telegram (atual):
+- Gestão de projetos via Sheets
+- Sistema determinístico funcional
+- 108 testes passando
+- Uso interno Ziontec
+
+Fase 2 - Multi-tenant Telegram:
+- Múltiplas empresas usando o bot
+- Separação de dados por company_id
+- Cobrança $19.90/mês por empresa
+- Google Sheets ainda como DB
+
+Fase 3 - Web Dashboard:
+- Interface web além do Telegram
+- PostgreSQL substituindo Sheets
+- Relatórios e analytics
+- Cobrança $49.90/mês
+
+Fase 4 - SMB OS Completo:
+- CRM, financeiro, NF-e integrados
+- App mobile
+- Múltiplos verticais (construção, joalheria, etc)
+- Tiers de $397-1.197/mês
+
+-----------------------------------------------------------------------------
+FUNCIONALIDADES ATUAIS
+-----------------------------------------------------------------------------
+
+Gestão de Projetos:
+- Criar projeto
+- Atualizar status
+- Adicionar notas
+- Follow-up automatizado
+
+Gestão de Clientes:
+- CRUD de clientes
+- Histórico de interações
+- Lembretes de follow-up
+
+Ordens de Serviço:
+- Criar OS
+- Atribuir técnico
+- Status tracking
+- Upload de fotos
+
+Relatórios:
+- Projetos em andamento
+- Receita mensal
+- Clientes inativos
+
+-----------------------------------------------------------------------------
+O QUE PRECISA SER IMPLEMENTADO
+-----------------------------------------------------------------------------
+
+PRIORIDADE ALTA (BOT ATUAL):
+□ Migração Google Sheets → PostgreSQL
+  - Schema definido
+  - Migration scripts
+  - Manter compatibilidade com comandos existentes
+
+□ Sistema de notificações proativas
+  - Follow-up automático após X dias
+  - Lembretes de pagamento
+  - Alertas de projeto atrasado
+
+□ Integração com Gmail/Google Calendar
+  - Criar evento de reunião via bot
+  - Enviar email de proposta
+  - Sync de calendario
+
+PRIORIDADE ALTA (SAAS):
+□ Multi-tenancy
+  - Separação de dados por empresa
+  - Onboarding de novas empresas
+  - Billing via Stripe
+
+□ Web Dashboard MVP
+  - Login/auth
+  - Visualização de projetos
+  - Edição de clientes
+  - Relatórios básicos
+
+PRIORIDADE MÉDIA:
+□ Integração com Field Nation
+  - Importar Work Orders automaticamente
+  - Criar projeto no bot quando aceitar WO
+  - Sync de status
+
+□ Geração de propostas em PDF
+  - Template profissional
+  - Valores dinâmicos
+  - Envio automático por email
+
+□ Sistema de templates
+  - Propostas padrão
+  - Emails de follow-up
+  - Checklists de OS
+
+PRIORIDADE BAIXA:
+□ Análise de dados com IA
+  - Previsão de receita
+  - Identificação de clientes em risco
+  - Sugestões de precificação
+
+□ Voice commands
+  - Telegram voice notes → comandos
+  - Transcrição via Whisper API
+
+-----------------------------------------------------------------------------
+ARQUITETURA
+-----------------------------------------------------------------------------
+
+bot.py:
+- Interface Telegram
+- Roteamento de comandos
+- Validação de input
+
+core.py:
+- Lógica de negócio determinística
+- Funções CRUD
+- Integração com Sheets/PostgreSQL
+
+llm_handler.py (futuro):
+- Wrapper para Claude/Groq/Gemini
+- Fallback inteligente
+- Caching de respostas
+
+-----------------------------------------------------------------------------
+DECISÕES ARQUITETURAIS (ADRs)
+-----------------------------------------------------------------------------
+
+Telegram em vez de WhatsApp:
+- API gratuita e ilimitada
+- Bots nativos (não precisa Business API)
+- Interface mais flexível (botões inline, etc)
+
+Google Sheets como MVP DB:
+- Zero setup
+- Fácil de debugar (vê dados em tempo real)
+- Suficiente para single-tenant
+- Migração para PostgreSQL quando multi-tenant
+
+Lógica determinística + LLM fallback:
+- Comandos estruturados são mais rápidos e baratos
+- LLM só para casos ambíguos
+- Custo operacional menor
+
+Claude Haiku como LLM primário:
+- Melhor custo-benefício ($0.25/1M tokens)
+- Latência baixa (~1s)
+- Qualidade suficiente para assistente
+
+Separação bot.py / core.py:
+- Core testável independentemente
+- Fácil migrar para web (reusa core.py)
+- Melhor manutenibilidade
+
+-----------------------------------------------------------------------------
+TESTES
+-----------------------------------------------------------------------------
+
+✅ 108 testes automatizados
+✅ Cobertura: CRUD, comandos, edge cases
+✅ CI/CD: Rodam antes de cada deploy
+
+Testar localmente:
+```bash
+pytest tests/ -v
+```
+
+-----------------------------------------------------------------------------
+RECURSOS EXISTENTES
+-----------------------------------------------------------------------------
+
+✅ Bot funcional em produção (VPS Hetzner)
+✅ Integração Google Sheets
+✅ 108 testes passando
+✅ Lógica determinística implementada
+✅ Fallback LLM funcionando
+✅ Documentação básica
+
+-----------------------------------------------------------------------------
+TRANSIÇÃO PARA SMB OS
+-----------------------------------------------------------------------------
+
+Este bot é a **fundação técnica e de produto** do SMB OS.
+
+Lições validadas aqui:
+- Fluxo de trabalho de pequenas empresas
+- Comandos mais usados
+- Pontos de fricção
+- Necessidade de web dashboard
+- Pricing ($19.90/mês é viável)
+
+Código reutilizável:
+- core.py → API FastAPI
+- Testes → base de QA do SaaS
+- Templates → onboarding automático
+
+-----------------------------------------------------------------------------
+PRÓXIMOS PASSOS IMEDIATOS
+-----------------------------------------------------------------------------
+
+1. Migrar de Sheets → PostgreSQL (manter bot funcionando)
+2. Implementar notificações proativas
+3. Adicionar segunda empresa (teste multi-tenant)
+4. Cobrar $19.90/mês da segunda empresa (validar billing)
+5. Construir dashboard web MVP (read-only primeiro)
+6. Pitch para 5 pequenas empresas (validar demanda)
+7. Se 3+ assinarem → acelerar desenvolvimento SMB OS
+
+=============================================================================

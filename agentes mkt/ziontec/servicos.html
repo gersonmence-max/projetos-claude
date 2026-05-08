@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ziontec services: Residential and Commercial EV Charging (Level 2 and DC Fast Charger), Residential and Commercial Solar Installation across New England.">
+  <title>Services — ZionTec Power Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="logo">
+          <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:42px;width:auto;">
+        </a>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="servicos.html" class="active" data-i18n="nav.services">Services</a></li>
+          <li><a href="calculadora.html" data-i18n="nav.calculator">Savings Calculator</a></li>
+          <li><a href="sobre.html" data-i18n="nav.about">About</a></li>
+          <li><a href="contato.html" data-i18n="nav.contact">Contact</a></li>
+          <li class="nav-cta"><a href="contato.html" class="btn btn-primary" data-i18n="nav.cta">Free Assessment</a></li>
+        </ul>
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" onclick="setLang('pt')">PT</button>
+          <button class="lang-btn" onclick="setLang('es')">ES</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="section-label" data-i18n="srv.label">Clean Power. Complete System.</div>
+      <h1 data-i18n="srv.h1">Everything You Need to Power Your Property</h1>
+      <p data-i18n="srv.p">Four services. One company. Integrated from day one.</p>
+    </div>
+  </div>
+
+  <!-- EV RESIDENTIAL -->
+  <section class="section" id="ev-residential">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="section-label" data-i18n="srv.evr.label">EV Charging — Residential</div>
+          <h2 data-i18n="srv.evr.h2">Wake Up Every Morning With a Full Charge</h2>
+          <p class="mt-16" style="font-size:1.05rem; color:var(--dark); line-height:1.9;" data-i18n="srv.evr.p">
+            A Level 2 home charger delivers 25–30 miles of range per hour — meaning most EVs charge overnight from empty.
+            No more stops at public stations. No more checking app availability. Just plug in when you get home.
+          </p>
+          <div class="mt-32">
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evr.f1"><strong>Level 2 (240V) installation</strong> — 6-8x faster than a standard 120V outlet</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evr.f2"><strong>Smart charger compatible</strong> — WiFi, app control, schedule off-peak charging</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evr.f3"><strong>Panel evaluation included</strong> — we assess your electrical panel before every install</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evr.f4"><strong>Permit + inspection handled</strong> — we manage all paperwork</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evr.f5"><strong>Utility rebate filing</strong> — Eversource, National Grid, and state programs</div>
+            </div>
+          </div>
+          <div style="background:rgba(0,212,255,0.06); border:1px solid rgba(0,212,255,0.2); border-radius:var(--radius); padding:20px; margin-top:32px;">
+            <div style="font-family:var(--font-heading); font-weight:700; color:var(--dark); margin-bottom:4px;" data-i18n="srv.evr.compat.h">Compatible with all EV brands</div>
+            <p style="font-size:0.85rem; color:var(--gray); margin:0;" data-i18n="srv.evr.compat.p">Tesla, Rivian, BMW, Mercedes, Audi, Volvo, Ford, Chevrolet, Hyundai, Kia, and all NACS/J1772 vehicles.</p>
+          </div>
+          <a href="contato.html" class="btn btn-primary btn-lg mt-32">
+            <i class="fa-solid fa-calendar-check"></i> <span data-i18n="srv.evr.btn">Schedule Residential Assessment</span>
+          </a>
+        </div>
+        <div>
+          <div style="background: linear-gradient(135deg,#0A1628,#1a3a5e); border-radius:var(--radius-lg); padding:48px; text-align:center; color:var(--white);">
+            <div style="font-size:5rem; margin-bottom:24px;">⚡</div>
+            <h3 style="color:var(--white); margin-bottom:16px;">Level 2 Home Charger</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; text-align:left; margin-top:24px;">
+              <div style="background:rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px;">
+                <div style="color:var(--accent); font-family:var(--font-heading); font-weight:800; font-size:1.5rem;">7.2 kW</div>
+                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:4px;">Charging power</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px;">
+                <div style="color:var(--accent); font-family:var(--font-heading); font-weight:800; font-size:1.5rem;">25 mi/hr</div>
+                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:4px;">Range per hour</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px;">
+                <div style="color:var(--gold); font-family:var(--font-heading); font-weight:800; font-size:1.5rem;">$0.14</div>
+                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:4px;">Per kWh (off-peak)</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px;">
+                <div style="color:var(--gold); font-family:var(--font-heading); font-weight:800; font-size:1.5rem;">~$1,200</div>
+                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:4px;">Annual savings vs. public</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EV COMMERCIAL -->
+  <section class="section section-light" id="ev-commercial">
+    <div class="container">
+      <div class="grid-2">
+        <div style="background: linear-gradient(135deg,#0A1628,#1a2f4e); border-radius:var(--radius-lg); padding:48px; color:var(--white);">
+          <div style="font-size:4rem; margin-bottom:20px;">🏢</div>
+          <h3 style="color:var(--white); margin-bottom:16px;">Commercial EV Charging</h3>
+          <p style="color:rgba(255,255,255,0.75); margin-bottom:24px;">Attract EV drivers, retain employees, and generate revenue from your parking spaces.</p>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="background:rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px; display:flex; gap:12px; align-items:center;">
+              <span style="font-size:1.5rem;">⚡</span>
+              <div>
+                <div style="font-family:var(--font-heading); font-weight:700; color:var(--white);">Level 2 Commercial</div>
+                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6);">For offices, retail, parking lots, apartment buildings</div>
+              </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px; display:flex; gap:12px; align-items:center;">
+              <span style="font-size:1.5rem;">⚡⚡</span>
+              <div>
+                <div style="font-family:var(--font-heading); font-weight:700; color:var(--white);">DC Fast Charger</div>
+                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6);">50–350 kW. Full charge in 15–45 min. Ideal for fleet + high-traffic</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-label" data-i18n="srv.evc.label">EV Charging — Commercial</div>
+          <h2 data-i18n="srv.evc.h2">Turn Your Parking Lot Into a Revenue Asset</h2>
+          <p class="mt-16" style="font-size:1.05rem; color:var(--dark); line-height:1.9;" data-i18n="srv.evc.p">
+            EV drivers actively seek out businesses with charging infrastructure. Installing commercial chargers increases dwell time, attracts new customers, and generates charging revenue.
+          </p>
+          <div class="mt-24">
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evc.f1"><strong>Multi-port station installation</strong> — scale from 2 to 100+ ports</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evc.f2"><strong>Network management software</strong> — monitor usage, set pricing, generate reports</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evc.f3"><strong>Fleet charging solutions</strong> — optimize overnight charging for vehicle fleets</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <i class="fa-solid fa-check-circle" style="color:var(--accent); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.evc.f4"><strong>Federal tax incentives</strong> — 30% Alternative Fuel Infrastructure Tax Credit</div>
+            </div>
+          </div>
+          <a href="contato.html" class="btn btn-primary btn-lg mt-32">
+            <i class="fa-solid fa-calendar-check"></i> <span data-i18n="srv.evc.btn">Schedule Commercial Assessment</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLAR RESIDENTIAL -->
+  <section class="section" id="solar-residential">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="section-label" data-i18n="srv.sr.label">Solar — Residential</div>
+          <h2 data-i18n="srv.sr.h2">Your Roof Is a Power Plant. Start Using It.</h2>
+          <p class="mt-16" style="font-size:1.05rem; color:var(--dark); line-height:1.9;" data-i18n="srv.sr.p">
+            New England gets enough sun for solar to be a strong investment — especially with Massachusetts, Connecticut, and Rhode Island among the highest electricity rates in the country. Solar turns that liability into an asset.
+          </p>
+          <div class="mt-24">
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--gold); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.sr.f1"><strong>Roof assessment + shading analysis</strong> — we evaluate your exact production potential</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--gold); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.sr.f2"><strong>Custom system design</strong> — sized for your usage, not a one-size-fits-all package</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--gold); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.sr.f3"><strong>30% Federal ITC</strong> — plus state incentives we handle for you</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--gold); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.sr.f4"><strong>Net metering</strong> — sell excess power back to the grid</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <i class="fa-solid fa-check-circle" style="color:var(--gold); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.sr.f5"><strong>25-year panel warranty</strong> — engineered for New England snow loads and weather</div>
+            </div>
+          </div>
+          <a href="contato.html" class="btn btn-gold btn-lg mt-32">
+            <i class="fa-solid fa-solar-panel"></i> <span data-i18n="srv.sr.btn">Schedule Solar Assessment</span>
+          </a>
+        </div>
+        <div>
+          <div style="background: linear-gradient(135deg,#1a1228,#2d1f5e); border-radius:var(--radius-lg); padding:48px; color:var(--white);">
+            <div style="font-size:5rem; margin-bottom:24px;">☀️</div>
+            <h3 style="color:var(--white); margin-bottom:24px;">Residential Solar</h3>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+                <span style="color:rgba(255,255,255,0.7); font-size:0.9rem;">Federal Tax Credit (ITC)</span>
+                <span style="color:var(--gold); font-family:var(--font-heading); font-weight:700;">30%</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+                <span style="color:rgba(255,255,255,0.7); font-size:0.9rem;">MA SMART Program</span>
+                <span style="color:var(--accent); font-family:var(--font-heading); font-weight:700;">Included</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+                <span style="color:rgba(255,255,255,0.7); font-size:0.9rem;">Average Payback Period</span>
+                <span style="color:var(--white); font-family:var(--font-heading); font-weight:700;">7–9 years</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+                <span style="color:rgba(255,255,255,0.7); font-size:0.9rem;">Panel Warranty</span>
+                <span style="color:var(--white); font-family:var(--font-heading); font-weight:700;">25 years</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0;">
+                <span style="color:rgba(255,255,255,0.7); font-size:0.9rem;">Bill Reduction (avg.)</span>
+                <span style="color:#34D399; font-family:var(--font-heading); font-weight:700;">70–90%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLAR COMMERCIAL -->
+  <section class="section section-light" id="solar-commercial">
+    <div class="container">
+      <div class="grid-2">
+        <div style="background: linear-gradient(135deg,#2d1f0a,#4a2e05); border-radius:var(--radius-lg); padding:48px; color:var(--white);">
+          <div style="font-size:5rem; margin-bottom:24px;">🏭</div>
+          <h3 style="color:var(--white); margin-bottom:16px;">Commercial Solar</h3>
+          <p style="color:rgba(255,255,255,0.75); margin-bottom:24px;">Reduce your biggest operating cost permanently. Energy is your fixed expense — solar makes it a shrinking one.</p>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <i class="fa-solid fa-check" style="color:var(--gold);"></i>
+              <span style="font-size:0.9rem;">Rooftop, ground-mount, and carport installations</span>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <i class="fa-solid fa-check" style="color:var(--gold);"></i>
+              <span style="font-size:0.9rem;">10 kW to 1+ MW systems</span>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <i class="fa-solid fa-check" style="color:var(--gold);"></i>
+              <span style="font-size:0.9rem;">ITC + MACRS accelerated depreciation</span>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <i class="fa-solid fa-check" style="color:var(--gold);"></i>
+              <span style="font-size:0.9rem;">Power Purchase Agreements (PPA) available</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-label" data-i18n="srv.sc.label">Solar — Commercial</div>
+          <h2 data-i18n="srv.sc.h2">Reduce Operating Costs. Permanently.</h2>
+          <p class="mt-16" style="font-size:1.05rem; color:var(--dark); line-height:1.9;" data-i18n="srv.sc.p">
+            Commercial electricity in New England can cost $0.18–$0.28/kWh. Solar brings that down to near-zero for 25+ years. For businesses spending $5,000–$50,000/year on electricity, this changes the math on everything.
+          </p>
+          <div class="mt-24">
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--gold); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.sc.f1"><strong>Feasibility analysis</strong> — full ROI modeling before you commit</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;">
+              <i class="fa-solid fa-check-circle" style="color:var(--gold); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.sc.f2"><strong>Utility interconnection</strong> — we manage the entire process with your utility company</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <i class="fa-solid fa-check-circle" style="color:var(--gold); margin-top:3px; font-size:1.1rem; flex-shrink:0;"></i>
+              <div data-i18n-html="srv.sc.f3"><strong>30% ITC + MACRS depreciation</strong> — significantly reduces net installation cost</div>
+            </div>
+          </div>
+          <a href="contato.html" class="btn btn-gold btn-lg mt-32">
+            <i class="fa-solid fa-building"></i> <span data-i18n="srv.sc.btn">Commercial Solar Inquiry</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTEGRATED ADVANTAGE -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-label" data-i18n="srv.integ.label">The Ziontec Advantage</div>
+        <h2 style="color:var(--white);" data-i18n="srv.integ.h2">Why We Do Both — Together</h2>
+        <p style="color:rgba(255,255,255,0.7);" class="mt-16" data-i18n="srv.integ.p">Most companies install either solar OR EV chargers. We engineer both as one system — and the difference matters.</p>
+      </div>
+      <div class="grid-3">
+        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius-lg); padding:28px;">
+          <div style="font-size:2rem; margin-bottom:12px;">🔌</div>
+          <h4 style="color:var(--white); margin-bottom:8px;" data-i18n="srv.integ.c1.h">Optimized Panel Sizing</h4>
+          <p style="font-size:0.9rem; color:rgba(255,255,255,0.65);" data-i18n="srv.integ.c1.p">When we design both together, we size your solar system to cover your home AND your EV — not just one or the other.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius-lg); padding:28px;">
+          <div style="font-size:2rem; margin-bottom:12px;">⚙️</div>
+          <h4 style="color:var(--white); margin-bottom:8px;" data-i18n="srv.integ.c2.h">One Permit Process</h4>
+          <p style="font-size:0.9rem; color:rgba(255,255,255,0.65);" data-i18n="srv.integ.c2.p">Two separate contractors means two permits, two inspections, two schedules. One Ziontec project = one coordinated process.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:var(--radius-lg); padding:28px;">
+          <div style="font-size:2rem; margin-bottom:12px;">💰</div>
+          <h4 style="color:var(--white); margin-bottom:8px;" data-i18n="srv.integ.c3.h">Maximum Incentives</h4>
+          <p style="font-size:0.9rem; color:rgba(255,255,255,0.65);" data-i18n="srv.integ.c3.p">We file all available rebates — federal ITC, state programs, and utility incentives — as a bundled project for maximum return.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2 data-i18n="srv.cta.h2">Not Sure Which Service You Need?</h2>
+        <p data-i18n="srv.cta.p">Schedule a free assessment. We'll evaluate your property and tell you exactly what makes sense — no upsell, just honest recommendations.</p>
+        <div class="cta-actions">
+          <a href="contato.html" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-calendar-check"></i> <span data-i18n="common.free_assessment">Schedule Free Assessment</span>
+          </a>
+          <a href="calculadora.html" class="btn btn-outline btn-lg">
+            <i class="fa-solid fa-calculator"></i> Calculate My Savings First
+          </a>
+        </div>
+        <p data-i18n="common.free_note" class="mt-16" style="font-size:0.85rem; color:var(--gray); margin-top:16px;">Free. No obligation. On-site visit within 5 business days.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="brand/logo-white.svg" alt="ZionTec Power Solutions" style="height:38px;width:auto;">
+          </a>
+          <p>New England's integrated clean energy company. Solar panels + EV charging systems for homes and businesses.</p>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.services">Services</div>
+          <ul class="footer-links">
+            <li><a href="#ev-residential">Residential EV Charging</a></li>
+            <li><a href="#ev-commercial">Commercial EV Charging</a></li>
+            <li><a href="#solar-residential">Residential Solar</a></li>
+            <li><a href="#solar-commercial">Commercial Solar</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.company">Company</div>
+          <ul class="footer-links">
+            <li><a href="sobre.html">About Ziontec</a></li>
+            <li><a href="calculadora.html">Savings Calculator</a></li>
+            <li><a href="contato.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-title" data-i18n="footer.contact">Contact</div>
+          <div class="footer-contact-item"><i class="fa-solid fa-phone"></i><span>(781) 866-7085</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><span>contact@ziontecpower.com</span></div>
+          <div class="footer-contact-item"><i class="fa-solid fa-map-marker-alt"></i><span>Boston, MA — All New England</span></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 ZionTec Power Solutions. All rights reserved.</p>
+        <p>MA · CT · RI · NH · VT · ME</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

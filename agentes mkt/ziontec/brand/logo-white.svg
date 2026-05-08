@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 100" role="img" aria-label="ZionTec Power Solutions">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@500&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Z GLYPH MARK — white version for dark colored backgrounds -->
+  <path d="M 2,0 L 62,0 L 62,14 L 16,66 L 62,66 L 62,80 L 2,80 L 2,66 L 48,14 L 2,14 Z" fill="#FFFFFF"/>
+
+  <text x="76" y="68"
+        font-family="'Bebas Neue', 'Arial Narrow', sans-serif"
+        font-size="72"
+        letter-spacing="2"
+        fill="#FFFFFF">IONTEC</text>
+
+  <text x="76" y="90"
+        font-family="'DM Sans', 'Arial', sans-serif"
+        font-size="11"
+        font-weight="500"
+        letter-spacing="5"
+        fill="#FFFFFF"
+        opacity="0.7">POWER SOLUTIONS</text>
+</svg>
