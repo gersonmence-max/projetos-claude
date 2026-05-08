@@ -80,26 +80,46 @@ codigo_gerado = chamar_groq(
     f"TAREFA:\n{proxima}\n\nPROJETO.txt:\n{projeto_txt}\n\nCODIGO EXISTENTE:\n{codigo_atual}",
 )
 
-# Salvar arquivos gerados
+# Salvar arquivos gerados — suporta múltiplos formatos de resposta
+import re
+
 arquivos_salvos = []
+
+# Tenta formato === ARQUIVO: ... === FIM ===
 blocos = codigo_gerado.split("=== ARQUIVO:")
-for bloco in blocos[1:]:
-    try:
-        linhas = bloco.strip().split("\n")
-        caminho = linhas[0].strip()
-        fim = bloco.find("=== FIM ===")
-        conteudo = bloco[len(linhas[0]):fim].strip() if fim != -1 else bloco[len(linhas[0]):].strip()
-        if conteudo.startswith("```"):
-            conteudo = "\n".join(conteudo.split("\n")[1:])
-        if conteudo.endswith("```"):
-            conteudo = "\n".join(conteudo.split("\n")[:-1])
-        dest = PROJETO_DIR / caminho
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(conteudo, encoding="utf-8")
-        arquivos_salvos.append(caminho)
-        print(f"Arquivo gerado: {caminho}")
-    except Exception as e:
-        print(f"Erro ao salvar: {e}")
+if len(blocos) > 1:
+    for bloco in blocos[1:]:
+        try:
+            linhas = bloco.strip().split("\n")
+            caminho = linhas[0].strip()
+            fim = bloco.find("=== FIM ===")
+            conteudo = bloco[len(linhas[0]):fim].strip() if fim != -1 else bloco[len(linhas[0]):].strip()
+            if conteudo.startswith("```"):
+                conteudo = "\n".join(conteudo.split("\n")[1:])
+            if conteudo.endswith("```"):
+                conteudo = "\n".join(conteudo.split("\n")[:-1])
+            dest = PROJETO_DIR / caminho
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(conteudo, encoding="utf-8")
+            arquivos_salvos.append(caminho)
+            print(f"Arquivo gerado: {caminho}")
+        except Exception as e:
+            print(f"Erro ao salvar: {e}")
+else:
+    # Tenta formato ```lang\n...``` com comentário de caminho acima
+    pattern = r'(?:(?:#|//|<!--|)\s*([\w/.\-]+\.\w+)\s*(?:-->)?\n)?```(?:\w+)?\n(.*?)```'
+    matches = re.findall(pattern, codigo_gerado, re.DOTALL)
+    for caminho, conteudo in matches:
+        if not caminho or "/" not in caminho:
+            continue
+        try:
+            dest = PROJETO_DIR / caminho.strip()
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(conteudo.strip(), encoding="utf-8")
+            arquivos_salvos.append(caminho)
+            print(f"Arquivo gerado: {caminho}")
+        except Exception as e:
+            print(f"Erro ao salvar: {e}")
 
 # Salvar log
 log_dir = Path("sugestoes/01-SMB-OS")

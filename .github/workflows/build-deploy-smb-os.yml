@@ -82,7 +82,9 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SMB_WEB }}
         run: |
           if [ -z "$VERCEL_TOKEN" ]; then echo "VERCEL_TOKEN nao configurado"; exit 0; fi
-          cd 01-SMB-OS/apps/web
+          npm install -g pnpm
+          cd 01-SMB-OS
+          pnpm install --frozen-lockfile 2>/dev/null || pnpm install
           vercel --prod --token=$VERCEL_TOKEN --yes 2>&1 | tail -10
 
       - name: Deploy Backend para Render
@@ -95,10 +97,10 @@ jobs:
             "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
             -H "Authorization: Bearer $RENDER_API_KEY" \
             -H "Content-Type: application/json" \
-            -d '{"clearCache": false}' | python3 -c "
+            -d '{"clearCache":"do_not_clear"}' | python3 -c "
           import sys, json
           r = json.load(sys.stdin)
-          print('Deploy iniciado:', r.get('id', r))
+          print('Deploy Render:', r.get('id', r))
           "
 
       - name: Resumo
