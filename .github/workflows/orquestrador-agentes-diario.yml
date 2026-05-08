@@ -158,7 +158,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "✅ Sem mudanças para commit"
           else
-            git commit -m "🤖 ci: análise automática orquestrador $(date +'%Y-%m-%d %H:%M')'
+            git commit -m "🤖 ci: análise automática orquestrador $(date +'%Y-%m-%d %H:%M')"
 
             # Tenta fazer push com retry
             attempt=1
