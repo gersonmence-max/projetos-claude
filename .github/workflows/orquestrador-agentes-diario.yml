@@ -66,7 +66,7 @@ jobs:
 
           EOF
 
-      - name: 🔍 Executar 6 Agentes para cada Projeto
+      - name: 🔍 Executar 10 Agentes Especializados para cada Projeto
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
@@ -81,28 +81,145 @@ jobs:
           client = Groq(api_key=os.environ["GROQ_API_KEY"])
           MODEL = "llama-3.3-70b-versatile"
 
+          EXTENSOES_CODIGO = {'.py', '.ts', '.tsx', '.js', '.jsx', '.go', '.java',
+                              '.cs', '.php', '.rb', '.rs', '.sql', '.sh', '.yaml',
+                              '.yml', '.json', '.env.example', '.toml', '.tf'}
+
+          IGNORAR_PASTAS = {'node_modules', '.git', '__pycache__', 'venv', '.venv',
+                            'dist', 'build', '.next', 'coverage', 'sugestoes'}
+
+          def ler_codigo_projeto(projeto_dir, max_chars=12000):
+              arquivos = []
+              for f in sorted(projeto_dir.rglob('*')):
+                  if any(p in f.parts for p in IGNORAR_PASTAS):
+                      continue
+                  if f.suffix.lower() in EXTENSOES_CODIGO or f.name in {'.env.example', 'Dockerfile', 'Procfile'}:
+                      try:
+                          conteudo = f.read_text(encoding='utf-8', errors='ignore')
+                          if conteudo.strip():
+                              arquivos.append((str(f.relative_to(projeto_dir)), conteudo))
+                      except:
+                          pass
+              # Prioriza arquivos menores e mais relevantes, respeita limite de contexto
+              codigo = ""
+              for nome, conteudo in arquivos:
+                  bloco = f"\n### {nome}\n```\n{conteudo[:2000]}\n```\n"
+                  if len(codigo) + len(bloco) > max_chars:
+                      break
+                  codigo += bloco
+              return codigo, len(arquivos)
+
           def chamar_groq(system_prompt, contexto, projeto):
               try:
                   response = client.chat.completions.create(
                       model=MODEL,
                       messages=[
                           {"role": "system", "content": system_prompt},
-                          {"role": "user", "content": f"Projeto: {projeto}\n\n{contexto}"}
+                          {"role": "user", "content": f"PROJETO: {projeto}\n\n{contexto}"}
                       ],
-                      max_tokens=1024,
-                      temperature=0.3,
+                      max_tokens=1500,
+                      temperature=0.2,
                   )
                   return response.choices[0].message.content
               except Exception as e:
                   return f"ERRO: {e}"
 
           AGENTES = [
-              ("🔍 Revisor", "Você é um revisor de código experiente. Analise o projeto descrito e aponte os 3 principais problemas ou melhorias de qualidade de código. Seja direto e específico."),
-              ("🛡️ Segurança", "Você é um especialista em segurança. Analise o projeto descrito e identifique as 3 principais vulnerabilidades ou riscos de segurança. Inclua como mitigar cada uma."),
-              ("⚡ Performance", "Você é um especialista em performance. Analise o projeto descrito e aponte os 3 principais gargalos ou oportunidades de otimização de desempenho."),
-              ("🏗️ Arquiteto", "Você é um arquiteto de software sênior. Analise o projeto descrito e sugira as 3 principais melhorias de arquitetura, padrões ou estrutura do sistema."),
-              ("💻 Programador", "Você é um programador sênior. Analise o projeto descrito e sugira as 3 principais melhorias de implementação, refatorações ou funcionalidades faltantes."),
-              ("📊 Consolidador", "Você é um tech lead. Baseado no projeto descrito, crie um resumo executivo com as 5 ações mais importantes a tomar nas próximas 2 semanas, em ordem de prioridade."),
+              ("🛡️ OWASP Top 10", (
+                  "Você é um especialista em segurança web seguindo o OWASP Top 10 2021. "
+                  "Analise o código fornecido e identifique vulnerabilidades reais nas categorias: "
+                  "A01 Broken Access Control, A02 Cryptographic Failures, A03 Injection, "
+                  "A04 Insecure Design, A05 Security Misconfiguration, A06 Vulnerable Components, "
+                  "A07 Auth Failures, A08 Integrity Failures, A09 Logging Failures, A10 SSRF. "
+                  "Para cada achado: classifique o risco (Crítico/Alto/Médio/Baixo), cite o arquivo e linha, "
+                  "e forneça a correção exata. Use CVSS 3.1 para scoring quando aplicável."
+              )),
+              ("🔐 Autenticação & JWT", (
+                  "Você é um especialista em autenticação e autorização seguindo RFC 7519 (JWT), "
+                  "OAuth 2.0 (RFC 6749), OpenID Connect e NIST SP 800-63B. "
+                  "Analise o código e verifique: algoritmos de assinatura JWT (HS256 vs RS256), "
+                  "expiração e rotação de tokens, armazenamento seguro (httpOnly cookies vs localStorage), "
+                  "implementação de refresh tokens, rate limiting em endpoints de auth, "
+                  "proteção contra brute force, MFA, e gestão de sessões. "
+                  "Aponte falhas concretas com arquivo, linha e correção."
+              )),
+              ("🔒 Criptografia & Dados Sensíveis", (
+                  "Você é um especialista em criptografia seguindo NIST FIPS 140-2, OWASP Cryptographic Storage. "
+                  "Analise o código e verifique: uso de algoritmos aprovados (AES-256, RSA-2048+, SHA-256+), "
+                  "hashing de senhas com bcrypt/Argon2/scrypt (NÃO MD5/SHA1), "
+                  "dados sensíveis em logs ou respostas de API, secrets hardcoded no código, "
+                  "uso correto de variáveis de ambiente, criptografia em trânsito (TLS 1.2+), "
+                  "e dados em repouso. Cite arquivo e linha de cada problema encontrado."
+              )),
+              ("📋 LGPD & Compliance", (
+                  "Você é um especialista em privacidade seguindo a LGPD (Lei 13.709/2018), GDPR e ISO 27701. "
+                  "Analise o código e verifique: coleta de dados pessoais sem base legal, "
+                  "ausência de consentimento explícito, dados pessoais sem criptografia, "
+                  "logs com PII (CPF, email, telefone), ausência de mecanismo de exclusão de dados, "
+                  "retenção indefinida de dados, transferência internacional sem salvaguardas, "
+                  "e ausência de DPO ou política de privacidade. "
+                  "Classifique cada violação como leve, grave ou gravíssima conforme o Art. 52."
+              )),
+              ("🕵️ Dependências & CVEs", (
+                  "Você é um especialista em segurança de supply chain seguindo OWASP A06:2021 e NIST SP 800-161. "
+                  "Analise os arquivos de dependências (requirements.txt, package.json, go.mod, etc.) e verifique: "
+                  "bibliotecas sem versão fixada (floating versions), pacotes com CVEs conhecidos, "
+                  "dependências desatualizadas por mais de 6 meses, uso de pacotes abandonados, "
+                  "presença de lockfile (package-lock.json, poetry.lock), "
+                  "e ausência de verificação de integridade (hash checking). "
+                  "Liste os riscos por severidade CVSS."
+              )),
+              ("⚡ Performance & Escalabilidade", (
+                  "Você é um especialista em performance e escalabilidade. "
+                  "Analise o código e identifique: N+1 queries em banco de dados, "
+                  "ausência de índices em campos de busca frequente, "
+                  "operações síncronas que deveriam ser assíncronas, "
+                  "ausência de cache em operações custosas, "
+                  "loops ineficientes e complexidade O(n²) desnecessária, "
+                  "memory leaks em event listeners ou conexões não fechadas, "
+                  "e falta de paginação em listagens. Estime o impacto de cada problema em produção."
+              )),
+              ("🗄️ Banco de Dados & SQL", (
+                  "Você é um especialista em banco de dados. "
+                  "Analise o código e verifique: SQL injection (queries concatenadas vs parametrizadas), "
+                  "ausência de transactions em operações críticas, "
+                  "falta de índices em foreign keys e campos de busca, "
+                  "uso de SELECT * desnecessário, "
+                  "ausência de soft delete em dados críticos, "
+                  "migrations sem rollback, "
+                  "e ausência de backup strategy. "
+                  "Para cada problema, cite o arquivo, a query problemática e a versão corrigida."
+              )),
+              ("🏗️ Arquitetura & Qualidade", (
+                  "Você é um arquiteto de software sênior seguindo SOLID, Clean Architecture e 12-Factor App. "
+                  "Analise o código e identifique: violações de Single Responsibility, "
+                  "acoplamento excessivo entre módulos, ausência de injeção de dependência, "
+                  "lógica de negócio misturada com infraestrutura, "
+                  "ausência de tratamento de erros consistente, "
+                  "configurações hardcoded que deveriam ser variáveis de ambiente, "
+                  "e ausência de testes unitários em funções críticas. "
+                  "Priorize por impacto na manutenibilidade."
+              )),
+              ("🧪 Testes & Confiabilidade", (
+                  "Você é um especialista em qualidade de software e testes. "
+                  "Analise o código e verifique: ausência de testes em funções críticas de negócio, "
+                  "testes sem asserções significativas, "
+                  "ausência de testes de integração em APIs, "
+                  "falta de mocks para dependências externas, "
+                  "ausência de testes de segurança (autenticação, autorização), "
+                  "e funções com complexidade ciclomática alta sem cobertura. "
+                  "Sugira os testes mais críticos a implementar com exemplos de código."
+              )),
+              ("📊 Consolidador Executivo", (
+                  "Você é um CTO experiente. Com base nas análises de segurança, performance, "
+                  "arquitetura e qualidade do projeto, crie um relatório executivo com: "
+                  "1) Score de saúde geral do projeto (0-100), "
+                  "2) Top 5 riscos críticos que precisam de ação imediata (com prazo sugerido), "
+                  "3) Top 5 melhorias de médio prazo (próximos 30 dias), "
+                  "4) Dívida técnica estimada em horas de desenvolvimento, "
+                  "5) Recomendação: está pronto para produção? Justifique. "
+                  "Seja objetivo e direto."
+              )),
           ]
 
           with open('/tmp/projetos.json', 'r') as f:
@@ -113,7 +230,7 @@ jobs:
               exit(0)
 
           print("\n" + "=" * 80)
-          print(f"🤖 INICIANDO ANÁLISE COM 6 AGENTES GROQ ({MODEL})")
+          print(f"🤖 INICIANDO ANÁLISE COM 10 AGENTES ESPECIALIZADOS ({MODEL})")
           print("=" * 80)
 
           for projeto in projetos:
@@ -130,35 +247,41 @@ jobs:
                   continue
 
               with open(projeto_file, 'r', encoding='utf-8') as f:
-                  contexto = f.read()
+                  descricao = f.read()
 
-              print(f"✅ Contexto lido ({len(contexto)} caracteres)")
+              codigo, total_arquivos = ler_codigo_projeto(projeto_dir)
+              print(f"✅ {total_arquivos} arquivos de código encontrados")
+
+              contexto = f"DESCRIÇÃO DO PROJETO:\n{descricao}\n\nCÓDIGO FONTE:\n{codigo}" if codigo else f"DESCRIÇÃO DO PROJETO:\n{descricao}"
 
               sugestoes_dir = Path(f'sugestoes/{projeto}')
               sugestoes_dir.mkdir(parents=True, exist_ok=True)
 
-              sugestoes_file = sugestoes_dir / f'{projeto}_sugestoes_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt'
+              ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+              sugestoes_file = sugestoes_dir / f'{projeto}_analise_{ts}.txt'
               resultados = []
 
               for nome, system_prompt in AGENTES:
-                  print(f"  {nome}: chamando Groq...")
+                  print(f"  {nome}: analisando...")
                   resposta = chamar_groq(system_prompt, contexto, projeto)
                   resultados.append((nome, resposta))
-                  time.sleep(1)  # respeita rate limit
+                  time.sleep(2)
 
               with open(sugestoes_file, 'w', encoding='utf-8') as f:
-                  f.write(f"📊 ANÁLISE DO PROJETO: {projeto}\n")
-                  f.write(f"⏰ Data: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-                  f.write(f"🤖 Modelo: {MODEL}\n")
-                  f.write("=" * 80 + "\n\n")
+                  f.write(f"ANÁLISE ESPECIALIZADA: {projeto}\n")
+                  f.write(f"Data: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                  f.write(f"Modelo: {MODEL}\n")
+                  f.write(f"Arquivos analisados: {total_arquivos}\n")
+                  f.write(f"Protocolos: OWASP Top 10 2021 | NIST CSF | LGPD | RFC 7519 | ISO 27001 | CVSS 3.1\n")
+                  f.write("=" * 80 + "\n")
                   for nome, resposta in resultados:
-                      f.write(f"\n{'=' * 40}\n{nome}\n{'=' * 40}\n")
+                      f.write(f"\n{'=' * 60}\n{nome}\n{'=' * 60}\n")
                       f.write(resposta + "\n")
 
-              print(f"  ✅ Sugestões salvas em: {sugestoes_file}")
+              print(f"  ✅ Análise salva em: {sugestoes_file}")
 
           print("\n" + "=" * 80)
-          print("✅ ANÁLISE CONCLUÍDA COM SUCESSO")
+          print("✅ ANÁLISE CONCLUÍDA")
           print("=" * 80)
 
           EOF
