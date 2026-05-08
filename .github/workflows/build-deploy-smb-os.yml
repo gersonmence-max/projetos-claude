@@ -83,8 +83,7 @@ jobs:
         run: |
           if [ -z "$VERCEL_TOKEN" ]; then echo "VERCEL_TOKEN nao configurado"; exit 0; fi
           npm install -g pnpm
-          cd 01-SMB-OS
-          pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+          pnpm install --frozen-lockfile --dir 01-SMB-OS 2>/dev/null || pnpm install --dir 01-SMB-OS
           vercel --prod --token=$VERCEL_TOKEN --yes 2>&1 | tail -10
 
       - name: Deploy Backend para Render
