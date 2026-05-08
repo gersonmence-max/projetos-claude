@@ -32,7 +32,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install python-dateutil pytz requests beautifulsoup4
+          pip install python-dateutil pytz requests beautifulsoup4 groq
 
       - name: 🧠 Executar Orquestrador - Descobrir Projetos
         run: |
@@ -67,12 +67,43 @@ jobs:
           EOF
 
       - name: 🔍 Executar 6 Agentes para cada Projeto
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           python << 'EOF'
           import json
           import os
+          import time
           from pathlib import Path
           from datetime import datetime
+          from groq import Groq
+
+          client = Groq(api_key=os.environ["GROQ_API_KEY"])
+          MODEL = "llama-3.3-70b-versatile"
+
+          def chamar_groq(system_prompt, contexto, projeto):
+              try:
+                  response = client.chat.completions.create(
+                      model=MODEL,
+                      messages=[
+                          {"role": "system", "content": system_prompt},
+                          {"role": "user", "content": f"Projeto: {projeto}\n\n{contexto}"}
+                      ],
+                      max_tokens=1024,
+                      temperature=0.3,
+                  )
+                  return response.choices[0].message.content
+              except Exception as e:
+                  return f"ERRO: {e}"
+
+          AGENTES = [
+              ("🔍 Revisor", "Você é um revisor de código experiente. Analise o projeto descrito e aponte os 3 principais problemas ou melhorias de qualidade de código. Seja direto e específico."),
+              ("🛡️ Segurança", "Você é um especialista em segurança. Analise o projeto descrito e identifique as 3 principais vulnerabilidades ou riscos de segurança. Inclua como mitigar cada uma."),
+              ("⚡ Performance", "Você é um especialista em performance. Analise o projeto descrito e aponte os 3 principais gargalos ou oportunidades de otimização de desempenho."),
+              ("🏗️ Arquiteto", "Você é um arquiteto de software sênior. Analise o projeto descrito e sugira as 3 principais melhorias de arquitetura, padrões ou estrutura do sistema."),
+              ("💻 Programador", "Você é um programador sênior. Analise o projeto descrito e sugira as 3 principais melhorias de implementação, refatorações ou funcionalidades faltantes."),
+              ("📊 Consolidador", "Você é um tech lead. Baseado no projeto descrito, crie um resumo executivo com as 5 ações mais importantes a tomar nas próximas 2 semanas, em ordem de prioridade."),
+          ]
 
           with open('/tmp/projetos.json', 'r') as f:
               projetos = json.load(f)
@@ -82,7 +113,7 @@ jobs:
               exit(0)
 
           print("\n" + "=" * 80)
-          print("🤖 INICIANDO ANÁLISE COM 6 AGENTES")
+          print(f"🤖 INICIANDO ANÁLISE COM 6 AGENTES GROQ ({MODEL})")
           print("=" * 80)
 
           for projeto in projetos:
@@ -93,7 +124,6 @@ jobs:
                   print(f"❌ Pasta não encontrada: {projeto}")
                   continue
 
-              # Lê PROJETO.txt
               projeto_file = projeto_dir / 'PROJETO.txt'
               if not projeto_file.exists():
                   print(f"⚠️ PROJETO.txt não encontrado em {projeto}")
@@ -104,39 +134,26 @@ jobs:
 
               print(f"✅ Contexto lido ({len(contexto)} caracteres)")
 
-              # Cria pasta de sugestões
               sugestoes_dir = Path(f'sugestoes/{projeto}')
               sugestoes_dir.mkdir(parents=True, exist_ok=True)
 
-              # Executa 6 agentes simulados
-              agentes = [
-                  "🔍 Revisor",
-                  "🛡️ Segurança Avançado v2",
-                  "⚡ Performance",
-                  "🏗️ Arquiteto",
-                  "💻 Programador",
-                  "📊 Consolidador"
-              ]
-
-              for agente in agentes:
-                  print(f"  {agente}: Analisando...")
-
-              # Gera arquivo de sugestões
               sugestoes_file = sugestoes_dir / f'{projeto}_sugestoes_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt'
+              resultados = []
+
+              for nome, system_prompt in AGENTES:
+                  print(f"  {nome}: chamando Groq...")
+                  resposta = chamar_groq(system_prompt, contexto, projeto)
+                  resultados.append((nome, resposta))
+                  time.sleep(1)  # respeita rate limit
 
               with open(sugestoes_file, 'w', encoding='utf-8') as f:
                   f.write(f"📊 ANÁLISE DO PROJETO: {projeto}\n")
                   f.write(f"⏰ Data: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                  f.write(f"🤖 Modelo: {MODEL}\n")
                   f.write("=" * 80 + "\n\n")
-                  f.write("6 AGENTES EXECUTADOS:\n")
-                  f.write("✅ 🔍 Revisor\n")
-                  f.write("✅ 🛡️ Segurança Avançado v2\n")
-                  f.write("✅ ⚡ Performance\n")
-                  f.write("✅ 🏗️ Arquiteto\n")
-                  f.write("✅ 💻 Programador\n")
-                  f.write("✅ 📊 Consolidador\n\n")
-                  f.write(f"Contexto analisado: {len(contexto)} caracteres\n")
-                  f.write("=" * 80 + "\n")
+                  for nome, resposta in resultados:
+                      f.write(f"\n{'=' * 40}\n{nome}\n{'=' * 40}\n")
+                      f.write(resposta + "\n")
 
               print(f"  ✅ Sugestões salvas em: {sugestoes_file}")
 
