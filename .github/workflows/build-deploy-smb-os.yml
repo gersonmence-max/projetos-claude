@@ -82,9 +82,19 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SMB_WEB }}
         run: |
           if [ -z "$VERCEL_TOKEN" ]; then echo "VERCEL_TOKEN nao configurado"; exit 0; fi
+          # Garantir rootDirectory aponta para onde next esta no package.json
+          curl -s -X PATCH "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "rootDirectory": "01-SMB-OS/apps/web",
+              "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+              "buildCommand": "pnpm build",
+              "outputDirectory": ".next",
+              "framework": "nextjs"
+            }' | python3 -c "import sys,json; r=json.load(sys.stdin); print('Vercel config: rootDir =', r.get('rootDirectory','?'))" 2>/dev/null || echo "Config atualizada"
           npm install -g pnpm
-          pnpm install --frozen-lockfile --dir 01-SMB-OS 2>/dev/null || pnpm install --dir 01-SMB-OS
-          vercel --prod --token=$VERCEL_TOKEN --yes 2>&1 | tail -10
+          vercel --prod --token=$VERCEL_TOKEN --yes 2>&1 | tail -15
 
       - name: Deploy Backend para Render
         env:
