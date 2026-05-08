@@ -1,8 +1,7 @@
-name: 🏗️ Build, Test & Deploy - 01-SMB-OS
+name: Build Test Deploy SMB-OS
 
 on:
   schedule:
-    # 3AM horário de Brasília (6AM UTC)
     - cron: '0 6 * * *'
   workflow_dispatch:
 
@@ -15,213 +14,92 @@ jobs:
       contents: write
 
     steps:
-      - name: 📦 Clonar repositório
+      - name: Clonar repositorio
         uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐍 Configurar Python 3.11
+      - name: Configurar Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: 🟢 Configurar Node.js 20
+      - name: Configurar Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: 📥 Instalar dependências globais
+      - name: Instalar dependencias globais
         run: |
           pip install groq
           npm install -g vercel@latest
 
-      - name: 🧠 Agente: Gerar código faltante
+      - name: Gerar codigo com Groq
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: |
-          python3 << 'EOF'
-          import os, sys, json, time
-          from pathlib import Path
-          from groq import Groq
+        run: python .github/scripts/build_smb_os.py
 
-          sys.stdout.reconfigure(encoding='utf-8')
-
-          client = Groq(api_key=os.environ["GROQ_API_KEY"])
-          MODEL = "llama-3.3-70b-versatile"
-          PROJETO_DIR = Path("01-SMB-OS")
-          IGNORAR = {"node_modules", ".git", "__pycache__", "venv", ".venv", "dist", "build", ".next", "uv.lock", "pnpm-lock.yaml"}
-          EXTS = {".py", ".ts", ".tsx", ".js", ".jsx", ".sql", ".yaml", ".yml", ".toml", ".json", ".md"}
-
-          def ler_codigo(pasta, max_chars=10000):
-              codigo = ""
-              for f in sorted(pasta.rglob("*")):
-                  if any(p in f.parts for p in IGNORAR): continue
-                  if f.suffix not in EXTS: continue
-                  if f.is_file():
-                      try:
-                          conteudo = f.read_text(encoding="utf-8", errors="ignore")[:1500]
-                          bloco = f"\n### {f.relative_to(pasta)}\n```\n{conteudo}\n```\n"
-                          if len(codigo) + len(bloco) > max_chars: break
-                          codigo += bloco
-              return codigo
-
-          def chamar_groq(system_prompt, user_msg):
-              try:
-                  r = client.chat.completions.create(
-                      model=MODEL,
-                      messages=[
-                          {"role": "system", "content": system_prompt},
-                          {"role": "user", "content": user_msg}
-                      ],
-                      max_tokens=4000,
-                      temperature=0.1,
-                  )
-                  return r.choices[0].message.content
-              except Exception as e:
-                  return f"ERRO: {e}"
-
-          projeto_txt = (PROJETO_DIR / "PROJETO.txt").read_text(encoding="utf-8")
-          codigo_atual = ler_codigo(PROJETO_DIR)
-
-          print("=" * 60)
-          print("Agente Desenvolvedor - SMB-OS")
-          print("=" * 60)
-
-          # Etapa 1: identificar próxima tarefa
-          proxima = chamar_groq(
-              "Você é um tech lead sênior. Analise o PROJETO.txt e o código existente. "
-              "Identifique UMA tarefa pendente (marcada com □) que seja implementável agora "
-              "com base no que já existe. Responda APENAS com: "
-              "TAREFA: <nome curto>\nDESCRICAO: <o que implementar em 2 frases>\n"
-              "ARQUIVOS: <lista de arquivos a criar/modificar, um por linha>",
-              f"PROJETO.txt:\n{projeto_txt}\n\nCÓDIGO EXISTENTE:\n{codigo_atual}"
-          )
-          print(f"Proxima tarefa identificada:\n{proxima}")
-          time.sleep(2)
-
-          # Etapa 2: gerar o código
-          codigo_gerado = chamar_groq(
-              "Você é um desenvolvedor sênior Full Stack especialista em FastAPI e Next.js. "
-              "Implemente a tarefa descrita de forma completa e funcional. "
-              "Siga as convenções do código existente. "
-              "Responda SOMENTE com blocos de código no formato:\n"
-              "=== ARQUIVO: caminho/relativo/ao/projeto ===\n"
-              "<conteudo completo do arquivo>\n"
-              "=== FIM ===\n"
-              "Gere arquivos reais e completos, não pseudocódigo.",
-              f"TAREFA A IMPLEMENTAR:\n{proxima}\n\n"
-              f"PROJETO.txt:\n{projeto_txt}\n\n"
-              f"CÓDIGO EXISTENTE:\n{codigo_atual}"
-          )
-
-          # Salvar arquivos gerados
-          arquivos_salvos = []
-          blocos = codigo_gerado.split("=== ARQUIVO:")
-          for bloco in blocos[1:]:
-              try:
-                  linhas = bloco.strip().split("\n")
-                  caminho = linhas[0].strip()
-                  fim = bloco.find("=== FIM ===")
-                  conteudo = bloco[len(linhas[0]):fim].strip() if fim != -1 else bloco[len(linhas[0]):].strip()
-                  # Remove markdown code fences se houver
-                  if conteudo.startswith("```"):
-                      conteudo = "\n".join(conteudo.split("\n")[1:])
-                  if conteudo.endswith("```"):
-                      conteudo = "\n".join(conteudo.split("\n")[:-1])
-                  dest = PROJETO_DIR / caminho
-                  dest.parent.mkdir(parents=True, exist_ok=True)
-                  dest.write_text(conteudo, encoding="utf-8")
-                  arquivos_salvos.append(caminho)
-                  print(f"Arquivo gerado: {caminho}")
-              except Exception as e:
-                  print(f"Erro ao salvar arquivo: {e}")
-
-          # Salvar log da sessao
-          log_dir = Path(f"sugestoes/01-SMB-OS")
-          log_dir.mkdir(parents=True, exist_ok=True)
-          from datetime import datetime
-          log = log_dir / f"build_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-          log.write_text(
-              f"BUILD SESSION - SMB-OS\nData: {datetime.now()}\nModelo: {MODEL}\n\n"
-              f"TAREFA:\n{proxima}\n\n"
-              f"ARQUIVOS GERADOS:\n" + "\n".join(arquivos_salvos) + "\n\n"
-              f"CODIGO COMPLETO:\n{codigo_gerado}",
-              encoding="utf-8"
-          )
-          print(f"\nLog salvo em: {log}")
-          print(f"\nTotal de arquivos gerados: {len(arquivos_salvos)}")
-          EOF
-
-      - name: 📦 Instalar dependências Python (backend)
+      - name: Instalar dependencias Python backend
         run: |
           cd 01-SMB-OS/apps/api
-          pip install -r requirements.txt 2>/dev/null || \
           pip install fastapi uvicorn sqlalchemy alembic pydantic python-jose passlib python-multipart httpx pytest pytest-asyncio 2>/dev/null || true
+          if [ -f requirements.txt ]; then pip install -r requirements.txt 2>/dev/null || true; fi
 
-      - name: 🧪 Rodar testes Python
+      - name: Rodar testes Python
         run: |
           cd 01-SMB-OS/apps/api
-          python -m pytest . -v --tb=short 2>/dev/null || echo "Sem testes ou testes falharam - continuando..."
+          python -m pytest . -v --tb=short 2>/dev/null || echo "Sem testes ou falhou - continuando"
 
-      - name: 📦 Instalar dependências Node.js (frontend)
+      - name: Instalar dependencias Node frontend
         run: |
           cd 01-SMB-OS/apps/web
           npm install --legacy-peer-deps 2>/dev/null || true
 
-      - name: 🔍 Type check TypeScript
+      - name: Type check TypeScript
         run: |
           cd 01-SMB-OS/apps/web
-          npx tsc --noEmit 2>/dev/null || echo "Type errors encontrados - continuando..."
+          npx tsc --noEmit 2>/dev/null || echo "Type errors - continuando"
 
-      - name: 📤 Commit do código gerado
+      - name: Commit codigo gerado
         run: |
           git config user.name "SMB-OS Builder Bot"
           git config user.email "builder@github.local"
           git add 01-SMB-OS/ sugestoes/01-SMB-OS/ 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "Sem código novo gerado"
+            echo "Sem codigo novo"
           else
-            git commit -m "feat(smb-os): codigo gerado automaticamente - $(date +'%Y-%m-%d %H:%M')"
+            git commit -m "feat(smb-os): build automatico $(date +'%Y-%m-%d %H:%M')"
             git pull --rebase origin main 2>/dev/null || true
             git push origin main
-            echo "Codigo commitado e enviado!"
           fi
 
-      - name: 🚀 Deploy Frontend → Vercel
+      - name: Deploy Frontend para Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SMB_WEB }}
         run: |
-          if [ -z "$VERCEL_TOKEN" ]; then
-            echo "VERCEL_TOKEN nao configurado - pulando deploy Vercel"
-            exit 0
-          fi
+          if [ -z "$VERCEL_TOKEN" ]; then echo "VERCEL_TOKEN nao configurado"; exit 0; fi
           cd 01-SMB-OS/apps/web
-          vercel --prod --token=$VERCEL_TOKEN --yes 2>&1 | tail -5
+          vercel --prod --token=$VERCEL_TOKEN --yes 2>&1 | tail -10
 
-      - name: 🚂 Deploy Backend → Railway
+      - name: Deploy Backend para Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          if [ -z "$RAILWAY_TOKEN" ]; then
-            echo "RAILWAY_TOKEN nao configurado - pulando deploy Railway"
-            exit 0
-          fi
+          if [ -z "$RAILWAY_TOKEN" ]; then echo "RAILWAY_TOKEN nao configurado"; exit 0; fi
           npm install -g @railway/cli
           cd 01-SMB-OS/apps/api
-          railway up --service smb-os-api 2>&1 | tail -5
+          railway up --service smb-os-api 2>&1 | tail -10
 
-      - name: 📊 Resumo
+      - name: Resumo
         if: always()
         run: |
-          echo "================================================"
+          echo "============================="
           echo "SMB-OS BUILD PIPELINE"
-          echo "================================================"
-          echo "Data: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-          echo "Branch: main"
+          echo "Data: $(date -u +'%Y-%m-%d %H:%M UTC')"
           echo "Frontend: Vercel"
           echo "Backend: Railway"
-          echo "================================================"
+          echo "============================="
