@@ -1,0 +1,67 @@
+name: Test APIs - Gemini + Groq
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-apis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install groq google-generativeai
+
+      - name: Testar Groq API
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          python << 'EOF'
+          import os
+          from groq import Groq
+
+          print("=== TESTE GROQ ===")
+          try:
+              client = Groq(api_key=os.environ["GROQ_API_KEY"])
+              r = client.chat.completions.create(
+                  model="llama-3.3-70b-versatile",
+                  messages=[{"role": "user", "content": "Responda apenas: OK"}],
+                  max_tokens=5,
+              )
+              print(f"Status: OK")
+              print(f"Resposta: {r.choices[0].message.content}")
+              print(f"Tokens usados: {r.usage.total_tokens}")
+          except Exception as e:
+              print(f"Status: ERRO")
+              print(f"Detalhe: {e}")
+          EOF
+
+      - name: Testar Gemini API
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python << 'EOF'
+          import os
+          import google.generativeai as genai
+
+          print("=== TESTE GEMINI ===")
+          try:
+              genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+              model = genai.GenerativeModel("gemini-2.0-flash")
+              response = model.generate_content("Responda apenas: OK")
+              print(f"Status: OK")
+              print(f"Resposta: {response.text.strip()}")
+          except Exception as e:
+              print(f"Status: ERRO")
+              print(f"Detalhe: {e}")
+          EOF
