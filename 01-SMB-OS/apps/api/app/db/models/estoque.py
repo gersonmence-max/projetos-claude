@@ -25,6 +25,7 @@ class Estoque(Base):
 
     tenant: Mapped["Tenant"] = relationship(back_populates="estoque")
     composicoes: Mapped[list["Composicao"]] = relationship(back_populates="estoque")
+    itens: Mapped[list["Item"]] = relationship(back_populates="estoque")
 
 
 class Composicao(Base):
@@ -54,14 +55,11 @@ class Item(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    tenant_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False, index=True
-    )
     nome: Mapped[str] = mapped_column(String(100), nullable=False)
     quantidade: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
-    tenant: Mapped["Tenant"] = relationship(back_populates="itens")
+    estoque: Mapped[Estoque] = relationship(back_populates="itens")
     composicoes: Mapped[list[Composicao]] = relationship(back_populates="item")
