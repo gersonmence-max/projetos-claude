@@ -3,7 +3,6 @@ import os
 import json
 import google.generativeai as genai
 
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 MODEL = "gemini-2.0-flash"
 
 
@@ -23,6 +22,10 @@ def planejar(projeto_txt: str, codigo: str) -> dict:
     Lê PROJETO.txt + código e retorna spec da próxima tarefa.
     Retorna: {"tarefa": str, "descricao": str, "arquivos": [str], "estrutura_sugerida": str}
     """
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY env var not set")
+    genai.configure(api_key=api_key)
     model = genai.GenerativeModel(MODEL)
     prompt = (
         "Você é um tech lead senior. Analise o PROJETO.txt e o código existente. "
@@ -34,6 +37,8 @@ def planejar(projeto_txt: str, codigo: str) -> dict:
         f"PROJETO.txt:\n{projeto_txt}\n\nCÓDIGO EXISTENTE:\n{codigo}"
     )
     response = model.generate_content(prompt)
+    if not response.text:
+        raise ValueError(f"Gemini returned empty response: {response.prompt_feedback}")
     return _parse_json(response.text)
 
 
@@ -42,6 +47,10 @@ def revisar(spec: dict, codigo_gerado: str) -> tuple[bool, str]:
     Revisa o código gerado contra a spec.
     Retorna: (aprovado: bool, feedback: str)
     """
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY env var not set")
+    genai.configure(api_key=api_key)
     model = genai.GenerativeModel(MODEL)
     prompt = (
         "Você é um revisor de código senior. Avalie se o código gerado implementa "
@@ -54,5 +63,10 @@ def revisar(spec: dict, codigo_gerado: str) -> tuple[bool, str]:
         f"CÓDIGO GERADO:\n{codigo_gerado}"
     )
     response = model.generate_content(prompt)
+    if not response.text:
+        raise ValueError(f"Gemini returned empty response: {response.prompt_feedback}")
     result = _parse_json(response.text)
-    return result["aprovado"], result.get("feedback", "")
+    aprovado = result.get("aprovado")
+    if aprovado is None:
+        raise ValueError(f"Gemini response missing 'aprovado' key: {result}")
+    return bool(aprovado), result.get("feedback", "")
