@@ -1,0 +1,20 @@
+BUILD SESSION - SMB-OS
+Data: 2026-05-09 00:49:35.688832
+Modelo: llama-3.3-70b-versatile
+
+TAREFA:
+TAREFA: Estoque por Composição
+DESCRICAO: Implementar a funcionalidade de estoque por composição, permitindo que os itens sejam compostos por outros itens, e realizar a baixa automática dos componentes quando um item é vendido ou utilizado. Isso envolverá a criação de novas tabelas no banco de dados e a modificação das existentes para acomodar as relações entre os itens.
+ARQUIVOS: 
+apps/api/app/db/models/estoque.py
+apps/api/app/db/models/composicao.py
+apps/api/app/core/services/estoque_service.py
+apps/api/app/core/services/composicao_service.py
+apps/api/app/db/base.py
+apps/api/app/db/models/__init__.py
+
+ARQUIVOS GERADOS:
+
+
+CODIGO:
+ERRO: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01khyx6rp1e7b88y3n3vj7cqsp` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 96557, Requested 3769. Please try again in 4m41.664s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
