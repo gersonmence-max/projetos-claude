@@ -2,8 +2,8 @@ name: 🤖 Orquestrador de Agentes - Análise Automática 2AM
 
 on:
   schedule:
-    # 2AM horário de Brasília (5AM UTC)
-    - cron: '0 5 * * *'
+    # 3AM horário de Brasília (6AM UTC) - roda DEPOIS do build para nao consumir tokens antes
+    - cron: '0 6 * * *'
   workflow_dispatch:  # Permite rodar manualmente
 
 jobs:
@@ -90,7 +90,7 @@ jobs:
           IGNORAR_PASTAS = {'node_modules', '.git', '__pycache__', 'venv', '.venv',
                             'dist', 'build', '.next', 'coverage', 'sugestoes'}
 
-          def ler_codigo_projeto(projeto_dir, max_chars=12000):
+          def ler_codigo_projeto(projeto_dir, max_chars=5000):
               arquivos = []
               for f in sorted(projeto_dir.rglob('*')):
                   if any(p in f.parts for p in IGNORAR_PASTAS):
@@ -105,7 +105,7 @@ jobs:
               # Prioriza arquivos menores e mais relevantes, respeita limite de contexto
               codigo = ""
               for nome, conteudo in arquivos:
-                  bloco = f"\n### {nome}\n```\n{conteudo[:2000]}\n```\n"
+                  bloco = f"\n### {nome}\n```\n{conteudo[:800]}\n```\n"
                   if len(codigo) + len(bloco) > max_chars:
                       break
                   codigo += bloco
@@ -119,7 +119,7 @@ jobs:
                           {"role": "system", "content": system_prompt},
                           {"role": "user", "content": f"PROJETO: {projeto}\n\n{contexto}"}
                       ],
-                      max_tokens=1500,
+                      max_tokens=600,
                       temperature=0.2,
                   )
                   return response.choices[0].message.content
