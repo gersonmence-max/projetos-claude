@@ -35,12 +35,13 @@ jobs:
 
       - name: Instalar dependencias globais
         run: |
-          pip install groq
+          pip install groq google-generativeai
           npm install -g pnpm vercel@latest
 
-      - name: Gerar codigo com Groq
+      - name: Gerar codigo
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python .github/scripts/build_smb_os.py
 
       - name: Instalar dependencias Python backend
