@@ -20,7 +20,7 @@ jobs:
           python-version: '3.11'
 
       - name: Instalar dependencias
-        run: pip install groq google-generativeai
+        run: pip install groq google-genai
 
       - name: Testar Groq API
         env:
@@ -52,13 +52,18 @@ jobs:
         run: |
           python << 'EOF'
           import os
-          import google.generativeai as genai
+          from google import genai
 
           print("=== TESTE GEMINI ===")
           try:
-              genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-              model = genai.GenerativeModel("gemini-2.0-flash")
-              response = model.generate_content("Responda apenas: OK")
+              api_key = os.environ.get("GEMINI_API_KEY")
+              if not api_key:
+                  raise RuntimeError("GEMINI_API_KEY secret nao configurado no repositorio")
+              client = genai.Client(api_key=api_key)
+              response = client.models.generate_content(
+                  model="gemini-2.0-flash",
+                  contents="Responda apenas: OK"
+              )
               print(f"Status: OK")
               print(f"Resposta: {response.text.strip()}")
           except Exception as e:

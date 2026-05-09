@@ -35,7 +35,7 @@ jobs:
 
       - name: Instalar dependencias globais
         run: |
-          pip install groq google-generativeai
+          pip install groq google-genai
           npm install -g pnpm vercel@latest
 
       - name: Gerar codigo
