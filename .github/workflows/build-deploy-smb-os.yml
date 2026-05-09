@@ -15,13 +15,13 @@ jobs:
 
     steps:
       - name: Clonar repositorio
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configurar Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5.6.0
         with:
           python-version: '3.11'
           cache: 'pip'
@@ -34,7 +34,7 @@ jobs:
       - name: Instalar dependencias globais
         run: |
           pip install groq
-          npm install -g vercel@latest
+          npm install -g pnpm vercel@latest
 
       - name: Gerar codigo com Groq
         env:
@@ -54,13 +54,12 @@ jobs:
 
       - name: Instalar dependencias Node frontend
         run: |
-          cd 01-SMB-OS/apps/web
-          npm install --legacy-peer-deps 2>/dev/null || true
+          pnpm install --dir 01-SMB-OS 2>/dev/null || true
 
       - name: Type check TypeScript
         run: |
           cd 01-SMB-OS/apps/web
-          npx tsc --noEmit 2>/dev/null || echo "Type errors - continuando"
+          npx tsc --noEmit 2>&1 | head -30 || echo "Type errors - continuando"
 
       - name: Commit codigo gerado
         run: |
@@ -93,7 +92,6 @@ jobs:
               "outputDirectory": ".next",
               "framework": "nextjs"
             }' | python3 -c "import sys,json; r=json.load(sys.stdin); print('Vercel config: rootDir =', r.get('rootDirectory','?'))" 2>/dev/null || echo "Config atualizada"
-          npm install -g pnpm
           vercel --prod --token=$VERCEL_TOKEN --yes 2>&1 | tail -15
 
       - name: Deploy Backend para Render
