@@ -14,11 +14,12 @@ class Tenant(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
-    slug: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    nome: Mapped[str] = mapped_column(String(100), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
     users: Mapped[list["User"]] = relationship(back_populates="tenant")
     roles: Mapped[list["Role"]] = relationship(back_populates="tenant")
+    estoque: Mapped[list[Estoque]] = relationship(back_populates="tenant")
+    itens: Mapped[list[Item]] = relationship(back_populates="tenant")

@@ -40,15 +40,5 @@ class RefreshToken(Base):
     )
     token_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    revoked: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
 
     user: Mapped["User"] = relationship(back_populates="refresh_tokens")
-
-    @staticmethod
-    def hash_token(raw_token: str) -> str:
-        # caller must provide at least 128 bits of entropy (e.g. secrets.token_urlsafe(32))
-        return hashlib.sha256(raw_token.encode()).hexdigest()

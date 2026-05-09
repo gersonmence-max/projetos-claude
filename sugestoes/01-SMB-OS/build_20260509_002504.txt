@@ -1,0 +1,427 @@
+BUILD SESSION - SMB-OS
+Data: 2026-05-09 00:25:04.237450
+Modelo: llama-3.3-70b-versatile
+
+TAREFA:
+TAREFA: Estoque por Composição
+DESCRICAO: Implementar o estoque por composição com baixa automática, permitindo que os itens sejam compostos por outros itens e que a baixa seja feita automaticamente quando um item for vendido ou utilizado. Isso envolverá a criação de novas tabelas no banco de dados e a implementação de lógica de negócios para gerenciar o estoque.
+ARQUIVOS: 
+apps/api/app/db/models/estoque.py
+apps/api/app/db/base.py
+apps/api/app/core/config.py
+apps/api/app/db/models/__init__.py
+apps/api/app/db/models/tenant.py 
+apps/api/app/db/models/user.py 
+apps/api/app/db/models/auth.py 
+apps/api/app/db/models/rbac.py 
+apps/api/app/db/models/audit.py 
+README.md
+
+ARQUIVOS GERADOS:
+apps/api/app/db/models/estoque.py
+apps/api/app/db/base.py
+apps/api/app/core/config.py
+apps/api/app/db/models/__init__.py
+apps/api/app/db/models/tenant.py
+apps/api/app/db/models/user.py
+apps/api/app/db/models/auth.py
+apps/api/app/db/models/rbac.py
+apps/api/app/db/models/audit.py
+
+CODIGO:
+### apps/api/app/db/models/estoque.py
+```python
+import uuid
+from datetime import datetime
+
+from sqlalchemy import DateTime, ForeignKey, Integer, String, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.base import Base
+
+
+class Estoque(Base):
+    __tablename__ = "estoque"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False, index=True
+    )
+    nome: Mapped[str] = mapped_column(String(100), nullable=False)
+    quantidade: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    tenant: Mapped["Tenant"] = relationship(back_populates="estoque")
+    composicoes: Mapped[list["Composicao"]] = relationship(back_populates="estoque")
+
+
+class Composicao(Base):
+    __tablename__ = "composicoes"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    estoque_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("estoque.id"), nullable=False, index=True
+    )
+    item_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("itens.id"), nullable=False, index=True
+    )
+    quantidade: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    estoque: Mapped[Estoque] = relationship(back_populates="composicoes")
+    item: Mapped["Item"] = relationship(back_populates="composicoes")
+
+
+class Item(Base):
+    __tablename__ = "itens"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False, index=True
+    )
+    nome: Mapped[str] = mapped_column(String(100), nullable=False)
+    quantidade: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    tenant: Mapped["Tenant"] = relationship(back_populates="itens")
+    composicoes: Mapped[list[Composicao]] = relationship(back_populates="item")
+```
+
+### apps/api/app/db/base.py
+```python
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
+from app.core.config import settings
+
+
+engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+def set_tenant_context(db: Session, tenant_id: str) -> None:
+    # SET LOCAL is transaction-scoped — must be called inside an open transaction
+    db.execute(text("SET LOCAL app.tenant_id = :tid"), {"tid": tenant_id})
+```
+
+### apps/api/app/core/config.py
+```python
+from pydantic import field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    DATABASE_URL: str
+    JWT_PRIVATE_KEY: str
+    JWT_PUBLIC_KEY: str
+    SECRET_KEY: str
+
+    ENVIRONMENT: str = "development"
+    ALLOWED_ORIGINS: str = "http://localhost:3000"
+
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    GITHUB_CLIENT_ID: str = ""
+    GITHUB_CLIENT_SECRET: str = ""
+
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    BCRYPT_ROUNDS: int = 12
+
+    @field_validator("BCRYPT_ROUNDS")
+    @classmethod
+    def bcrypt_rounds_minimum(cls, v: int) -> int:
+        if v < 10:
+            raise ValueError("BCRYPT_ROUNDS must be at least 10")
+        return v
+
+    @property
+    def allowed_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.ALLOWED_ORIGINS.split(",") if o.strip()]
+
+    @property
+    def is_production(self) -> bool:
+        return self.ENVIRONMENT == "production"
+
+    @property
+    def jwt_private_key_pem(self) -> str:
+        return self.JWT_PRIVATE_KEY.replace("\\n", "\n")
+
+    @property
+    def jwt_public_key_pem(self) -> str:
+        return self.JWT_PUBLIC_KEY.replace("\\n", "\n")
+
+
+settings = Settings()
+```
+
+### apps/api/app/db/models/__init__.py
+```python
+from app.db.models.tenant import Tenant
+from app.db.models.user import User
+from app.db.models.auth import OAuthAccount, RefreshToken
+from app.db.models.rbac import Permission, Role, RolePermission, UserRole
+from app.db.models.audit import AuditLog
+from app.db.models.estoque import Estoque, Composicao, Item
+
+__all__ = [
+    "Tenant", "User",
+    "OAuthAccount", "RefreshToken",
+    "Permission", "Role", "RolePermission", "UserRole",
+    "AuditLog",
+    "Estoque", "Composicao", "Item",
+]
+```
+
+### apps/api/app/db/models/tenant.py 
+```python
+import uuid
+from datetime import datetime
+
+from sqlalchemy import DateTime, String, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.base import Base
+
+
+class Tenant(Base):
+    __tablename__ = "tenants"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    nome: Mapped[str] = mapped_column(String(100), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    users: Mapped[list["User"]] = relationship(back_populates="tenant")
+    roles: Mapped[list["Role"]] = relationship(back_populates="tenant")
+    estoque: Mapped[list[Estoque]] = relationship(back_populates="tenant")
+    itens: Mapped[list[Item]] = relationship(back_populates="tenant")
+```
+
+### apps/api/app/db/models/user.py 
+```python
+import uuid
+from datetime import datetime
+
+from sqlalchemy import DateTime, String, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.base import Base
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False, index=True
+    )
+    nome: Mapped[str] = mapped_column(String(100), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    tenant: Mapped["Tenant"] = relationship(back_populates="users")
+    oauth_accounts: Mapped[list["OAuthAccount"]] = relationship(back_populates="user")
+```
+
+### apps/api/app/db/models/auth.py 
+```python
+import hashlib
+import uuid
+from datetime import datetime
+
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, UniqueConstraint, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.base import Base
+
+
+class OAuthAccount(Base):
+    __tablename__ = "oauth_accounts"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
+    provider: Mapped[str] = mapped_column(String(50), nullable=False)
+    provider_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    user: Mapped["User"] = relationship(back_populates="oauth_accounts")
+
+    __table_args__ = (UniqueConstraint("provider", "provider_id"),)
+
+
+class RefreshToken(Base):
+    __tablename__ = "refresh_tokens"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+    user: Mapped["User"] = relationship(back_populates="refresh_tokens")
+```
+
+### apps/api/app/db/models/rbac.py 
+```python
+import uuid
+from datetime import datetime
+
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, UniqueConstraint, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.base import Base
+
+
+class Permission(Base):
+    __tablename__ = "permissions"
+
+    id: Mapped[str] = mapped_column(String(100), primary_key=True)  # e.g. "invoices:read"
+
+    role_permissions: Mapped[list["RolePermission"]] = relationship(back_populates="permission")
+
+
+class Role(Base):
+    __tablename__ = "roles"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False, index=True
+    )
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    is_default: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    tenant: Mapped["Tenant"] = relationship(back_populates="roles")
+    role_permissions: Mapped[list["RolePermission"]] = relationship(back_populates="role")
+    user_roles: Mapped[list["UserRole"]] = relationship(back_populates="role")
+
+    __table_args__ = (UniqueConstraint("tenant_id", "name"),)
+
+
+class RolePermission(Base):
+    __tablename__ = "role_permissions"
+
+    role_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("roles.id"), nullable=False, index=True
+    )
+    permission_id: Mapped[str] = mapped_column(
+        String(100), ForeignKey("permissions.id"), nullable=False, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    role: Mapped["Role"] = relationship(back_populates="role_permissions")
+    permission: Mapped["Permission"] = relationship(back_populates="role_permissions")
+
+    __table_args__ = (UniqueConstraint("role_id", "permission_id"),)
+
+
+class UserRole(Base):
+    __tablename__ = "user_roles"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
+    role_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("roles.id"), nullable=False, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    user: Mapped["User"] = relationship(back_populates="user_roles")
+    role: Mapped["Role"] = relationship(back_populates="user_roles")
+
+    __table_args__ = (UniqueConstraint("user_id", "role_id"),)
+```
+
+### apps/api/app/db/models/audit.py 
+```python
+import uuid
+from datetime import datetime
+
+from sqlalchemy import DateTime, Index, String, func, text
+from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.orm import Mapped, mapped_column
+
+from app.db.base import Base
+
+
+class AuditLog(Base):
+    __tablename__ = "audit_log"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    tenant_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    action: Mapped[str] = mapped_column(String(100), nullable=False)
+    resource_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    payload: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    ip_address: Mapped[str | None] = mapped_column(String(45), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    __table_args__ = (
+        Index("ix_audit_log_tenant_id", "tenant_id"),
+        Index("ix_audit_log_user_id", "user_id"),
+        Index("ix_audit_log_action", "action"),
+    )
+```
