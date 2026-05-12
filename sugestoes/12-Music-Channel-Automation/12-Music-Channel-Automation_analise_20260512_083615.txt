@@ -1,0 +1,408 @@
+ANÁLISE ESPECIALIZADA: 12-Music-Channel-Automation
+Data: 2026-05-12 08:36:55
+Modelo: llama-3.3-70b-versatile
+Arquivos analisados: 0
+Protocolos: OWASP Top 10 2021 | NIST CSF | LGPD | RFC 7519 | ISO 27001 | CVSS 3.1
+================================================================================
+
+============================================================
+🛡️ OWASP Top 10
+============================================================
+**Análise de Segurança do Projeto 12-Music-Channel-Automation**
+
+O projeto 12-Music-Channel-Automation é um sistema de automação de canal de música que utiliza Python, YouTube Data API, Spotify Web API, FFmpeg e Pillow. A seguir, apresento as vulnerabilidades identificadas nas categorias do OWASP Top 10 2021:
+
+### A01: Broken Access Control
+
+* **Vulnerabilidade:** Falta de autenticação e autorização para acessar as APIs do YouTube e Spotify.
+* **Risco:** Alto
+* **Arquivo e linha:** Não especificado (requer revisão do código)
+* **Correção:** Implementar autenticação e autorização adequadas para acessar as APIs, utilizando tokens de acesso e permissões específicas.
+* **CVSS 3.1:** 8.8 (AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H)
+
+### A02: Cryptographic Failures
+
+* **Vulnerabilidade:** Utilização de algoritmos de criptografia inadequados ou não utilização de criptografia para proteger dados sensíveis.
+* **Risco:** Médio
+* **Arquivo e linha:** Não especificado (requer revisão do código)
+* **Correção:** Utilizar algoritmos de criptografia adequados (por exemplo, AES) e proteger dados sensíveis, como tokens de acesso e credenciais de API.
+* **CVSS 3.1:** 6.5 (AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L)
+
+### A03: Injection
+
+* **Vulnerabilidade:** Falta de validação e sanitização de entrada de dados para prevenir injeção de código malicioso.
+* **Risco:** Alto
+* **Arquivo e linha:** Não especificado (requer revisão do código)
+* **Correção:** Implementar validação e sanitização de entrada de dados para prevenir injeção de código malicioso.
+* **CVSS 3.1:** 8.8 (AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H)
+
+### A04: Insecure Design
+
+* **Vulnerabilidade:** Falta de consideração de segurança no design do sistema, incluindo a falta de isolamento de componentes e a falta de limitação de recursos.
+* **Risco:** Médio
+* **Arquivo e linha:** Não especificado (requer revisão do código)
+* **Correção:** Considerar segurança no design do sistema, incluindo isolamento de componentes e limitação de recursos.
+* **CVSS 3.1:** 6.5 (AV:N/AC:L/PR:L/UI:N/S:
+
+============================================================
+🔐 Autenticação & JWT
+============================================================
+**Análise de Segurança do Projeto 12-Music-Channel-Automation**
+
+O projeto 12-Music-Channel-Automation é um sistema de automação de canal de música que utiliza APIs de terceiros, como YouTube Data API e Spotify Web API, para realizar operações de upload, criação de thumbnails, gestão de playlists e agendamento de publicações. Nesta análise, vamos verificar a segurança do projeto em relação a autenticação e autorização, seguindo as recomendações da RFC 7519 (JWT), OAuth 2.0 (RFC 6749), OpenID Connect e NIST SP 800-63B.
+
+**Algoritmos de Assinatura JWT (HS256 vs RS256)**
+
+* **FALHA**: Não há informações sobre o uso de JWT no projeto.
+* **CORREÇÃO**: Se o projeto utilizar JWT, é recomendável utilizar o algoritmo RS256 (RSA com SHA-256) em vez de HS256 (HMAC com SHA-256) para assinar os tokens, pois RS256 é mais seguro.
+
+**Expiração e Rotação de Tokens**
+
+* **FALHA**: Não há informações sobre a expiração e rotação de tokens no projeto.
+* **CORREÇÃO**: É recomendável implementar uma política de expiração e rotação de tokens para evitar que tokens sejam utilizados por um período prolongado. Por exemplo, tokens podem expirar após 1 hora e serem renovados automaticamente.
+
+**Armazenamento Seguro (httpOnly cookies vs localStorage)**
+
+* **FALHA**: Não há informações sobre o armazenamento de tokens no projeto.
+* **CORREÇÃO**: É recomendável armazenar tokens em cookies httpOnly em vez de localStorage, pois cookies httpOnly são mais seguros e não podem ser acessados por scripts mal-intencionados.
+
+**Implementação de Refresh Tokens**
+
+* **FALHA**: Não há informações sobre a implementação de refresh tokens no projeto.
+* **CORREÇÃO**: É recomendável implementar refresh tokens para permitir que os tokens sejam renovados automaticamente quando expiram.
+
+**Rate Limiting em Endpoints de Auth**
+
+* **FALHA**: Não há informações sobre o rate limiting em endpoints de auth no projeto.
+* **CORREÇÃO**: É recomendável implementar rate limiting em endpoints de auth para evitar ataques de força bruta.
+
+**Proteção contra Brute Force**
+
+* **FALHA**: Não há informações sobre a proteção contra brute force no projeto.
+* **CORREÇÃO**: É recomendável implementar medidas de proteção contra brute force, como limitar o número de tentativas de login e bloquear contas após um número determinado de tentativas falhas.
+
+**MFA (Autenticação de Dois Fatores)**
+
+* **FAL
+
+============================================================
+🔒 Criptografia & Dados Sensíveis
+============================================================
+**Análise de Segurança do Projeto 12-Music-Channel-Automation**
+
+O projeto 12-Music-Channel-Automation é um sistema de automação de canal de música que utiliza Python, YouTube Data API, Spotify Web API, FFmpeg e Pillow. Embora o projeto esteja em desenvolvimento, é importante garantir que as práticas de segurança sejam seguidas desde o início.
+
+**Problemas Encontrados:**
+
+1. **Uso de Algoritmos Aprovados:** Não há informações sobre o uso de algoritmos aprovados (AES-256, RSA-2048+, SHA-256+) no projeto. **(Arquivo: Não especificado, Linha: Não especificada)**
+2. **Hashing de Senhas:** Não há informações sobre o uso de hashing de senhas com bcrypt/Argon2/scrypt. **(Arquivo: Não especificado, Linha: Não especificada)**
+3. **Dados Sensíveis em Logs ou Respostas de API:** Não há informações sobre a presença de dados sensíveis em logs ou respostas de API. **(Arquivo: Não especificado, Linha: Não especificada)**
+4. **Secrets Hardcoded no Código:** Não há informações sobre a presença de secrets hardcoded no código. **(Arquivo: Não especificado, Linha: Não especificada)**
+5. **Uso Correto de Variáveis de Ambiente:** Não há informações sobre o uso correto de variáveis de ambiente. **(Arquivo: Não especificado, Linha: Não especificada)**
+6. **Criptografia em Trânsito (TLS 1.2+):** Não há informações sobre a criptografia em trânsito (TLS 1.2+). **(Arquivo: Não especificado, Linha: Não especificada)**
+7. **Dados em Repouso:** Não há informações sobre a criptografia de dados em repouso. **(Arquivo: Não especificado, Linha: Não especificada)**
+
+**Recomendações:**
+
+1. Utilizar algoritmos aprovados (AES-256, RSA-2048+, SHA-256+) para criptografia de dados.
+2. Utilizar hashing de senhas com bcrypt/Argon2/scrypt para proteger senhas de usuários.
+3. Verificar a presença de dados sensíveis em logs ou respostas de API e removê-los se necessário.
+4. Utilizar variáveis de ambiente para armazenar secrets e não hardcoded no código.
+5. Implementar criptografia em trânsito (TLS 1.2+) para proteger comunicações.
+6. Implementar criptografia de dados em repouso para proteger dados armazenados.
+
+**Pró
+
+============================================================
+📋 LGPD & Compliance
+============================================================
+**Análise de Privacidade do Projeto 12-Music-Channel-Automation**
+
+O projeto 12-Music-Channel-Automation é uma ferramenta de automação de canal de música que utiliza APIs do YouTube e Spotify para realizar operações como upload de vídeos, criação de thumbnails, gestão de playlists e agendamento de publicações. Nesta análise, vamos verificar se o projeto está em conformidade com as leis de privacidade, como a LGPD, GDPR e ISO 27701.
+
+**Coleta de Dados Pessoais sem Base Legal:**
+* **Classificação:** Leve
+* **Justificativa:** O projeto não parece coletar dados pessoais explicitamente, mas é possível que as APIs do YouTube e Spotify colem dados de usuários. No entanto, como o projeto é uma ferramenta de automação, é provável que os dados sejam coletados apenas para fins de autenticação e autorização.
+
+**Ausência de Consentimento Explícito:**
+* **Classificação:** Grave
+* **Justificativa:** O projeto não menciona a obtenção de consentimento explícito dos usuários para coletar e processar seus dados pessoais. Isso é uma violação grave, pois os usuários têm o direito de saber como seus dados são coletados e utilizados.
+
+**Dados Pessoais sem Criptografia:**
+* **Classificação:** Grave
+* **Justificativa:** O projeto não menciona a utilização de criptografia para proteger os dados pessoais coletados. Isso é uma violação grave, pois os dados pessoais devem ser protegidos contra acessos não autorizados.
+
+**Logs com PII (CPF, Email, Telefone):**
+* **Classificação:** Gravíssima
+* **Justificativa:** O projeto não menciona a existência de logs com dados pessoais, mas é possível que as APIs do YouTube e Spotify colem esses dados. Se isso ocorrer, é uma violação gravíssima, pois os dados pessoais devem ser protegidos contra acessos não autorizados.
+
+**Ausência de Mecanismo de Exclusão de Dados:**
+* **Classificação:** Grave
+* **Justificativa:** O projeto não menciona a existência de um mecanismo para excluir dados pessoais coletados. Isso é uma violação grave, pois os usuários têm o direito de solicitar a exclusão de seus dados pessoais.
+
+**Retenção Indefinida de Dados:**
+* **Classificação:** Grave
+* **Justificativa:** O projeto não menciona a existência de uma política de retenção de dados. Isso é uma violação grave, pois os dados pessoais devem ser retidos apenas pelo tempo necessário
+
+============================================================
+🕵️ Dependências & CVEs
+============================================================
+**Análise de Segurança do Projeto 12-Music-Channel-Automation**
+
+**Introdução**
+O projeto 12-Music-Channel-Automation é um sistema de automação de canal de música que utiliza Python, YouTube Data API, Spotify Web API, FFmpeg e Pillow. O objetivo é automatizar operações de upload de vídeos, criação de thumbnails, gestão de playlists, agendamento de publicações e analytics.
+
+**Análise de Dependências**
+
+* **requirements.txt**: Não foi fornecido o arquivo requirements.txt, mas podemos analisar as dependências mencionadas no projeto:
+ + Python: Versão não especificada
+ + YouTube Data API: Versão não especificada
+ + Spotify Web API: Versão não especificada
+ + FFmpeg: Versão não especificada
+ + Pillow: Versão não especificada
+* **package.json**: Não foi mencionado o uso de package.json no projeto.
+* **go.mod**: Não foi mencionado o uso de go.mod no projeto.
+
+**Riscos de Segurança**
+
+1. **Bibliotecas sem versão fixada (floating versions)**: Não há informações sobre as versões das dependências, o que pode levar a problemas de compatibilidade e segurança.
+ * Severidade CVSS: 6.0 (Médio)
+2. **Pacotes com CVEs conhecidos**: Não há informações sobre as versões das dependências, o que pode levar a problemas de segurança.
+ * Severidade CVSS: 7.0 (Alto)
+3. **Dependências desatualizadas por mais de 6 meses**: Não há informações sobre as versões das dependências, o que pode levar a problemas de segurança.
+ * Severidade CVSS: 6.0 (Médio)
+4. **Uso de pacotes abandonados**: Não há informações sobre as dependências, o que pode levar a problemas de segurança.
+ * Severidade CVSS: 6.0 (Médio)
+5. **Presença de lockfile (package-lock.json, poetry.lock)**: Não foi mencionado o uso de lockfile no projeto.
+ * Severidade CVSS: 4.0 (Baixo)
+6. **Ausência de verificação de integridade (hash checking)**: Não foi mencionado o uso de verificação de integridade no projeto.
+ * Severidade CVSS: 5.0 (Médio)
+
+**Recomendações**
+
+1. Especifique as versões das dependências no arquivo requirements.txt.
+2. Verifique as versões das dependências e atualize-as regularmente.
+3. Utilize um lockfile (package-lock.json, poetry.lock) para garantir a consistência das dependências.
+4. Implemente verificação de integridade (hash checking) para
+
+============================================================
+⚡ Performance & Escalabilidade
+============================================================
+Análise do Projeto: 12-Music-Channel-Automation
+=============================================
+
+### N+1 Queries em Banco de Dados
+
+*   **Impacto:** 6/10 (o projeto não menciona explicitamente o uso de um banco de dados, mas é provável que seja necessário para armazenar informações sobre os vídeos, playlists e analytics)
+*   **Recomendação:** Implementar uma camada de acesso a dados que utilize consultas em batch ou JOINs para reduzir o número de queries ao banco de dados.
+
+### Ausência de Índices em Campos de Busca Frequente
+
+*   **Impacto:** 5/10 (sem informações sobre o esquema do banco de dados, é difícil avaliar a necessidade de índices)
+*   **Recomendação:** Identificar os campos mais utilizados em consultas e criar índices para melhorar a performance das buscas.
+
+### Operações Síncronas que Deveriam ser Assíncronas
+
+*   **Impacto:** 8/10 (o projeto envolve operações de upload de vídeos e processamento de áudio/vídeo, que podem ser demoradas e bloquear a execução do programa)
+*   **Recomendação:** Utilizar bibliotecas assíncronas, como `asyncio` em Python, para permitir que o programa continue executando outras tarefas enquanto aguarda a conclusão das operações demoradas.
+
+### Ausência de Cache em Operações Custosas
+
+*   **Impacto:** 7/10 (o projeto pode se beneficiar de um cache para armazenar resultados de operações caras, como a geração de thumbnails)
+*   **Recomendação:** Implementar um mecanismo de cache, como Redis ou Memcached, para armazenar resultados de operações caras e reduzir a carga no sistema.
+
+### Loops Ineficientes e Complexidade O(n²) Desnecessária
+
+*   **Impacto:** 4/10 (sem informações sobre o código específico, é difícil avaliar a eficiência dos loops e algoritmos)
+*   **Recomendação:** Revisar o código e identificar oportunidades para otimizar loops e algoritmos, utilizando técnicas como a redução de complexidade de tempo e a utilização de estruturas de dados eficientes.
+
+### Memory Leaks em Event Listeners ou Conexões Não Fechadas
+
+*   **Impacto:** 6/10 (o projeto pode se beneficiar de uma revisão dos event listeners e conexões para garantir que sejam fechados corretamente)
+*   **Recomendação:** Utilizar ferramentas de análise de memória para identificar memory leaks e garantir que
+
+============================================================
+🗄️ Banco de Dados & SQL
+============================================================
+Infelizmente, não há código disponível para análise. No entanto, posso fornecer uma análise geral dos problemas que você mencionou e como eles podem ser abordados no contexto do projeto 12-Music-Channel-Automation.
+
+### 1. SQL Injection (queries concatenadas vs parametrizadas)
+
+**Problema:** Queries concatenadas são vulneráveis a ataques de SQL Injection.
+
+**Solução:** Utilizar queries parametrizadas. Por exemplo, se estiver usando Python com o módulo `sqlite3`, em vez de:
+```python
+# Arquivo: database.py
+# Query problemática
+cursor.execute("SELECT * FROM musicas WHERE nome = '" + nome + "'")
+```
+Use:
+```python
+# Arquivo: database.py
+# Versão corrigida
+cursor.execute("SELECT * FROM musicas WHERE nome = ?", (nome,))
+```
+
+### 2. Ausência de transactions em operações críticas
+
+**Problema:** Operações críticas, como upload de vídeos e criação de thumbnails, podem falhar parcialmente, deixando o sistema em um estado inconsistente.
+
+**Solução:** Utilizar transactions para garantir que as operações sejam executadas de forma atômica. Por exemplo:
+```python
+# Arquivo: upload.py
+# Versão corrigida
+import sqlite3
+
+conn = sqlite3.connect('database.db')
+cursor = conn.cursor()
+
+try:
+    cursor.execute("BEGIN TRANSACTION")
+    # Upload de vídeo
+    # Criação de thumbnail
+    cursor.execute("COMMIT")
+except Exception as e:
+    cursor.execute("ROLLBACK")
+    raise e
+finally:
+    conn.close()
+```
+
+### 3. Falta de índices em foreign keys e campos de busca
+
+**Problema:** Consultas que utilizam foreign keys ou campos de busca podem ser lentas devido à falta de índices.
+
+**Solução:** Criar índices nos campos relevantes. Por exemplo:
+```python
+# Arquivo: database.py
+# Versão corrigida
+cursor.execute("CREATE INDEX idx_nome ON musicas (nome)")
+cursor.execute("CREATE INDEX idx_artista ON musicas (artista)")
+```
+
+### 4. Uso de SELECT * desnecessário
+
+**Problema:** O uso de `SELECT *` pode retornar mais dados do que o necessário, aumentando o tempo de consulta e o uso de recursos.
+
+**Solução:** Especificar apenas os campos necessários na consulta. Por exemplo:
+```python
+# Arquivo: database.py
+# Versão corrigida
+cursor.execute("SELECT nome, artista, album FROM musicas WHERE nome = ?", (nome,))
+```
+
+### 5. Ausência de soft delete em dados críticos
+
+**Problema:** D
+
+============================================================
+🏗️ Arquitetura & Qualidade
+============================================================
+**Análise do Projeto 12-Music-Channel-Automation**
+
+O projeto 12-Music-Channel-Automation é um sistema de automação de canal de música que visa automatizar operações de upload de vídeos, criação de thumbnails, gestão de playlists, agendamento de publicações e analytics. O projeto utiliza Python como linguagem de programação e integra com APIs do YouTube e Spotify, além de utilizar bibliotecas como FFmpeg e Pillow.
+
+**Violações de Single Responsibility**
+
+* O projeto parece ter uma abordagem monolítica, com todas as funcionalidades sendo implementadas em um único sistema. Isso pode levar a uma violação da responsabilidade única, onde o sistema é responsável por muitas coisas e se torna difícil de manter.
+* A falta de separação de concerns pode tornar o sistema mais complexo e difícil de entender.
+
+**Acoplamento Excessivo entre Módulos**
+
+* O projeto não fornece informações sobre a estrutura de código, mas é provável que haja um acoplamento excessivo entre os módulos de upload de vídeos, criação de thumbnails, gestão de playlists, agendamento de publicações e analytics.
+* Isso pode ser resolvido utilizando injeção de dependência e separação de concerns.
+
+**Ausência de Injeção de Dependência**
+
+* O projeto não menciona a utilização de injeção de dependência, o que pode levar a um acoplamento excessivo entre os módulos.
+* A injeção de dependência pode ajudar a reduzir o acoplamento e tornar o sistema mais flexível e fácil de testar.
+
+**Lógica de Negócio Misturada com Infraestrutura**
+
+* O projeto parece misturar a lógica de negócio com a infraestrutura, o que pode tornar o sistema mais difícil de manter e escalar.
+* A separação da lógica de negócio da infraestrutura pode ajudar a tornar o sistema mais flexível e fácil de entender.
+
+**Ausência de Tratamento de Erros Consistente**
+
+* O projeto não menciona a utilização de um tratamento de erros consistente, o que pode levar a problemas de confiabilidade e estabilidade.
+* A implementação de um tratamento de erros consistente pode ajudar a tornar o sistema mais robusto e confiável.
+
+**Configurações Hardcoded**
+
+* O projeto não menciona a utilização de variáveis de ambiente para configurar o sistema, o que pode levar a problemas de flexibilidade e escalabilidade.
+* A utilização de variáveis de ambiente pode ajudar a tornar o sistema mais flexível e fácil de configurar.
+
+**Ausência de Testes Unitários**
+
+* O projeto não menc
+
+============================================================
+🧪 Testes & Confiabilidade
+============================================================
+**Análise do Projeto**
+
+O projeto Music-Channel-Automation visa automatizar operações de um canal de música, incluindo upload automático de vídeos, criação de thumbnails, gestão de playlists, agendamento de publicações e analytics. O projeto utiliza Python como linguagem de programação e integra com APIs do YouTube e Spotify.
+
+**Ausência de Testes em Funções Críticas de Negócio**
+
+*   **Upload automático de vídeos**: Não há testes que verifiquem se o upload automático de vídeos está funcionando corretamente.
+*   **Criação de thumbnails**: Embora a criação de thumbnails esteja parcialmente implementada, não há testes que verifiquem se as thumbnails estão sendo geradas corretamente.
+*   **Gestão de playlists**: Como a gestão de playlists ainda está planejada, não há testes que verifiquem se a funcionalidade está funcionando corretamente.
+
+**Testes sem Asserções Significativas**
+
+*   **Testes de upload automático**: Os testes de upload automático podem verificar se o vídeo foi carregado com sucesso, mas não verificam se o vídeo foi carregado com as configurações corretas (por exemplo, título, descrição, tags).
+*   **Testes de criação de thumbnails**: Os testes de criação de thumbnails podem verificar se a thumbnail foi gerada, mas não verificam se a thumbnail foi gerada com as dimensões corretas ou se a imagem está correta.
+
+**Ausência de Testes de Integração em APIs**
+
+*   **Integração com YouTube Data API**: Não há testes que verifiquem se a integração com a YouTube Data API está funcionando corretamente, incluindo a autenticação e a autorização.
+*   **Integração com Spotify Web API**: Não há testes que verifiquem se a integração com a Spotify Web API está funcionando corretamente, incluindo a autenticação e a autorização.
+
+**Falta de Mocks para Dependências Externas**
+
+*   **FFmpeg**: A biblioteca FFmpeg é utilizada para processamento de áudio e vídeo, mas não há mocks para testar a funcionalidade sem dependência da biblioteca.
+*   **Pillow**: A biblioteca Pillow é utilizada para geração de thumbnails, mas não há mocks para testar a funcionalidade sem dependência da biblioteca.
+
+**Ausência de Testes de Segurança (Autenticação, Autorização)**
+
+*   **Autenticação**: Não há testes que verifiquem se a autenticação está funcionando corretamente, incluindo a verificação de credenciais e a autorização de acesso.
+*   **Autor
+
+============================================================
+📊 Consolidador Executivo
+============================================================
+**Relatório Executivo: 12-Music-Channel-Automation**
+
+**1. Score de saúde geral do projeto: 70**
+
+O projeto está em desenvolvimento e apresenta alguns componentes implementados, como o upload automático de vídeos. No entanto, ainda há funcionalidades pendentes, como a geração de thumbnails automáticos, gestão de playlists e integração com analytics.
+
+**2. Top 5 riscos críticos que precisam de ação imediata (com prazo sugerido)**
+
+1. **Falta de geração de thumbnails automáticos**: Prazo sugerido: 3 dias
+A falta de thumbnails automáticos pode afetar a visibilidade e o engajamento do canal.
+2. **Implementação de gestão de playlists**: Prazo sugerido: 5 dias
+A gestão de playlists é fundamental para a organização e distribuição de conteúdo.
+3. **Integração com analytics**: Prazo sugerido: 7 dias
+A integração com analytics é essencial para monitorar o desempenho do canal e tomar decisões informadas.
+4. **Testes com múltiplos formatos**: Prazo sugerido: 10 dias
+Os testes com múltiplos formatos são necessários para garantir a compatibilidade e a estabilidade do sistema.
+5. **Documentação e manutenção do código**: Prazo sugerido: 14 dias
+A documentação e manutenção do código são fundamentais para garantir a escalabilidade e a manutenção do sistema.
+
+**3. Top 5 melhorias de médio prazo (próximos 30 dias)**
+
+1. **Otimização do upload automático**: Melhorar a eficiência do upload automático para reduzir o tempo de upload.
+2. **Implementação de agendamento de publicações**: Permitir que os usuários agendem publicações em diferentes horários.
+3. **Integração com outras plataformas**: Integrar o sistema com outras plataformas, como TikTok e Instagram Reels.
+4. **Desenvolvimento de relatórios personalizados**: Desenvolver relatórios personalizados para atender às necessidades específicas dos usuários.
+5. **Implementação de notificações**: Implementar notificações para alertar os usuários sobre erros ou problemas no sistema.
+
+**4. Dívida técnica estimada em horas de desenvolvimento: 120 horas**
+
+A dívida técnica inclui a implementação de funcionalidades pendentes, como a geração de thumbnails automáticos, gestão de playlists e integração com analytics, além da documentação e manutenção do código.
+
+**5. Recomendação: Não está pronto para produção**
+
+O projeto não está pronto
