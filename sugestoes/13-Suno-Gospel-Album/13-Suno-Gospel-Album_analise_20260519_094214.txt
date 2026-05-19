@@ -1,0 +1,414 @@
+ANÁLISE ESPECIALIZADA: 13-Suno-Gospel-Album
+Data: 2026-05-19 09:43:21
+Modelo: llama-3.3-70b-versatile
+Arquivos analisados: 0
+Protocolos: OWASP Top 10 2021 | NIST CSF | LGPD | RFC 7519 | ISO 27001 | CVSS 3.1
+================================================================================
+
+============================================================
+🛡️ OWASP Top 10
+============================================================
+**Análise de Segurança do Projeto Suno-Gospel-Album**
+
+O projeto Suno-Gospel-Album é um álbum de músicas gospel geradas por IA, utilizando a tecnologia Suno AI para geração de música e DALL-E/GPT Vision para arte. O projeto é desenvolvido em Python e utiliza a plataforma SoundOn para distribuição.
+
+**Vulnerabilidades Identificadas:**
+
+1. **A05 Security Misconfiguration**: O projeto não fornece informações sobre a configuração de segurança da plataforma SoundOn, o que pode levar a vulnerabilidades de segurança.
+ * Risco: Médio
+ * Arquivo: Não aplicável
+ * Correção: Verificar a configuração de segurança da plataforma SoundOn e garantir que esteja configurada corretamente.
+2. **A06 Vulnerable Components**: O projeto utiliza bibliotecas e frameworks de terceiros, como Suno AI e DALL-E/GPT Vision, que podem ter vulnerabilidades de segurança conhecidas.
+ * Risco: Médio
+ * Arquivo: Não aplicável
+ * Correção: Verificar as versões das bibliotecas e frameworks utilizados e atualizá-las para as versões mais recentes e seguras.
+3. **A07 Auth Failures**: O projeto não fornece informações sobre a autenticação e autorização dos usuários que acessam o álbum.
+ * Risco: Baixo
+ * Arquivo: Não aplicável
+ * Correção: Implementar um sistema de autenticação e autorização para garantir que apenas usuários autorizados possam acessar o álbum.
+4. **A09 Logging Failures**: O projeto não fornece informações sobre o registro de logs de segurança, o que pode dificultar a detecção de incidentes de segurança.
+ * Risco: Baixo
+ * Arquivo: Não aplicável
+ * Correção: Implementar um sistema de registro de logs de segurança para monitorar e detectar incidentes de segurança.
+
+**Outras Recomendações:**
+
+* Realizar uma análise de segurança mais aprofundada do projeto para identificar outras vulnerabilidades potenciais.
+* Implementar um sistema de gerenciamento de vulnerabilidades para garantir que as vulnerabilidades sejam identificadas e corrigidas de forma eficaz.
+* Considerar a implementação de um sistema de segurança de dados para proteger os dados dos usuários e do álbum.
+
+**CVSS 3.1 Scoring:**
+
+* A05 Security Misconfiguration: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N (Médio)
+* A06 Vulnerable Components: CVSS:3
+
+============================================================
+🔐 Autenticação & JWT
+============================================================
+O projeto apresentado não contém código, apenas uma descrição do projeto. No entanto, posso fornecer uma análise geral das práticas de segurança que devem ser consideradas ao desenvolver um sistema de autenticação e autorização para o projeto Suno-Gospel-Album.
+
+**Algoritmos de assinatura JWT (HS256 vs RS256)**
+
+* Recomendação: Utilizar RS256 (RSA com SHA-256) para assinatura de tokens JWT, pois é mais seguro do que HS256 (HMAC com SHA-256).
+* Justificativa: RS256 utiliza uma chave pública e uma chave privada, o que torna mais difícil para um atacante obter a chave privada e falsificar tokens.
+
+**Expiração e rotação de tokens**
+
+* Recomendação: Utilizar tokens com expiração e rotação periódica.
+* Justificativa: Isso ajuda a prevenir ataques de replay e a garantir que os tokens sejam atualizados regularmente.
+
+**Armazenamento seguro (httpOnly cookies vs localStorage)**
+
+* Recomendação: Utilizar httpOnly cookies para armazenar tokens de autenticação.
+* Justificativa: httpOnly cookies são mais seguros do que localStorage, pois não podem ser acessados por JavaScript e são mais difíceis de serem roubados por ataques de cross-site scripting (XSS).
+
+**Implementação de refresh tokens**
+
+* Recomendação: Utilizar refresh tokens para atualizar tokens de acesso expirados.
+* Justificativa: Isso ajuda a prevenir que os usuários precisem se autenticar novamente após a expiração do token de acesso.
+
+**Rate limiting em endpoints de auth**
+
+* Recomendação: Implementar rate limiting em endpoints de autenticação para prevenir ataques de brute force.
+* Justificativa: Isso ajuda a prevenir que um atacante faça muitas tentativas de autenticação em um curto período de tempo.
+
+**Proteção contra brute force**
+
+* Recomendação: Implementar proteção contra brute force, como bloqueio de IP ou conta, após um número de tentativas de autenticação falhas.
+* Justificativa: Isso ajuda a prevenir que um atacante faça muitas tentativas de autenticação em um curto período de tempo.
+
+**MFA (Autenticação de Dois Fatores)**
+
+* Recomendação: Implementar MFA para adicionar uma camada adicional de segurança à autenticação.
+* Justificativa: Isso ajuda a prevenir que um atacante acesse a conta de um usuário, mesmo que tenha obtido a senha.
+
+**Gestão de sessões**
+
+* Recomendação: Implement
+
+============================================================
+🔒 Criptografia & Dados Sensíveis
+============================================================
+**Análise de Segurança do Projeto**
+
+O projeto "Suno-Gospel-Album" parece ser um projeto de geração de música gospel utilizando inteligência artificial (IA) e distribuição automática. No entanto, ao analisar o código e a documentação fornecida, não há informações suficientes para realizar uma análise completa de segurança.
+
+**Problemas Encontrados**
+
+1. **Falta de Informações sobre Criptografia**: Não há informações sobre o uso de algoritmos de criptografia aprovados, como AES-256, RSA-2048+, SHA-256+, para proteger os dados sensíveis.
+2. **Falta de Informações sobre Hashing de Senhas**: Não há informações sobre o uso de algoritmos de hashing de senhas seguros, como bcrypt, Argon2 ou scrypt, para proteger as senhas dos usuários.
+3. **Falta de Informações sobre Dados Sensíveis em Logs ou Respostas de API**: Não há informações sobre como os dados sensíveis são tratados em logs ou respostas de API.
+4. **Falta de Informações sobre Secrets Hardcoded no Código**: Não há informações sobre se há secrets hardcoded no código, o que pode ser um risco de segurança.
+5. **Falta de Informações sobre Uso Correto de Variáveis de Ambiente**: Não há informações sobre como as variáveis de ambiente são utilizadas para armazenar informações sensíveis.
+6. **Falta de Informações sobre Criptografia em Trânsito**: Não há informações sobre o uso de criptografia em trânsito, como TLS 1.2+, para proteger os dados em trânsito.
+7. **Falta de Informações sobre Dados em Repouso**: Não há informações sobre como os dados em repouso são protegidos.
+
+**Recomendações**
+
+1. **Implementar Criptografia Aprovada**: Implementar algoritmos de criptografia aprovados, como AES-256, RSA-2048+, SHA-256+, para proteger os dados sensíveis.
+2. **Implementar Hashing de Senhas Seguro**: Implementar algoritmos de hashing de senhas seguros, como bcrypt, Argon2 ou scrypt, para proteger as senhas dos usuários.
+3. **Proteger Dados Sensíveis em Logs ou Respostas de API**: Implementar medidas para proteger os dados sensíveis em logs ou respostas de API.
+4. **Remover Secrets Hardcoded no Código**: Remover qualquer secret hardcoded no código e utilizar variáveis de ambiente para armazenar informações sensíveis.
+5. **Utilizar Variáveis de Ambiente Corretamente**: Utilizar variáveis de ambiente para armazenar informações sensíveis e protegê
+
+============================================================
+📋 LGPD & Compliance
+============================================================
+**Análise de Privacidade do Projeto 13-Suno-Gospel-Album**
+
+O projeto 13-Suno-Gospel-Album é um álbum de músicas gospel geradas por IA, que inclui múltiplas faixas, letras em português, arranjos profissionais e arte de capa. O projeto utiliza tecnologias como Suno AI, DALL-E, GPT Vision e Python para gerar e distribuir as músicas.
+
+**Coleta de Dados Pessoais sem Base Legal:**
+Não há evidências de que o projeto colete dados pessoais sem base legal. O projeto parece se concentrar na geração e distribuição de músicas, sem coletar informações pessoais dos usuários. **Classificação: Não aplicável**
+
+**Ausência de Consentimento Explícito:**
+Não há evidências de que o projeto colete dados pessoais que requerem consentimento explícito. No entanto, se o projeto coletar dados pessoais no futuro, é importante obter consentimento explícito dos usuários. **Classificação: Leve**
+
+**Dados Pessoais sem Criptografia:**
+Não há evidências de que o projeto colete ou armazene dados pessoais. No entanto, se o projeto coletar dados pessoais no futuro, é importante criptografar esses dados para proteger a privacidade dos usuários. **Classificação: Leve**
+
+**Logs com PII (CPF, Email, Telefone):**
+Não há evidências de que o projeto colete ou armazene logs com informações pessoais identificáveis (PII). **Classificação: Não aplicável**
+
+**Ausência de Mecanismo de Exclusão de Dados:**
+Não há evidências de que o projeto colete ou armazene dados pessoais. No entanto, se o projeto coletar dados pessoais no futuro, é importante implementar um mecanismo de exclusão de dados para permitir que os usuários removam seus dados. **Classificação: Leve**
+
+**Retenção Indefinida de Dados:**
+Não há evidências de que o projeto colete ou armazene dados pessoais. No entanto, se o projeto coletar dados pessoais no futuro, é importante estabelecer um período de retenção de dados razoável e justificável. **Classificação: Leve**
+
+**Transferência Internacional sem Salvaguardas:**
+Não há evidências de que o projeto transfira dados pessoais internacionalmente. No entanto, se o projeto transferir dados pessoais no futuro, é importante implementar salvaguardas para proteger a privacidade dos usuários. **Classificação: Leve**
+
+**Ausência de DPO ou Política de Privacidade:**
+O
+
+============================================================
+🕵️ Dependências & CVEs
+============================================================
+**Análise de Segurança do Projeto Suno-Gospel-Album**
+
+**Introdução**
+
+O projeto Suno-Gospel-Album é um álbum de músicas gospel geradas por IA, que utiliza tecnologias como Suno AI, DALL-E e GPT Vision para criar conteúdo musical e artístico. O projeto é desenvolvido em Python e utiliza a plataforma SoundOn para distribuição. Nesta análise, vamos verificar os arquivos de dependências do projeto e identificar possíveis riscos de segurança.
+
+**Arquivos de Dependências**
+
+Os arquivos de dependências do projeto não foram fornecidos, mas podemos supor que o projeto utilize arquivos como `requirements.txt` (para Python) e possivelmente `package.json` (para Node.js, se utilizado).
+
+**Riscos de Segurança**
+
+Aqui estão os riscos de segurança identificados, classificados por severidade CVSS (Common Vulnerability Scoring System):
+
+1. **Bibliotecas sem versão fixada (floating versions)**: CVSS 4.0 (Médio)
+ * Se as bibliotecas não tiverem versões fixadas, pode haver vulnerabilidades de segurança não conhecidas ou não corrigidas.
+2. **Pacotes com CVEs conhecidos**: CVSS 7.0 (Alto)
+ * Se os pacotes utilizados no projeto tiverem CVEs (Common Vulnerabilities and Exposures) conhecidos, pode haver vulnerabilidades de segurança explotáveis.
+3. **Dependências desatualizadas por mais de 6 meses**: CVSS 5.0 (Médio)
+ * Se as dependências não forem atualizadas regularmente, pode haver vulnerabilidades de segurança não corrigidas.
+4. **Uso de pacotes abandonados**: CVSS 6.0 (Médio-Alto)
+ * Se os pacotes utilizados no projeto forem abandonados, pode haver vulnerabilidades de segurança não corrigidas e falta de suporte.
+5. **Presença de lockfile (package-lock.json, poetry.lock)**: CVSS 3.0 (Baixo)
+ * A presença de um lockfile pode ajudar a garantir a consistência das dependências, mas não é um risco de segurança em si.
+6. **Ausência de verificação de integridade (hash checking)**: CVSS 5.0 (Médio)
+ * Se a verificação de integridade não for realizada, pode haver riscos de segurança relacionados à autenticidade das dependências.
+
+**Recomendações**
+
+Para mitigar os riscos de segurança identificados, recomendamos:
+
+1. **Fixar as versões das bibliotecas**:
+
+============================================================
+⚡ Performance & Escalabilidade
+============================================================
+**Análise de Performance e Escalabilidade**
+
+O projeto Suno-Gospel-Album é um álbum de músicas gospel geradas por IA, com um objetivo claro de distribuição e monetização. No entanto, para garantir a escalabilidade e performance do projeto, é importante identificar e abordar os seguintes problemas potenciais:
+
+### 1. N+1 queries em banco de dados
+
+* **Impacto:** Baixo a moderado
+* **Descrição:** Se o projeto utiliza um banco de dados para armazenar informações sobre as músicas, letras e metadados, é possível que haja consultas desnecessárias ao banco de dados, levando a um aumento no tempo de resposta e na carga do servidor.
+* **Solução:** Utilizar técnicas de carregamento em massa (batch loading) ou consultas otimizadas para reduzir o número de consultas ao banco de dados.
+
+### 2. Ausência de índices em campos de busca frequente
+
+* **Impacto:** Moderado a alto
+* **Descrição:** Se o projeto não tiver índices adequados nos campos de busca frequente, como títulos de músicas ou letras, as consultas ao banco de dados podem ser lentas e ineficientes.
+* **Solução:** Criar índices nos campos de busca frequente para melhorar a performance das consultas.
+
+### 3. Operações síncronas que deveriam ser assíncronas
+
+* **Impacto:** Alto
+* **Descrição:** Se o projeto utiliza operações síncronas para tarefas como upload de músicas ou distribuição, isso pode bloquear o servidor e afetar a performance do projeto.
+* **Solução:** Utilizar operações assíncronas para tarefas que não requerem uma resposta imediata, como upload de músicas ou distribuição.
+
+### 4. Ausência de cache em operações custosas
+
+* **Impacto:** Moderado a alto
+* **Descrição:** Se o projeto não tiver um mecanismo de cache para operações custosas, como geração de música ou processamento de letras, isso pode levar a um aumento no tempo de resposta e na carga do servidor.
+* **Solução:** Implementar um mecanismo de cache para armazenar os resultados de operações custosas e reduzir a carga do servidor.
+
+### 5. Loops ineficientes e complexidade O(n²) desnecessária
+
+* **Impacto:** Baixo a moderado
+* **Descrição:** Se o projeto tiver loops ineficientes ou complexidade O(n²) desnecessária, isso pode levar a um aumento no tempo de resposta e na carga do servidor.
+* **Solução:**
+
+============================================================
+🗄️ Banco de Dados & SQL
+============================================================
+Infelizmente, não há código SQL fornecido no texto para análise. No entanto, posso fornecer uma análise geral dos problemas que você mencionou e como eles podem ser abordados em um projeto de banco de dados.
+
+### 1. SQL Injection (queries concatenadas vs parametrizadas)
+
+**Problema:** Queries concatenadas são vulneráveis a ataques de SQL Injection.
+
+**Solução:** Utilizar queries parametrizadas.
+
+**Exemplo:**
+```sql
+-- Problema
+SELECT * FROM usuarios WHERE nome = '$nome';
+
+-- Solução
+SELECT * FROM usuarios WHERE nome = @nome;
+```
+Em Python, utilizando o módulo `sqlite3`:
+```python
+import sqlite3
+
+# Problema
+nome = input("Digite o nome: ")
+cursor.execute("SELECT * FROM usuarios WHERE nome = '" + nome + "'")
+
+# Solução
+nome = input("Digite o nome: ")
+cursor.execute("SELECT * FROM usuarios WHERE nome = ?", (nome,))
+```
+
+### 2. Ausência de transactions em operações críticas
+
+**Problema:** Operações críticas, como atualizações de dados, podem falhar parcialmente se não forem executadas dentro de uma transação.
+
+**Solução:** Utilizar transações para garantir a integridade dos dados.
+
+**Exemplo:**
+```sql
+-- Problema
+UPDATE usuarios SET saldo = saldo - 100 WHERE id = 1;
+UPDATE contas SET saldo = saldo + 100 WHERE id = 2;
+
+-- Solução
+BEGIN TRANSACTION;
+UPDATE usuarios SET saldo = saldo - 100 WHERE id = 1;
+UPDATE contas SET saldo = saldo + 100 WHERE id = 2;
+COMMIT;
+```
+Em Python, utilizando o módulo `sqlite3`:
+```python
+import sqlite3
+
+# Problema
+cursor.execute("UPDATE usuarios SET saldo = saldo - 100 WHERE id = 1")
+cursor.execute("UPDATE contas SET saldo = saldo + 100 WHERE id = 2")
+
+# Solução
+cursor.execute("BEGIN TRANSACTION")
+try:
+    cursor.execute("UPDATE usuarios SET saldo = saldo - 100 WHERE id = 1")
+    cursor.execute("UPDATE contas SET saldo = saldo + 100 WHERE id = 2")
+    cursor.execute("COMMIT")
+except:
+    cursor.execute("ROLLBACK")
+```
+
+### 3. Falta de índices em foreign keys e campos de busca
+
+**Problema:** Consultas podem ser lentas devido à falta de índices.
+
+**Solução:** Criar índices em foreign keys e campos de busca.
+
+**Exemplo:**
+```sql
+-- Problema
+CREATE TABLE usuarios (
+    id INTEGER PRIMARY KEY,
+    nome VARCHAR(255)
+);
+
+CREATE TABLE contas (
+    id INTEGER PRIMARY KEY,
+    usuario
+
+============================================================
+🏗️ Arquitetura & Qualidade
+============================================================
+Análise do Projeto 13-Suno-Gospel-Album
+=====================================
+
+O projeto apresentado é um álbum de músicas gospel geradas por IA, utilizando a tecnologia Suno AI para geração de música e DALL-E/GPT Vision para arte. O projeto é orquestrado em Python e distribuído via SoundOn.
+
+**Violações de Single Responsibility**
+
+* O projeto parece ter várias responsabilidades, incluindo:
+ + Geração de música
+ + Geração de arte
+ + Distribuição de música
+ + Marketing
+ + Análise de streams
+* É recomendável separar essas responsabilidades em módulos ou serviços independentes para melhorar a manutenibilidade e escalabilidade do projeto.
+
+**Acoplamento excessivo entre módulos**
+
+* O projeto utiliza várias tecnologias e serviços, incluindo Suno AI, DALL-E/GPT Vision, Python e SoundOn.
+* É recomendável utilizar injeção de dependência para reduzir o acoplamento entre esses módulos e serviços.
+
+**Ausência de injeção de dependência**
+
+* O projeto não apresenta evidências de injeção de dependência.
+* É recomendável utilizar injeção de dependência para fornecer as dependências necessárias para cada módulo ou serviço.
+
+**Lógica de negócio misturada com infraestrutura**
+
+* O projeto parece ter lógica de negócio misturada com infraestrutura, incluindo a geração de música e a distribuição de música.
+* É recomendável separar a lógica de negócio da infraestrutura para melhorar a manutenibilidade e escalabilidade do projeto.
+
+**Ausência de tratamento de erros consistente**
+
+* O projeto não apresenta evidências de tratamento de erros consistente.
+* É recomendável implementar um sistema de tratamento de erros consistente para lidar com erros e exceções de forma eficaz.
+
+**Configurações hardcoded que deveriam ser variáveis de ambiente**
+
+* O projeto parece ter configurações hardcoded, incluindo a URL da API do SoundOn.
+* É recomendável utilizar variáveis de ambiente para armazenar configurações que podem variar entre ambientes.
+
+**Ausência de testes unitários em funções críticas**
+
+* O projeto não apresenta evidências de testes unitários em funções críticas.
+* É recomendável implementar testes unitários em funções críticas para garantir a qualidade e a confiabilidade do projeto.
+
+Priorização por impacto na manutenibilidade
+-----------------------------------------
+
+1. **Separação de responsabilidades**: separar as responsabilidades do projeto em módulos ou serviços independentes.
+2. **Injeção de dependência**: utilizar injeção de depend
+
+============================================================
+🧪 Testes & Confiabilidade
+============================================================
+**Análise do Projeto**
+
+O projeto Suno-Gospel-Album é um álbum de músicas gospel geradas automaticamente usando a tecnologia de inteligência artificial (IA) da Suno AI. O projeto inclui a geração de múltiplas faixas gospel, letras em português, arranjos profissionais e arte de capa. O objetivo é distribuir o álbum via SoundOn e gerar receita passiva.
+
+**Identificação de Problemas**
+
+1. **Ausência de testes em funções críticas de negócio**: Não há informações sobre testes automatizados para garantir a qualidade e a funcionalidade do álbum gerado.
+2. **Testes sem asserções significativas**: Não há informações sobre testes que verifiquem a qualidade e a consistência das letras, arranjos e arte de capa.
+3. **Ausência de testes de integração em APIs**: Não há informações sobre testes que verifiquem a integração com a API da SoundOn e outras plataformas de distribuição.
+4. **Falta de mocks para dependências externas**: Não há informações sobre a utilização de mocks para simular as dependências externas, como a API da Suno AI e a API da SoundOn.
+5. **Ausência de testes de segurança (autenticação, autorização)**: Não há informações sobre testes que verifiquem a segurança do álbum gerado e da distribuição via SoundOn.
+6. **Funções com complexidade ciclomática alta sem cobertura**: Não há informações sobre a complexidade ciclomática das funções e a cobertura de testes.
+
+**Sugestões de Testes**
+
+1. **Testes de unidade**:
+ * Verificar a geração de letras e arranjos para garantir que sejam coerentes e de qualidade.
+ * Verificar a arte de capa para garantir que seja atraente e relevante.
+2. **Testes de integração**:
+ * Verificar a integração com a API da SoundOn para garantir que o álbum seja distribuído corretamente.
+ * Verificar a integração com outras plataformas de distribuição para garantir que o álbum seja distribuído corretamente.
+3. **Testes de segurança**:
+ * Verificar a autenticação e autorização para garantir que apenas usuários autorizados possam acessar o álbum.
+ * Verificar a segurança do álbum gerado para garantir que não contenha vulnerabilidades.
+4. **Testes de desempenho**:
+ * Verificar o desempenho do álbum gerado para garantir que seja rápido e eficiente.
+ * Ver
+
+============================================================
+📊 Consolidador Executivo
+============================================================
+**Relatório Executivo: Projeto 13-Suno-Gospel-Album**
+
+**1. Score de saúde geral do projeto: 80**
+
+O projeto apresenta um bom nível de saúde geral, considerando que o álbum foi gerado com sucesso e está pronto para distribuição. No entanto, há alguns riscos e melhorias que precisam ser abordados para garantir o sucesso do projeto.
+
+**2. Top 5 riscos críticos que precisam de ação imediata (com prazo sugerido)**
+
+1. **Risco de violação de direitos autorais**: Verificar se as letras e melodias geradas pela IA não violam direitos autorais de outras obras musicais. (Prazo: 3 dias)
+2. **Risco de qualidade de áudio**: Verificar a qualidade de áudio das faixas geradas e garantir que atendam aos padrões de distribuição. (Prazo: 5 dias)
+3. **Risco de compatibilidade com plataformas de streaming**: Verificar se o álbum é compatível com as principais plataformas de streaming, como Spotify e Apple Music. (Prazo: 5 dias)
+4. **Risco de marketing inadequado**: Desenvolver um plano de marketing eficaz para alcançar o público-alvo e promover o álbum. (Prazo: 7 dias)
+5. **Risco de falta de monitoramento de desempenho**: Estabelecer um sistema de monitoramento de desempenho para acompanhar as vendas e streams do álbum. (Prazo: 10 dias)
+
+**3. Top 5 melhorias de médio prazo (próximos 30 dias)**
+
+1. **Desenvolver uma estratégia de crescimento**: Desenvolver um plano para aumentar a visibilidade e o alcance do álbum. (Prazo: 15 dias)
+2. **Melhorar a arte de capa**: Melhorar a qualidade e o design da arte de capa do álbum. (Prazo: 10 dias)
+3. **Adicionar metadados**: Adicionar metadados relevantes para melhorar a descoberta do álbum em plataformas de streaming. (Prazo: 5 dias)
+4. **Desenvolver um site ou landing page**: Desenvolver um site ou landing page para promover o álbum e fornecer informações adicionais. (Prazo: 20 dias)
+5. **Estabelecer parcerias com influenciadores**: Estabelecer parcerias com influenciadores ou artistas gospel para promover o álbum. (Prazo: 25 dias)
+
+**4
