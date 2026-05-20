@@ -1,0 +1,396 @@
+ANÁLISE ESPECIALIZADA: 05-EV-Viability-Finder
+Data: 2026-05-20 09:27:53
+Modelo: llama-3.3-70b-versatile
+Arquivos analisados: 53
+Protocolos: OWASP Top 10 2021 | NIST CSF | LGPD | RFC 7519 | ISO 27001 | CVSS 3.1
+================================================================================
+
+============================================================
+🛡️ OWASP Top 10
+============================================================
+A análise do código fornecido revela várias vulnerabilidades e melhorias possíveis. Aqui estão os achados, classificados de acordo com o OWASP Top 10 2021:
+
+### A01: Broken Access Control
+
+* **Risco:** Médio
+* **Arquivo e linha:** `backend/config.py`, linha 5
+* **Descrição:** A variável `ANTHROPIC_API_KEY` é carregada do arquivo `.env` e não há validação se a chave está vazia ou inválida. Isso pode permitir que um atacante acesse a API sem autenticação.
+* **Correção:** Adicionar validação para a variável `ANTHROPIC_API_KEY` e lançar uma exceção se estiver vazia ou inválida.
+
+### A02: Cryptographic Failures
+
+* **Risco:** Baixo
+* **Arquivo e linha:** `backend/enrichers/fema.py`, linha 10
+* **Descrição:** A URL da API FEMA é hardcoded e não há criptografia explícita. No entanto, a API FEMA parece ser pública e não requer autenticação.
+* **Correção:** Nenhuma correção necessária, mas é recomendável revisar a documentação da API FEMA para garantir que não há requisitos de criptografia.
+
+### A03: Injection
+
+* **Risco:** Alto
+* **Arquivo e linha:** `backend/enrichers/census_profile.py`, linha 20
+* **Descrição:** A variável `county_lower` é usada para construir a URL da API do Censo sem sanitização. Isso pode permitir que um atacante injete código malicioso.
+* **Correção:** Sanitizar a variável `county_lower` antes de usá-la para construir a URL da API do Censo.
+
+### A04: Insecure Design
+
+* **Risco:** Médio
+* **Arquivo e linha:** `backend/database.py`, linha 10
+* **Descrição:** A conexão com o banco de dados é feita com a opção `check_same_thread=False`, o que pode permitir que várias threads acessem o banco de dados simultaneamente.
+* **Correção:** Revisar a configuração do banco de dados e garantir que a opção `check_same_thread` esteja configurada corretamente.
+
+### A05: Security Misconfiguration
+
+* **Risco:** Médio
+* **Arquivo e linha:** `backend/config.py`, linha 5
+* **Descrição:** A variável `ANTHROPIC_API_KEY` é carregada do arquivo `.env` e não há validação se a chave está configurada corretamente.
+* **Correção:** Adicionar validação para a
+
+============================================================
+🔐 Autenticação & JWT
+============================================================
+Uma análise detalhada do código!
+
+**Autenticação e Autorização**
+
+* Não há implementação de autenticação ou autorização explícita no código fornecido.
+* No entanto, há uma referência a uma chave de API no arquivo `backend/.env.example`, que sugere que pode haver uma forma de autenticação baseada em chaves de API.
+* Recomendação: Implementar autenticação e autorização adequadas, como OAuth 2.0 ou JWT, para proteger as APIs e garantir que apenas usuários autorizados acessem os recursos.
+
+**Algoritmos de Assinatura JWT (HS256 vs RS256)**
+
+* Não há implementação de JWT no código fornecido.
+* Recomendação: Se for necessário implementar JWT, escolher o algoritmo de assinatura adequado dependendo das necessidades específicas do projeto. HS256 é mais simples e rápido, enquanto RS256 é mais seguro, mas também mais complexo.
+
+**Expiração e Rotação de Tokens**
+
+* Não há implementação de tokens no código fornecido.
+* Recomendação: Se for necessário implementar tokens, definir uma política de expiração e rotação de tokens para garantir a segurança e evitar que tokens sejam comprometidos.
+
+**Armazenamento Seguro (httpOnly cookies vs localStorage)**
+
+* Não há implementação de armazenamento de dados no cliente no código fornecido.
+* Recomendação: Se for necessário armazenar dados no cliente, usar httpOnly cookies ou um mecanismo de armazenamento seguro, como o LocalStorage, com medidas de segurança adequadas, como criptografia e acesso controlado.
+
+**Implementação de Refresh Tokens**
+
+* Não há implementação de refresh tokens no código fornecido.
+* Recomendação: Se for necessário implementar refresh tokens, definir uma política de expiração e rotação de tokens para garantir a segurança e evitar que tokens sejam comprometidos.
+
+**Rate Limiting em Endpoints de Auth**
+
+* Não há implementação de rate limiting no código fornecido.
+* Recomendação: Implementar rate limiting em endpoints de autenticação para evitar ataques de força bruta e garantir a segurança.
+
+**Proteção Contra Brute Force**
+
+* Não há implementação de proteção contra brute force no código fornecido.
+* Recomendação: Implementar medidas de proteção contra brute force, como limitação de tentativas de login, bloqueio de IPs e notificação de administradores.
+
+**MFA (Autenticação de Dois Fatores)**
+
+* Não há implementação de MFA no código fornecido.
+* Recomendação: Implementar MFA para garantir a segurança e evitar que usu
+
+============================================================
+🔒 Criptografia & Dados Sensíveis
+============================================================
+A análise do código fonte do projeto "EV Viability Finder" revelou alguns problemas relacionados à segurança e criptografia. Aqui estão os principais problemas encontrados:
+
+1. **Chaves de API hardcoded**: No arquivo `backend/.env.example`, há chaves de API hardcoded, como `ANTHROPIC_API_KEY` e `REGRID_API_KEY`. Isso é um problema de segurança, pois essas chaves podem ser expostas a terceiros. Em vez disso, as chaves de API devem ser armazenadas em variáveis de ambiente ou em um sistema de gerenciamento de segredos.
+
+2. **Falta de criptografia em repouso**: No arquivo `backend/database.py`, o banco de dados SQLite é criado sem criptografia. Isso significa que os dados armazenados no banco de dados podem ser acessados por qualquer pessoa com acesso ao arquivo do banco de dados. É recomendável usar criptografia em repouso, como o SQLite com criptografia, para proteger os dados.
+
+3. **Falta de criptografia em trânsito**: No arquivo `backend/enrichers/census_profile.py`, há uma requisição HTTP para o Census Bureau ACS sem criptografia. Isso significa que os dados transmitidos podem ser interceptados por terceiros. É recomendável usar criptografia em trânsito, como HTTPS, para proteger os dados.
+
+4. **Falta de autenticação e autorização**: No arquivo `backend/classifier.py`, não há autenticação ou autorização para acessar as funções de classificação. Isso significa que qualquer pessoa pode acessar as funções de classificação sem permissão. É recomendável implementar autenticação e autorização para controlar o acesso às funções de classificação.
+
+5. **Falta de logging e monitoramento**: No arquivo `backend/enrichers/fema.py`, há um erro de logging que pode ser ignorado. É recomendável implementar logging e monitoramento para detectar e responder a erros e problemas de segurança.
+
+6. **Falta de validação de dados**: No arquivo `backend/classifier.py`, não há validação de dados para as propriedades de entrada. Isso significa que os dados podem ser inválidos ou malformados, o que pode causar erros ou problemas de segurança. É recomendável implementar validação de dados para garantir que os dados sejam válidos e consistentes.
+
+7. **Uso de algoritmos de criptografia não aprovados**: No arquivo `backend/enrichers/census_profile.py`, há uma requisição HTTP para o Census Bureau ACS que pode usar algoritmos de criptografia não aprovados, como o RC4. É recomendável usar algoritmos de
+
+============================================================
+📋 LGPD & Compliance
+============================================================
+A análise do código fornecido não revela explicitamente violações graves de privacidade, como coleta de dados pessoais sem base legal, ausência de consentimento explícito, dados pessoais sem criptografia, logs com PII (CPF, email, telefone), ausência de mecanismo de exclusão de dados, retenção indefinida de dados, transferência internacional sem salvaguardas, ou ausência de DPO ou política de privacidade. No entanto, é importante notar que o código parece ser parte de um projeto maior e pode haver outras partes do código ou práticas de desenvolvimento que não estão visíveis aqui.
+
+Aqui estão algumas observações e sugestões baseadas no código fornecido:
+
+1. **Coleta de Dados Pessoais**: O código não parece coletar dados pessoais diretamente. Ele parece se concentrar em dados geográficos, demográficos e de propriedades, que não são considerados dados pessoais sensíveis. **Classificação: N/A**
+
+2. **Consentimento Explícito**: Como o código não coleta dados pessoais, a questão do consentimento explícito não se aplica diretamente. **Classificação: N/A**
+
+3. **Criptografia de Dados Pessoais**: Não há evidências de que o código lide com dados pessoais que necessitem de criptografia. **Classificação: N/A**
+
+4. **Logs com PII**: O código não parece registrar ou armazenar logs que contenham informações de identificação pessoal (PII). **Classificação: N/A**
+
+5. **Mecanismo de Exclusão de Dados**: O código não fornece mecanismos explícitos para exclusão de dados, mas isso pode ser devido à natureza dos dados que estão sendo processados (geográficos e demográficos). **Classificação: Leve**, pois é importante ter mecanismos claros para gerenciar dados, mesmo que não sejam pessoais.
+
+6. **Retenção Indefinida de Dados**: O código não especifica políticas de retenção de dados. **Classificação: Leve**, pois é importante definir políticas claras de retenção e eliminação de dados.
+
+7. **Transferência Internacional sem Salvaguardas**: Não há evidências de transferência internacional de dados pessoais. **Classificação: N/A**
+
+8. **Ausência de DPO ou Política de Privacidade**: O código não fornece informações sobre a existência de um Oficial de Proteção de Dados (DPO) ou uma política de privacidade. **Classificação: Grave**, pois ter um DPO e uma política de privacidade clara é essencial para garantir a conformidade
+
+============================================================
+🕵️ Dependências & CVEs
+============================================================
+A análise dos arquivos de dependências do projeto 05-EV-Viability-Finder revelou alguns riscos e vulnerabilidades. Aqui está a lista dos riscos por severidade CVSS:
+
+**Riscos de Alta Severidade (CVSS 7.0-10.0)**
+
+1. **Uso de bibliotecas desatualizadas**: O projeto utiliza bibliotecas como `Flask` e `SQLAlchemy` que estão desatualizadas. Isso pode expor o projeto a vulnerabilidades conhecidas e não corrigidas.
+2. **Falta de validação de entrada**: O projeto não valida adequadamente as entradas de usuário, o que pode permitir ataques de injeção de SQL ou cross-site scripting (XSS).
+3. **Uso de APIs não seguras**: O projeto utiliza APIs como a `LocationIQ` e a `TomTom` que podem não ser seguras ou podem ter vulnerabilidades conhecidas.
+
+**Riscos de Média Severidade (CVSS 4.0-6.9)**
+
+1. **Uso de bibliotecas com vulnerabilidades conhecidas**: O projeto utiliza bibliotecas como `httpx` que têm vulnerabilidades conhecidas, mas que não são críticas.
+2. **Falta de cache de resultados**: O projeto não cacheia os resultados das consultas à API, o que pode levar a uma sobrecarga de requisições e aumentar o risco de ataques de negação de serviço (DoS).
+3. **Uso de chaves de API hardcoded**: O projeto utiliza chaves de API hardcoded, o que pode expor as chaves a acessos não autorizados.
+
+**Riscos de Baixa Severidade (CVSS 0.0-3.9)**
+
+1. **Uso de bibliotecas obsoletas**: O projeto utiliza bibliotecas como `python-dotenv` que estão obsoletas, mas que não apresentam riscos significativos.
+2. **Falta de documentação**: O projeto não tem documentação adequada, o que pode dificultar a manutenção e a segurança do projeto.
+
+**Recomendações**
+
+1. Atualizar as bibliotecas e dependências para as versões mais recentes.
+2. Implementar validação de entrada de usuário e saída de dados.
+3. Utilizar APIs seguras e validar as respostas das APIs.
+4. Implementar cache de resultados das consultas à API.
+5. Utilizar chaves de API de forma segura, como utilizando variáveis de ambiente ou armazenamento de chaves de API seguro.
+6. Documentar o projeto e as dependências utilizadas.
+
+**Priorização**
+
+1. Corrigir os riscos de alta severidade (
+
+============================================================
+⚡ Performance & Escalabilidade
+============================================================
+Aqui está a análise do código e identificação dos problemas de performance e escalabilidade:
+
+1. **N+1 queries em banco de dados**: No arquivo `backend/database.py`, a função `get_db()` cria uma nova conexão com o banco de dados para cada requisição. Isso pode levar a um problema de N+1 queries, onde o banco de dados é consultado múltiplas vezes para obter os mesmos dados. Para resolver isso, é recomendável usar uma conexão de banco de dados única e compartilhada entre as requisições.
+
+2. **Ausência de índices em campos de busca frequente**: No arquivo `backend/database.py`, não há índices definidos para os campos de busca frequente, como `population` e `median_hh_income`. Isso pode levar a consultas lentas e ineficientes. Para resolver isso, é recomendável criar índices para os campos de busca frequente.
+
+3. **Operações síncronas que deveriam ser assíncronas**: No arquivo `backend/enrichers/census_profile.py`, a função `get_census_data()` é síncrona e pode bloquear a execução do programa enquanto aguarda a resposta do servidor. Para resolver isso, é recomendável usar operações assíncronas com bibliotecas como `httpx` ou `aiohttp`.
+
+4. **Ausência de cache em operações custosas**: No arquivo `backend/enrichers/census_profile.py`, a função `get_census_data()` não usa cache para armazenar os resultados das consultas. Isso pode levar a consultas repetidas e ineficientes. Para resolver isso, é recomendável usar um cache, como `Redis` ou `Memcached`, para armazenar os resultados das consultas.
+
+5. **Loops ineficientes e complexidade O(n²) desnecessária**: No arquivo `backend/classifier.py`, a função `classify_property()` tem uma complexidade O(n²) devido ao uso de loops aninhados. Para resolver isso, é recomendável usar algoritmos mais eficientes, como `numpy` ou `pandas`, para processar os dados.
+
+6. **Memory leaks em event listeners ou conexões não fechadas**: No arquivo `backend/database.py`, a função `get_db()` não fecha a conexão com o banco de dados após o uso. Isso pode levar a memory leaks e problemas de performance. Para resolver isso, é recomendável fechar a conexão com o banco de dados após o uso.
+
+7. **Falta de paginação em listagens**: No arquivo `backend/database.py`, a função `get_db()` não implementa paginação para as listagens de dados. Isso pode levar a consultas lentas e inef
+
+============================================================
+🗄️ Banco de Dados & SQL
+============================================================
+Aqui estão as análises de segurança e desempenho do código:
+
+### SQL Injection
+
+*   Arquivo: `backend/database.py`
+*   Query problemática: `SQLALCHEMY_DATABASE_URL = "sqlite:///./terrenos.db"`
+*   Versão corrigida: A query não está vulnerável a SQL Injection, pois não há entrada de usuário sendo concatenada à string de conexão.
+
+### Ausência de Transactions em Operações Críticas
+
+*   Arquivo: `backend/database.py`
+*   Query problemática: `db = SessionLocal()`
+*   Versão corrigida:
+    ```python
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+# ...
+
+def get_db():
+    db = SessionLocal()
+    try:
+        with db.begin():  # Inicia uma transação
+            yield db
+    except Exception:
+        db.rollback()  # Desfaz as alterações em caso de erro
+        raise
+    finally:
+        db.close()
+```
+
+### Falta de Índices em Foreign Keys e Campos de Busca
+
+*   Arquivo: `backend/database.py`
+*   Query problemática: Não há criação de índices explícita.
+*   Versão corrigida:
+    ```python
+from sqlalchemy import Index
+
+# ...
+
+class Terreno(Base):
+    __tablename__ = "terrenos"
+
+    id = Column(Integer, primary_key=True)
+    nome = Column(String)
+    # ...
+
+    # Cria um índice no campo "nome"
+    __table_args__ = (Index("ix_nome", "nome"),)
+```
+
+### Uso de SELECT \* Desnecessário
+
+*   Arquivo: `backend/enrichers/census_profile.py`
+*   Query problemática: `resp.json()` (supõe-se que a resposta contenha todos os campos)
+*   Versão corrigida:
+    ```python
+import httpx
+
+# ...
+
+async def get_census_data(county: str, state: str) -> Dict:
+    async with httpx.AsyncClient(timeout=15) as client:
+        try:
+            resp = await client.get(_CENSUS_URL, params={"get": "B01003_001E,B19013_001E,B25001_001E", "for": f"county:{county}", "in": f"state:{state}"})
+            if resp.status_code == 200:
+                data = resp.json()
+                # Seleciona apenas os campos necessários
+                return {
+                    "population": data[1][0],
+                    "median_hh_income": data[1][1],
+                    "housing_units": data[1][2],
+                }
+        except Exception as e:
+            print(f"Erro Census ({county}, {state}): {e}")
+    return {}
+```
+
+### Ausência de Soft Delete em
+
+============================================================
+🏗️ Arquitetura & Qualidade
+============================================================
+A análise do código fonte do projeto 05-EV-Viability-Finder revelou várias violações de princípios de design de software e boas práticas. Aqui estão as principais violações identificadas, priorizadas por impacto na manutenibilidade:
+
+### 1. Violações de Single Responsibility (SRP)
+
+*   O arquivo `backend/classifier.py` contém uma função `classify_property` que realiza várias tarefas, incluindo a classificação de terrenos e a verificação de condições. Essa função deveria ser dividida em funções menores, cada uma com uma responsabilidade única.
+*   O arquivo `backend/enrichers/census_profile.py` contém uma função que busca dados demográficos e também realiza cálculos de liquidez do mercado local. Essa função deveria ser dividida em funções menores, cada uma com uma responsabilidade única.
+
+### 2. Acoplamento excessivo entre módulos
+
+*   O arquivo `backend/config.py` importa o arquivo `dotenv` e carrega as variáveis de ambiente. No entanto, o arquivo `backend/database.py` também importa o arquivo `config.py` para acessar as variáveis de ambiente. Isso cria um acoplamento excessivo entre os módulos. Em vez disso, as variáveis de ambiente deveriam ser injetadas nos módulos que as necessitam.
+*   O arquivo `backend/enrichers/fema.py` importa o arquivo `httpx` e realiza uma requisição HTTP. No entanto, o arquivo `backend/enrichers/census_profile.py` também importa o arquivo `httpx` e realiza uma requisição HTTP. Isso cria um acoplamento excessivo entre os módulos. Em vez disso, as requisições HTTP deveriam ser encapsuladas em um módulo separado.
+
+### 3. Ausência de injeção de dependência
+
+*   O arquivo `backend/classifier.py` depende do arquivo `config.py` para acessar as variáveis de ambiente. No entanto, a dependência não é injetada explicitamente. Em vez disso, a dependência deveria ser injetada no construtor da classe ou função.
+*   O arquivo `backend/enrichers/census_profile.py` depende do arquivo `httpx` para realizar requisições HTTP. No entanto, a dependência não é injetada explicitamente. Em vez disso, a dependência deveria ser injetada no construtor da classe ou função.
+
+### 4. Lógica de negócio misturada com infraestrutura
+
+*   O arquivo `backend/classifier.py` contém lógica de negócio para classificar terrenos, mas também
+
+============================================================
+🧪 Testes & Confiabilidade
+============================================================
+A análise do código do projeto "EV Viability Finder" revela várias áreas que precisam de atenção em termos de testes e qualidade de software. Aqui estão algumas sugestões de testes críticos a implementar, juntamente com exemplos de código:
+
+### 1. Testes de Unidade para Funções Críticas
+
+As funções `classify_property` em `backend/classifier.py` e `get_fema_zone` em `backend/enrichers/fema.py` são críticas para o funcionamento do sistema. É essencial implementar testes de unidade para essas funções.
+
+Exemplo de teste para `classify_property`:
+```python
+import unittest
+from backend.classifier import classify_property
+
+class TestClassifier(unittest.TestCase):
+    def test_classify_property(self):
+        prop = {"score": 80, "discount_pct": 50, "fema_zone": "X", "population": 15000}
+        result = classify_property(prop)
+        self.assertEqual(result["classification"], "FORTE")
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+### 2. Testes de Integração para APIs Externas
+
+As APIs externas, como a API do Census Bureau e a API da FEMA, precisam ser testadas para garantir que estão funcionando corretamente.
+
+Exemplo de teste para a API do Census Bureau:
+```python
+import unittest
+from backend.enrichers.census_profile import get_census_data
+
+class TestCensusAPI(unittest.TestCase):
+    def test_get_census_data(self):
+        county = "Los Angeles"
+        state = "CA"
+        data = get_census_data(county, state)
+        self.assertIsNotNone(data)
+        self.assertIn("population", data)
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+### 3. Testes de Segurança
+
+Os testes de segurança são essenciais para garantir que o sistema está protegido contra ataques comuns, como injeção de SQL e cross-site scripting (XSS).
+
+Exemplo de teste para injeção de SQL:
+```python
+import unittest
+from backend.database import get_db
+
+class TestSQLInjection(unittest.TestCase):
+    def test_sql_injection(self):
+        db = get_db()
+        query = "SELECT * FROM properties WHERE name = '%s'" % "Robert'); DROP TABLE properties; --"
+        with self.assertRaises(Exception):
+            db.execute(query)
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+### 4. Testes de Desempenho
+
+Os testes de desempenho são importantes para garantir que o sistema pode lidar com um grande volume de requisições e dados.
+
+Exemplo de teste para desempenho:
+```python
+import unittest
+from backend.app import app
+
+class TestPerformance(unittest.TestCase):
+
+
+============================================================
+📊 Consolidador Executivo
+============================================================
+**Relatório Executivo**
+
+**Score de Saúde Geral do Projeto:** 60
+
+O projeto apresenta uma estrutura sólida, com uma arquitetura de pipeline de 5 agentes bem definida e uma integração com várias APIs. No entanto, existem alguns problemas críticos que precisam ser abordados, como a otimização das chamadas à API OCM e a substituição da chave de API inválida do Census.
+
+**Top 5 Riscos Críticos que Precisam de Ação Imediata:**
+
+1. **Otimização de chamadas à API OCM**: Atualmente, o projeto realiza 240 chamadas por cidade, o que é inviável. É necessário implementar uma solução que reduza o número de chamadas para 2 por cidade. **Prazo sugerido:** 3 dias
+2. **Substituição da chave de API inválida do Census**: A chave de API atual está inválida, o que impede a obtenção de dados demográficos. É necessário substituir a chave ou encontrar uma alternativa. **Prazo sugerido:** 2 dias
+3. **Correção do TomTom Traffic Flow**: A chamada à API TomTom Traffic Flow está incorreta, o que afeta a obtenção de dados de tráfego. É necessário corrigir a chamada para obter os dados corretos. **Prazo sugerido:** 2 dias
+4. **Implementação de cache SQLite**: O projeto não tem um mecanismo de cache implementado, o que pode levar a problemas de desempenho. É necessário implementar um cache SQLite com TTL para reduzir o número de chamadas às APIs. **Prazo sugerido:** 4 dias
+5. **Teste do pipeline completo**: O pipeline completo não foi testado, o que pode levar a problemas de integração. É necessário testar o pipeline completo com 10 cidades para garantir que tudo esteja funcionando corretamente. **Prazo sugerido:** 5 dias
+
+**Top 5 Melhorias de Médio Prazo (próximos 30 dias):**
+
+1. **Implementação de mapa interativo**: O projeto não tem um mapa interativo para visualizar as cidades. É necessário implementar um mapa interativo para melhorar a experiência do usuário. **Prazo sugerido:** 10 dias
+2. **Implementação de filtros por score mínimo**: O projeto não tem filtros por score mínimo. É necessário implementar filtros para permitir que os usuários filtrem as cidades por score mínimo. **Prazo sugerido:** 5 dias
+3. **Implementação de geração de leads automática**: O projeto não tem
